@@ -1,0 +1,14 @@
+[
+    {
+      "optionText": 0,
+      "value": "Have Kids"
+    },
+    {
+      "optionText": 1,
+      "value": "Don't Have Kids"
+    },
+    {
+      "optionText": 2,
+      "value": "Prefer Not To Say"
+    }
+  ]

@@ -1,0 +1,14 @@
+[
+    {
+        "optionText": 0,
+        "value": "Man"
+    },
+    {
+        "optionText": 1,
+        "value": "Woman"
+    },
+    {
+        "optionText": 2,
+        "value": "Other"
+    }
+]

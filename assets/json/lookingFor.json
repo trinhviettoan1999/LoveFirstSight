@@ -1,0 +1,22 @@
+[
+    {
+      "optionText": 0,
+      "value": "Chatting"
+    },
+    {
+      "optionText": 1,
+      "value": "Prefer Not To Say"
+    },
+    {
+      "optionText": 2,
+      "value": "FriendShip"
+    },
+    {
+      "optionText": 3,
+      "value": "Something Casual"
+    },
+    {
+      "optionText": 4,
+      "value": "Long-term Relationship"
+    }
+]

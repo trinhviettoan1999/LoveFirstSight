@@ -1,0 +1,18 @@
+[
+    {
+        "optionText": 0,
+        "value": "Never"
+    },
+    {
+      "optionText": 1,
+      "value": "Often"
+    },
+    {
+      "optionText": 2,
+      "value": "Occasionaly"
+    },
+    {
+      "optionText": 3,
+      "value": "Prefer Not To Say"
+    }
+]

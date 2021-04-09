@@ -1,0 +1,334 @@
+[
+  {
+    "id": 1,
+    "value": "Picnicking"
+  },
+  {
+    "id": 2,
+    "value": "Grab a drink"
+  },
+  {
+    "id": 3,
+    "value": "Cat lover"
+  },
+  {
+    "id": 4,
+    "value": "Trying new things"
+  },
+  {
+    "id": 5,
+    "value": "Soccer"
+  },
+  {
+    "id": 6,
+    "value": "Athlete"
+  },
+  {
+    "id": 7,
+    "value": "Movies"
+  },
+  {
+    "id": 8,
+    "value": "Golf"
+  },
+  {
+    "id": 9,
+    "value": "Music"
+  },
+  {
+    "id": 10,
+    "value": "Working out"
+  },
+  {
+    "id": 11,
+    "value": "Vegetarian"
+  },
+  {
+    "id": 12,
+    "value": "Gamer"
+  },
+  {
+    "id": 13,
+    "value": "Anime"
+  },
+  {
+    "id": 14,
+    "value": "Scorpio"
+  },
+  {
+    "id": 15,
+    "value": "BTS"
+  },
+  {
+    "id": 16,
+    "value": "Sushi"
+  },
+  {
+    "id": 17,
+    "value": "Photography"
+  },
+  {
+    "id": 18,
+    "value": "Vegan"
+  },
+  {
+    "id": 19,
+    "value": "Brunch"
+  },
+  {
+    "id": 20,
+    "value": "Geek"
+  },
+  {
+    "id": 21,
+    "value": "Aries"
+  },
+  {
+    "id": 22,
+    "value": "Pisces"
+  },
+  {
+    "id": 23,
+    "value": "Cooking"
+  },
+  {
+    "id": 24,
+    "value": "Clubbing"
+  },
+  {
+    "id": 25,
+    "value": "Walking"
+  },
+  {
+    "id": 26,
+    "value": "Craft beer"
+  },
+  {
+    "id": 27,
+    "value": "Wine"
+  },
+  {
+    "id": 28,
+    "value": "Coffee"
+  },
+  {
+    "id": 29,
+    "value": "Surfing"
+  },
+  {
+    "id": 30,
+    "value": "Karaoke"
+  },
+  {
+    "id": 31,
+    "value": "Motorcycles"
+  },
+  {
+    "id": 32,
+    "value": "Trivia"
+  },
+  {
+    "id": 33,
+    "value": "Spirituality"
+  },
+  {
+    "id": 34,
+    "value": "Language Exchange"
+  },
+  {
+    "id": 35,
+    "value": "Comedy"
+  },
+  {
+    "id": 36,
+    "value": "Street food"
+  },
+  {
+    "id": 37,
+    "value": "Vlogging"
+  },
+  {
+    "id": 38,
+    "value": "Running"
+  },
+  {
+    "id": 39,
+    "value": "Blogging"
+  },
+  {
+    "id": 40,
+    "value": "Travel"
+  },
+  {
+    "id": 41,
+    "value": "Aquarius"
+  },
+  {
+    "id": 42,
+    "value": "Capricorn"
+  },
+  {
+    "id": 43,
+    "value": "Yoga"
+  },
+  {
+    "id": 44,
+    "value": "Dancing"
+  },
+  {
+    "id": 45,
+    "value": "Disney"
+  },
+  {
+    "id": 46,
+    "value": "Instagram"
+  },
+  {
+    "id": 47,
+    "value": "Fishing"
+  },
+  {
+    "id": 48,
+    "value": "Leo"
+  },
+  {
+    "id": 49,
+    "value": "K-Pop"
+  },
+  {
+    "id": 50,
+    "value": "Swimming"
+  },
+  {
+    "id": 51,
+    "value": "Museum"
+  },
+  {
+    "id": 52,
+    "value": "V-Pop"
+  },
+  {
+    "id": 53,
+    "value": "Climbing"
+  },
+  {
+    "id": 54,
+    "value": "Libra"
+  },
+  {
+    "id": 55,
+    "value": "Nightlife"
+  },
+  {
+    "id": 56,
+    "value": "Bun cha"
+  },
+  {
+    "id": 57,
+    "value": "Baking"
+  },
+  {
+    "id": 58,
+    "value": "Reading"
+  },
+  {
+    "id": 59,
+    "value": "Dog lover"
+  },
+  {
+    "id": 60,
+    "value": "Sports"
+  },
+  {
+    "id": 61,
+    "value": "Outdoors"
+  },
+  {
+    "id": 62,
+    "value": "Chatting when i'm bored"
+  },
+  {
+    "id": 63,
+    "value": "Environmentalism"
+  },
+  {
+    "id": 64,
+    "value": "Hip hop"
+  },
+  {
+    "id": 65,
+    "value": "Tea"
+  },
+  {
+    "id": 66,
+    "value": "Writer"
+  },
+  {
+    "id": 67,
+    "value": "Virgo"
+  },
+  {
+    "id": 68,
+    "value": "Volunteering"
+  },
+  {
+    "id": 69,
+    "value": "Fashion"
+  },
+  {
+    "id": 70,
+    "value": "Festivals"
+  },
+  {
+    "id": 71,
+    "value": "Netflix"
+  },
+  {
+    "id": 72,
+    "value": "Gardening"
+  },
+  {
+    "id": 73,
+    "value": "Cycling"
+  },
+  {
+    "id": 74,
+    "value": "Foodie"
+  },
+  {
+    "id": 75,
+    "value": "Hot Pot"
+  },
+  {
+    "id": 76,
+    "value": "Esports"
+  },
+  {
+    "id": 77,
+    "value": "Student"
+  },
+  {
+    "id": 78,
+    "value": "Art"
+  },
+  {
+    "id": 79,
+    "value": "BBQ"
+  },
+  {
+    "id": 80,
+    "value": "Iced tea"
+  },
+  {
+    "id": 81,
+    "value": "Hiking"
+  },
+  {
+    "id": 82,
+    "value": "Taurus"
+  },
+  {
+    "id": 83,
+    "value": "Shopping"
+  }
+]

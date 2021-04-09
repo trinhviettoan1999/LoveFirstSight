@@ -1,0 +1,254 @@
+[
+    {
+        "id": "Bắc Giang",
+        "name": "Bắc Giang"
+    },
+    {
+        "id": "Bắc Kạn",
+        "name": "Bắc Kạn"
+    },
+    {
+        "id": "Cao Bằng",
+        "name": "Cao Bằng"
+    },
+    {
+        "id": "Hà Giang",
+        "name": "Hà Giang"
+    },
+    {
+        "id": "Lạng Sơn",
+        "name": "Lạng Sơn"
+    },
+    {
+        "id": "Phú Thọ",
+        "name": "Phú Thọ"
+    },
+    {
+        "id": "Quảng Ninh",
+        "name": "Quảng Ninh"
+    },
+    {
+        "id": "Thái Nguyên",
+        "name": "Thái Nguyên"
+    },
+    {
+        "id": "Tuyên Quang",
+        "name": "Tuyên Quang"
+    },
+    {
+        "id": "Lào Cai",
+        "name": "Lào Cai"
+    },
+    {
+        "id": "Yên Bái",
+        "name": "Yên Bái"
+    },
+    {
+        "id": "Điện Biên",
+        "name": "Điện Biên"
+    },
+    {
+        "id": "Hòa Bình",
+        "name": "Hòa Bình"
+    },
+    {
+        "id": "Lai Châu",
+        "name": "Lai Châu"
+    },
+    {
+        "id": "Sơn La",
+        "name": "Sơn La"
+    },
+    {
+        "id": "Bắc Ninh",
+        "name": "Bắc Ninh"
+    },
+    {
+        "id": "Hà Nam",
+        "name": "Hà Nam"
+    },
+    {
+        "id": "Hải Dương",
+        "name": "Hải Dương"
+    },
+    {
+        "id": "Hưng Yên",
+        "name": "Hưng Yên"
+    },
+    {
+        "id": "Nam Định",
+        "name": "Nam Định"
+    },
+    {
+        "id": "Ninh Bình",
+        "name": "Ninh Bình"
+    },
+    {
+        "id": "Thái Bình",
+        "name": "Thái Bình"
+    },
+    {
+        "id": "Vĩnh Phúc",
+        "name": "Vĩnh Phúc"
+    },
+    {
+        "id": "Hà Nội",
+        "name": "Hà Nội"
+    },
+    {
+        "id": "Hải Phòng",
+        "name": "Hải Phòng"
+    },
+    {
+        "id": "Hà Tĩnh",
+        "name": "Hà Tĩnh"
+    },
+    {
+        "id": "Nghệ An",
+        "name": "Nghệ An"
+    },
+    {
+        "id": "Quảng Bình",
+        "name": "Quảng Bình"
+    },
+    {
+        "id": "Quảng Trị",
+        "name": "Quảng Trị"
+    },
+    {
+        "id": "Thanh Hóa",
+        "name": "Thanh Hóa"
+    },
+    {
+        "id": "Thừa Thiên–Huế",
+        "name": "Thừa Thiên–Huế"
+    },
+    {
+        "id": "Đắk Lắk",
+        "name": "Đắk Lắk"
+    },
+    {
+        "id": "Đắk Nông",
+        "name": "Đắk Nông"
+    },
+    {
+        "id": "Gia Lai",
+        "name": "Gia Lai"
+    },
+    {
+        "id": "Kon Tum",
+        "name": "Kon Tum"
+    },
+    {
+        "id": "Lâm Đồng",
+        "name": "Lâm Đồng"
+    },
+    {
+        "id": "Bình Định",
+        "name": "Bình Định"
+    },
+    {
+        "id": "Bình Thuận",
+        "name": "Bình Thuận"
+    },
+    {
+        "id": "Khánh Hòa",
+        "name": "Khánh Hòa"
+    },
+    {
+        "id": "Ninh Thuận",
+        "name": "Ninh Thuận"
+    },
+    {
+        "id": "Phú Yên",
+        "name": "Phú Yên"
+    },
+    {
+        "id": "Quảng Nam",
+        "name": "Quảng Nam"
+    },
+    {
+        "id": "Quảng Ngãi",
+        "name": "Quảng Ngãi"
+    },
+    {
+        "id": "Đà Nẵng",
+        "name": "Đà Nẵng"
+    },
+    {
+        "id": "Bà Rịa–Vũng Tàu",
+        "name": "Bà Rịa–Vũng Tàu"
+    },
+    {
+        "id": "Bình Dương",
+        "name": "Bình Dương"
+    },
+    {
+        "id": "Bình Phước",
+        "name": "Bình Phước"
+    },
+    {
+        "id": "Đồng Nai",
+        "name": "Đồng Nai"
+    },
+    {
+        "id": "Tây Ninh",
+        "name": "Tây Ninh"
+    },
+    {
+        "id": "Hồ Chí Minh",
+        "name": "Hồ Chí Minh"
+    },
+    {
+        "id": "An Giang",
+        "name": "An Giang"
+    },
+    {
+        "id": "Bạc Liêu",
+        "name": "Bạc Liêu"
+    },
+    {
+        "id": "Bến Tre",
+        "name": "Bến Tre"
+    },
+    {
+        "id": "Cà Mau",
+        "name": "Cà Mau"
+    },
+    {
+        "id": "Đồng Tháp",
+        "name": "Đồng Tháp"
+    },
+    {
+        "id": "Hậu Giang",
+        "name": "Hậu Giang"
+    },
+    {
+        "id": "Kiên Giang",
+        "name": "Kiên Giang"
+    },
+    {
+        "id": "Long An",
+        "name": "Long An"
+    },
+    {
+        "id": "Sóc Trăng",
+        "name": "Sóc Trăng"
+    },
+    {
+        "id": "Tiền Giang",
+        "name": "Tiền Giang"
+    },
+    {
+        "id": "Trà Vinh",
+        "name": "Trà Vinh"
+    },
+    {
+        "id": "Vĩnh Long",
+        "name": "Vĩnh Long"
+    },
+    {
+        "id": "Cần Thơ",
+        "name": "Cần Thơ"
+    }
+]

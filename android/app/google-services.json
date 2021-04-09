@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "500865270015",
+    "firebase_url": "https://stapler-cf434.firebaseio.com",
+    "project_id": "stapler-cf434",
+    "storage_bucket": "stapler-cf434.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500865270015:android:2e86ff9cfc72ec2e224cca",
+        "android_client_info": {
+          "package_name": "com.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500865270015-2uat70emstop40v4v0cc9rmnhd3ogecm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZAITk7cKOJpmZHV1HoChqJ6pYaLROHCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500865270015-2uat70emstop40v4v0cc9rmnhd3ogecm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
