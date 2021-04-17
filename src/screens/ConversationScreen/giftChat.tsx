@@ -36,6 +36,7 @@ import {
   updateStateConversation,
 } from '../../controller';
 import 'react-native-console-time-polyfill';
+import {createToken} from '../../agora';
 const messagesRef = firestore().collection('conversations');
 
 const checkPermissionPhoto = () => {
@@ -660,6 +661,22 @@ const Chat = ({route, navigation}: RouteStackParamList<'InitScreen'>) => {
             } else {
               navigation.goBack();
             }
+          }}
+          showIconRight={true}
+          iconNameRight="video"
+          onPressRight={() => {
+            navigation.navigate('VideoScreen', {
+              name: name,
+              avatar: avatar,
+              appId: '904b6f3ec0bd44ac991b9d0166cb741c',
+              channelName: 'VietToan',
+              token: createToken({
+                appId: '904b6f3ec0bd44ac991b9d0166cb741c',
+                appCertificate: '',
+                channelName: 'VietToan',
+                uid: 0,
+              }),
+            });
           }}
         />
         <GiftedChat

@@ -72,8 +72,8 @@ const Header = ({
           {showIconRight ? (
             <CustomIcon
               name={iconNameRight}
-              size={20}
-              color="#000000"
+              size={25}
+              color="#6A1616"
               onPress={onPressRight}
             />
           ) : null}

@@ -2,19 +2,19 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
-  ScrollView,
   Dimensions,
   PermissionsAndroid,
+  ImageBackground,
   Text,
 } from 'react-native';
 import {RouteStackParamList} from '../../components';
-
 import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Sound from 'react-native-sound';
 
 const requestCameraAndAudioPermission = async () => {
   try {
@@ -38,27 +38,31 @@ const requestCameraAndAudioPermission = async () => {
 };
 
 var engine: RtcEngine;
-
+let sound: Sound;
+const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
 export default function VideoScreen({
   navigation,
+  route,
 }: RouteStackParamList<'InitScreen'>) {
+  const {appId, channelName, token, avatar, name} = route.params;
   const [props, setProps] = useState({
     peerIds: [],
-    appId: '904b6f3ec0bd44ac991b9d0166cb741c',
-    channelName: 'VietToan',
-    token:
-      '006904b6f3ec0bd44ac991b9d0166cb741cIADMUIxlzlXQdIjWuo0dtJWezW1osqCNL2+epw+mN2B5Pqn2Jm0AAAAAEAC74Hh621dwYAEAAQDbV3Bg',
     vidMute: false,
     audMute: false,
     joinSucceed: false,
   });
-
+  console.log('token: ', token);
   async function init() {
-    engine = await RtcEngine.create(props.appId);
+    sound = new Sound(nhachuong);
+    sound.setNumberOfLoops(-1);
+    sound.setVolume(1);
+    engine = await RtcEngine.create(appId);
     await engine.enableVideo(); //Enable the audio
+    await engine.joinChannel(token, channelName, null, 0);
     engine.addListener('UserJoined', (uid: number) => {
       // @ts-ignore: Object is possibly 'null'.
       if (props.peerIds.indexOf(uid) === -1) {
+        sound.stop();
         // @ts-ignore: Object is possibly 'null'.
         setProps({...props, peerIds: [...props.peerIds, uid]});
       }
@@ -70,6 +74,7 @@ export default function VideoScreen({
       });
     });
     engine.addListener('JoinChannelSuccess', () => {
+      sound.play();
       setProps({...props, joinSucceed: true});
     });
     engine.addListener('Error', (errorCode) => {
@@ -85,29 +90,30 @@ export default function VideoScreen({
     setProps({...props, vidMute: !props.vidMute});
   }
   function endCall() {
+    sound.stop();
     engine.leaveChannel();
     setProps({...props, peerIds: [], joinSucceed: false});
-  }
-  async function join() {
-    await engine.joinChannel(props.token, props.channelName, null, 0);
+    navigation.goBack();
   }
   useEffect(() => {
-    requestCameraAndAudioPermission().then((result) => console.log(result));
+    requestCameraAndAudioPermission();
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <View style={styles.full}>
+      {props.peerIds.length === 0 && (
+        <ImageBackground
+          style={styles.image}
+          source={{uri: avatar}}
+          resizeMode="cover">
+          <Text style={styles.textName}>Calling to {name}...</Text>
+        </ImageBackground>
+      )}
       {props.joinSucceed && !props.vidMute && (
         <RtcLocalView.SurfaceView
-          style={{
-            width: 150,
-            height: 200,
-            top: 0,
-            right: 0,
-            position: 'absolute',
-          }}
-          channelId={props.channelName}
+          style={styles.localVideo}
+          channelId={channelName}
           renderMode={VideoRenderMode.Hidden}
         />
       )}
@@ -118,7 +124,7 @@ export default function VideoScreen({
             height: dimensions.height,
           }}
           uid={props.peerIds[0]}
-          channelId={props.channelName}
+          channelId={channelName}
           renderMode={VideoRenderMode.Hidden}
           key={props.peerIds[0]}
         />
@@ -126,19 +132,19 @@ export default function VideoScreen({
       <View style={styles.buttonBar}>
         <Icon.Button
           style={styles.iconStyle}
-          backgroundColor="#0093E9"
+          backgroundColor="#6A1616"
           name={props.audMute ? 'mic-off' : 'mic'}
+          onPress={toggleAudio}
+        />
+        <Icon.Button
+          style={styles.iconStyle}
+          backgroundColor="#6A1616"
+          name="call-end"
           onPress={endCall}
         />
         <Icon.Button
           style={styles.iconStyle}
-          backgroundColor="#0093E9"
-          name="call-end"
-          onPress={join}
-        />
-        <Icon.Button
-          style={styles.iconStyle}
-          backgroundColor="#0093E9"
+          backgroundColor="#6A1616"
           name={props.vidMute ? 'videocam-off' : 'videocam'}
           onPress={toggleVideo}
         />
@@ -156,7 +162,7 @@ let dimensions = {
 const styles = StyleSheet.create({
   buttonBar: {
     height: 50,
-    backgroundColor: '#0093E9',
+    backgroundColor: '#6A1616',
     display: 'flex',
     width: '100%',
     position: 'absolute',
@@ -176,5 +182,22 @@ const styles = StyleSheet.create({
   },
   full: {
     flex: 1,
+  },
+  localVideo: {
+    width: 150,
+    height: 200,
+    top: 0,
+    right: 0,
+    position: 'absolute',
+  },
+  image: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textName: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
 });
