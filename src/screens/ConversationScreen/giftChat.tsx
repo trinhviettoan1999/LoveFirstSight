@@ -36,7 +36,6 @@ import {
   updateStateConversation,
 } from '../../controller';
 import 'react-native-console-time-polyfill';
-import {createToken} from '../../agora';
 const messagesRef = firestore().collection('conversations');
 
 const checkPermissionPhoto = () => {
@@ -672,7 +671,7 @@ const Chat = ({route, navigation}: RouteStackParamList<'InitScreen'>) => {
               channelName: 'VietToan',
               token: createToken({
                 appId: '904b6f3ec0bd44ac991b9d0166cb741c',
-                appCertificate: '',
+                appCertificate: '0a74d4d72dc94bab83c42b611c802c8f',
                 channelName: 'VietToan',
                 uid: 0,
               }),
