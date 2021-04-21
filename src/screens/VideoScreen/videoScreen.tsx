@@ -8,6 +8,7 @@ import {
   Text,
 } from 'react-native';
 import {RouteStackParamList} from '../../components';
+import {updateUser} from '../../controller';
 import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
@@ -44,21 +45,20 @@ export default function VideoScreen({
   navigation,
   route,
 }: RouteStackParamList<'InitScreen'>) {
-  const {appId, channelName, token, avatar, name} = route.params;
+  const {appId, channelName, token, avatar, name, userId} = route.params;
   const [props, setProps] = useState({
     peerIds: [],
     vidMute: false,
     audMute: false,
     joinSucceed: false,
   });
-  console.log('token: ', token);
   async function init() {
     sound = new Sound(nhachuong);
     sound.setNumberOfLoops(-1);
     sound.setVolume(1);
     engine = await RtcEngine.create(appId);
     await engine.enableVideo(); //Enable the audio
-    await engine.joinChannel(token, channelName, null, 0);
+    await engine.joinChannel(token, channelName, null, userId);
     engine.addListener('UserJoined', (uid: number) => {
       // @ts-ignore: Object is possibly 'null'.
       if (props.peerIds.indexOf(uid) === -1) {
@@ -72,6 +72,8 @@ export default function VideoScreen({
         ...props,
         peerIds: props.peerIds.filter((result) => result !== uid),
       });
+      engine.leaveChannel();
+      navigation.goBack();
     });
     engine.addListener('JoinChannelSuccess', () => {
       sound.play();
@@ -92,6 +94,9 @@ export default function VideoScreen({
   function endCall() {
     sound.stop();
     engine.leaveChannel();
+    updateUser({
+      stateJoinCall: false,
+    });
     setProps({...props, peerIds: [], joinSucceed: false});
     navigation.goBack();
   }
@@ -110,24 +115,26 @@ export default function VideoScreen({
           <Text style={styles.textName}>Calling to {name}...</Text>
         </ImageBackground>
       )}
-      {props.joinSucceed && !props.vidMute && (
-        <RtcLocalView.SurfaceView
-          style={styles.localVideo}
-          channelId={channelName}
-          renderMode={VideoRenderMode.Hidden}
-        />
-      )}
       {props.peerIds.length > 0 && (
-        <RtcRemoteView.SurfaceView
-          style={{
-            width: dimensions.width,
-            height: dimensions.height,
-          }}
-          uid={props.peerIds[0]}
-          channelId={channelName}
-          renderMode={VideoRenderMode.Hidden}
-          key={props.peerIds[0]}
-        />
+        <View>
+          <RtcRemoteView.SurfaceView
+            style={{
+              width: dimensions.width,
+              height: dimensions.height,
+            }}
+            uid={props.peerIds[0]}
+            channelId={channelName}
+            renderMode={VideoRenderMode.Hidden}
+            key={props.peerIds[0]}
+          />
+          {!props.vidMute && (
+            <RtcLocalView.SurfaceView
+              style={styles.localVideo}
+              channelId={channelName}
+              renderMode={VideoRenderMode.Hidden}
+            />
+          )}
+        </View>
       )}
       <View style={styles.buttonBar}>
         <Icon.Button

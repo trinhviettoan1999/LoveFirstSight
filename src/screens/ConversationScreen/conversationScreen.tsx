@@ -107,11 +107,11 @@ const Conversation = ({navigation}: RouteStackParamList<'InitScreen'>) => {
     );
   };
   useEffect(() => {
-    getConversation().then((result) => setConversation(result));
+    getConversation(false, (result: any) => setConversation(result));
   }, []);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      getConversation().then((result) => setConversation(result));
+      getConversation(false, (result: any) => setConversation(result));
     });
     return unsubscribe;
   }, [navigation]);

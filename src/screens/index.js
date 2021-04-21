@@ -40,6 +40,7 @@ import NewsScreen from './NewsScreen/newsScreen.tsx';
 import PostScreen from './PostScreen/postScreen.tsx';
 import DetailNewScreen from './DetailNewScreen/detailNewScreen.tsx';
 import VideoScreen from './VideoScreen/videoScreen.tsx';
+import IncomingCallScreen from './VideoScreen/incomingCallScreen.tsx';
 
 export {
   LoadingScreen,
@@ -84,4 +85,5 @@ export {
   PostScreen,
   DetailNewScreen,
   VideoScreen,
+  IncomingCallScreen,
 };

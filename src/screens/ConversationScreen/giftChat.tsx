@@ -34,6 +34,11 @@ import {
   checkPermissionCamera,
   likeUser,
   updateStateConversation,
+  createKey,
+  setStateVideoCall,
+  getStateVideoCall,
+  checkUserInCall,
+  updateUser,
 } from '../../controller';
 import 'react-native-console-time-polyfill';
 const messagesRef = firestore().collection('conversations');
@@ -101,6 +106,7 @@ let valueChangeInterval: NodeJS.Timeout;
 const Chat = ({route, navigation}: RouteStackParamList<'InitScreen'>) => {
   const {ownerId, name, conversationId, avatar, flag, state} = route.params;
   const [messages, setMessages] = useState([]);
+  const uid = Math.floor(Math.random() * 100) + 1;
   const [audioPath] = useState(
     `${AudioUtils.DocumentDirectoryPath}/${uuid.v4()}`,
   );
@@ -135,7 +141,21 @@ const Chat = ({route, navigation}: RouteStackParamList<'InitScreen'>) => {
     IncludeBase64: true,
     AudioEncodingBitRate: 32000,
   });
-
+  useEffect(() => {
+    checkUserInCall(ownerId, (isUserCalling: any) => {
+      getStateVideoCall(conversationId, (result: any) => {
+        if (result && isUserCalling) {
+          navigation.navigate('IncomingCallScreen', {
+            name: name,
+            avatar: avatar,
+            appId: '904b6f3ec0bd44ac991b9d0166cb741c',
+            channelName: conversationId,
+            userId: uid,
+          });
+        }
+      });
+    });
+  }, []);
   useEffect(() => {
     // @ts-ignore: Object is possibly 'null'.
     getUser(auth().currentUser.uid).then((result) => {
@@ -664,18 +684,27 @@ const Chat = ({route, navigation}: RouteStackParamList<'InitScreen'>) => {
           showIconRight={true}
           iconNameRight="video"
           onPressRight={() => {
-            navigation.navigate('VideoScreen', {
-              name: name,
-              avatar: avatar,
-              appId: '904b6f3ec0bd44ac991b9d0166cb741c',
-              channelName: 'VietToan',
-              token: createToken({
-                appId: '904b6f3ec0bd44ac991b9d0166cb741c',
-                appCertificate: '0a74d4d72dc94bab83c42b611c802c8f',
-                channelName: 'VietToan',
-                uid: 0,
-              }),
-            });
+            createKey(
+              '904b6f3ec0bd44ac991b9d0166cb741c',
+              '0a74d4d72dc94bab83c42b611c802c8f',
+              conversationId,
+              uid,
+            )
+              .then((result) => result.json())
+              .then((key) => {
+                setStateVideoCall(conversationId, true);
+                updateUser({
+                  stateJoinCall: true,
+                });
+                navigation.navigate('VideoScreen', {
+                  name: name,
+                  avatar: avatar,
+                  appId: '904b6f3ec0bd44ac991b9d0166cb741c',
+                  channelName: conversationId,
+                  userId: uid,
+                  token: key,
+                });
+              });
           }}
         />
         <GiftedChat

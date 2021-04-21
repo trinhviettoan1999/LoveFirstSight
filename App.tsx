@@ -47,6 +47,7 @@ import {
   PostScreen,
   DetailNewScreen,
   VideoScreen,
+  IncomingCallScreen,
 } from './src/screens';
 import {CustomIcon, RouteParamList} from './src/components';
 import messaging from '@react-native-firebase/messaging';
@@ -330,6 +331,11 @@ const App = () => {
         <Stack.Screen
           name="VideoScreen"
           component={VideoScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="IncomingCallScreen"
+          component={IncomingCallScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

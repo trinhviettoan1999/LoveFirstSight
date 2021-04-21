@@ -86,6 +86,7 @@ export type RouteParamList = {
   };
   NewsScreen: undefined;
   VideoScreen: undefined;
+  IncomingCallScreen: undefined;
 };
 
 export type RouteStackParamList<T extends keyof RouteParamList> = {
