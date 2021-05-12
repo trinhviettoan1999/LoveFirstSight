@@ -8,13 +8,10 @@ import {
   KeyboardAvoidingView,
   Image,
   Platform,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
-import {
-  StatusBarCustom,
-  CustomIcon,
-  RouteStackParamList,
-} from '../../components';
-import Modal from 'react-native-modal';
+import {StatusBarCustom, RouteStackParamList} from '../../components';
 
 import * as firebase from '../../firebase/firebase';
 
@@ -24,9 +21,10 @@ const SignInScreen = ({navigation}: RouteStackParamList<'FirstScreen'>) => {
   const ref_input1 = useRef(null);
   const ref_input2 = useRef(null);
   const [textNotify, setTextNotify] = useState('LOG IN');
-  const [isModalVisible, setIsModalVisible] = useState(false);
   return (
-    <View style={styles.allContainer}>
+    <ScrollView
+      style={styles.allContainer}
+      contentContainerStyle={styles.scroll}>
       <StatusBarCustom backgroundColor="#FFFFFF" barStyle="dark-content" />
       <View style={styles.introductionContainer}>
         <Image
@@ -87,64 +85,25 @@ const SignInScreen = ({navigation}: RouteStackParamList<'FirstScreen'>) => {
           </TouchableHighlight>
           <Text
             style={styles.textOptions}
-            onPress={() => setIsModalVisible(true)}>
-            Other Options
+            onPress={() => {
+              navigation.navigate('EnterMailScreen');
+            }}>
+            Create an account
           </Text>
         </KeyboardAvoidingView>
       </View>
-      <Modal
-        swipeDirection="down"
-        onSwipeComplete={() => setIsModalVisible(false)}
-        hideModalContentWhileAnimating
-        isVisible={isModalVisible}
-        style={styles.modalOptions}
-        onBackdropPress={() => setIsModalVisible(false)}
-        backdropOpacity={0.5}>
-        {/* <View style={styles.buttonModal}>
-          <Image
-            style={styles.iconModal}
-            source={{
-              uri:
-                'https://firebasestorage.googleapis.com/v0/b/stapler-cf434.appspot.com/o/logo%2Ffacebook-icon.png?alt=media',
-            }}
-          />
-          <Text style={styles.textButtonModal}>Log In With Facebook</Text>
-        </View>
-        <View style={styles.buttonModal}>
-          <Image
-            style={styles.iconModal}
-            source={{
-              uri:
-                'https://firebasestorage.googleapis.com/v0/b/stapler-cf434.appspot.com/o/logo%2Fgoogle-icon.png?alt=media',
-            }}
-          />
-          <Text style={styles.textButtonModal}>Log In With Google</Text>
-        </View> */}
-        <View style={styles.buttonModal}>
-          <CustomIcon
-            name="create-account"
-            size={30}
-            color="#212121"
-            style={{marginRight: 20}}
-          />
-          <Text
-            style={styles.textButtonModal}
-            onPress={() => {
-              navigation.navigate('EnterMailScreen');
-              setIsModalVisible(false);
-            }}>
-            Create An Account
-          </Text>
-        </View>
-      </Modal>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   allContainer: {
-    flex: 1,
+    width: '100%',
     backgroundColor: '#FFFFFF',
+  },
+  scroll: {
+    height: Dimensions.get('screen').height,
+    justifyContent: 'center',
   },
   loginContainer: {
     flex: 2,
@@ -199,38 +158,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   textOptions: {
-    marginTop: 60,
-    fontSize: 18,
+    marginTop: 15,
+    fontSize: 17,
     fontWeight: '800',
     fontStyle: 'normal',
     color: '#6A1616',
     textAlign: 'center',
-  },
-  modalOptions: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  buttonModal: {
-    backgroundColor: '#F8F8F8',
-    height: 50,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    // marginTop: 10,
-    marginBottom: 30,
-    paddingHorizontal: 40,
-  },
-  textButtonModal: {
-    flex: 2,
-    fontSize: 17,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-    color: '#000000',
-  },
-  iconModal: {
-    width: 30,
-    height: 30,
-    marginRight: 20,
+    textDecorationLine: 'underline',
   },
 });
 
