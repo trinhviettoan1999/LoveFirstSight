@@ -148,22 +148,23 @@ const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
   });
   const [isModalVisibleFilter, setIsModalVisibleFilter] = useState(false);
   const [isModalVisibleMenu, setIsModalVisibleMenu] = useState(false);
-  const [isModalVisibleLoading, setIsModalVisibleLoading] = useState(false);
   const [user, setUser] = useState(User);
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(true);
   const [coordinate, setCoordinate] = useState({
     lat: 0,
     long: 0,
   });
+
   async function loadData(isMounted: boolean) {
-    setIsModalVisibleLoading(true);
+    // setIsModalVisibleLoading(true);
     await getAvailableUsers(filter).then(async (result) => {
       if (isMounted) {
         setUser(getUserRandom(result));
       }
     });
-    setIsModalVisibleLoading(false);
+    setLoad(false);
   }
+
   useEffect(() => {
     //get token device
     messaging()
@@ -209,232 +210,225 @@ const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load]);
 
-  return user ? (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <ScrollView style={styles.scrollView}>
-        <Header
-          setIsModalVisibleFilter={setIsModalVisibleFilter}
-          setIsModalVisibleMenu={setIsModalVisibleMenu}
-        />
-        <FastImage
-          style={styles.avatar}
-          source={{
-            // @ts-ignore: Object is possibly 'null'.
-            uri: user.avatar,
-            headers: {Authorization: 'staplerapp123456'},
-            priority: FastImage.priority.normal,
-          }}
-          resizeMode={FastImage.resizeMode.cover}
-        />
-        <View style={styles.container}>
-          <View style={styles.informationContainer}>
-            <View style={styles.firstContainer}>
-              <Text style={styles.font26}>{user.name}</Text>
-              <Text style={styles.font26}>, {computeAge(user.birthday)}</Text>
-              <View style={styles.containerMessageIcon}>
-                <TouchableOpacity
-                  onPress={() => {
-                    Alert.alert(
-                      'Notification',
-                      `Do you want to send message to ${user.name}?`,
-                      [
-                        {
-                          text: 'Cancel',
-                          style: 'cancel',
-                        },
-                        {
-                          text: 'OK',
-                          onPress: () => {
-                            sendMessageRequest(user.userId).then(
-                              (conversationId) => {
-                                setLoad(!load);
-                                navigation.navigate('Chat', {
-                                  name: user.name,
-                                  avatar: user.avatar,
-                                  conversationId: conversationId,
-                                  ownerId: user.userId,
-                                  state: true,
-                                });
-                              },
-                            );
-                          },
-                        },
-                      ],
-                      {cancelable: false},
-                    );
-                  }}>
-                  <CustomIcon name="messenger" size={25} color="#6A1616" />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <Text style={styles.font17}>{user.intro}</Text>
-            <ProfileInformation iconName="gender" content={user.gender} />
-            {user.lookingFor ? (
-              <ProfileInformation
-                iconName="lookingfor"
-                content={user.lookingFor}
-              />
-            ) : null}
-            <ProfileInformation
-              iconName="location"
-              content="Located in Ho Chi Minh City, Viet Nam"
-            />
-            <ProfileInformation
-              iconName="scope"
-              content={
-                `${calculateDistance(user.coordinates, coordinate)
-                  .toFixed(1)
-                  .toString()}` + ' km'
-              }
-            />
-            {user.height ? (
-              <ProfileInformation
-                iconName="height"
-                content={user.height + ' cm'}
-              />
-            ) : null}
-            {user.university ? (
-              <ProfileInformation
-                iconName="university"
-                content={user.university}
-              />
-            ) : null}
-            {user.province ? (
-              <ProfileInformation iconName="province" content={user.province} />
-            ) : null}
-            {user.drinking ? (
-              <ProfileInformation iconName="drinking" content={user.drinking} />
-            ) : null}
-            {user.smoking ? (
-              <ProfileInformation iconName="smoking" content={user.smoking} />
-            ) : null}
-            {user.kids ? (
-              <ProfileInformation iconName="child" content={user.kids} />
-            ) : null}
-          </View>
-          {user.images[0] ? <ImageUser urlImage={user.images[0]} /> : null}
-          {user.images[1] ? <ImageUser urlImage={user.images[1]} /> : null}
-          {user.images[2] ? <ImageUser urlImage={user.images[2]} /> : null}
-          {user.images[3] ? <ImageUser urlImage={user.images[3]} /> : null}
-          {user.images[4] ? <ImageUser urlImage={user.images[4]} /> : null}
-          {user.images[5] ? <ImageUser urlImage={user.images[5]} /> : null}
-          {user.images[6] ? <ImageUser urlImage={user.images[6]} /> : null}
-          {user.images[7] ? <ImageUser urlImage={user.images[7]} /> : null}
-        </View>
-        <View style={{height: 80}} />
-      </ScrollView>
-      <View style={styles.interactiveContainer}>
-        <ButtonIcon
-          name="dislike"
-          size={30}
-          color="#745300"
-          onPress={async () => {
-            await ignoreUser(user.userId);
-            setLoad(!load);
-          }}
-        />
-        <ButtonIcon
-          name="star"
-          size={40}
-          color="#0078D4"
-          onPress={async () => {
-            await superLikeUser(user.userId);
-            setLoad(!load);
-          }}
-        />
-        <ButtonIcon
-          name="lookingfor"
-          size={30}
-          color="#6A1616"
-          onPress={async () => {
-            await likeUser(user.userId);
-            // @ts-ignore: Object is possibly 'null'.
-            sendNotification(user.userId, auth().currentUser?.uid);
-            setLoad(!load);
-          }}
-        />
-      </View>
-      <Modal
-        swipeDirection="left"
-        onSwipeComplete={() => setIsModalVisibleFilter(false)}
-        hideModalContentWhileAnimating
-        isVisible={isModalVisibleFilter}
-        style={styles.modalFilter}
-        onBackdropPress={() => setIsModalVisibleFilter(false)}
-        backdropOpacity={0.5}>
-        <FilterScreen
-          setIsModalVisible={setIsModalVisibleFilter}
-          setFilter={setFilter}
-          filter={filter}
-          setLoad={setLoad}
-          load={load}
-        />
-      </Modal>
-      <Modal
-        swipeDirection="down"
-        onSwipeComplete={() => setIsModalVisibleMenu(false)}
-        hideModalContentWhileAnimating
-        isVisible={isModalVisibleMenu}
-        style={styles.modalMenu}
-        onBackdropPress={() => setIsModalVisibleMenu(false)}
-        backdropOpacity={0.5}>
-        <View style={styles.buttonModal}>
-          <CustomIcon
-            name="report"
-            size={30}
-            color="#6A1616"
-            style={{flex: 0.5}}
-          />
-          <Text
-            style={styles.textButtonModal}
-            onPress={() => {
-              reportUser(user.userId);
-              setLoad(!load);
-              setIsModalVisibleMenu(false);
-            }}>
-            Report {user.name}'s profile
-          </Text>
-        </View>
-        <View style={styles.buttonModal}>
-          <CustomIcon
-            name="block-people"
-            size={30}
-            color="#6A1616"
-            style={{flex: 0.5}}
-          />
-          <Text
-            style={styles.textButtonModal}
-            onPress={() => {
-              blockUser(user.userId);
-              setLoad(!load);
-              setIsModalVisibleMenu(false);
-            }}>
-            Block {user.name}'s profile
-          </Text>
-        </View>
-      </Modal>
-      <Modal
-        isVisible={isModalVisibleLoading}
-        style={styles.modalLoading}
-        backdropOpacity={0.5}>
-        <ActivityIndicator size="large" color="#6A1616" />
-      </Modal>
-    </View>
-  ) : (
+  return (
     <View style={styles.containerAll}>
       <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
       <Header
         setIsModalVisibleFilter={setIsModalVisibleFilter}
         setIsModalVisibleMenu={setIsModalVisibleMenu}
       />
-      <View
-        style={[
-          styles.scrollView,
-          {justifyContent: 'center', alignItems: 'center'},
-        ]}>
-        <Text style={{fontSize: 16}}>Don't have Users with your filter</Text>
-      </View>
+      {load && (
+        <View style={styles.load}>
+          <ActivityIndicator color="#6A1616" size={20} />
+          <Text style={styles.textLoad}>Loading...</Text>
+        </View>
+      )}
+      {user?.name && !load ? (
+        <>
+          <ScrollView style={styles.scrollView}>
+            <FastImage
+              style={styles.avatar}
+              source={{
+                // @ts-ignore: Object is possibly 'null'.
+                uri: user.avatar,
+                headers: {Authorization: 'staplerapp123456'},
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            <View style={styles.container}>
+              <View style={styles.informationContainer}>
+                <View style={styles.firstContainer}>
+                  <Text style={styles.font26}>{user.name}</Text>
+                  <Text style={styles.font26}>
+                    , {computeAge(user.birthday)}
+                  </Text>
+                  <View style={styles.containerMessageIcon}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        Alert.alert(
+                          'Notification',
+                          `Do you want to send message to ${user.name}?`,
+                          [
+                            {
+                              text: 'Cancel',
+                              style: 'cancel',
+                            },
+                            {
+                              text: 'OK',
+                              onPress: () => {
+                                sendMessageRequest(user.userId).then(
+                                  (conversationId) => {
+                                    setLoad(!load);
+                                    navigation.navigate('Chat', {
+                                      name: user.name,
+                                      avatar: user.avatar,
+                                      conversationId: conversationId,
+                                      ownerId: user.userId,
+                                      state: true,
+                                    });
+                                  },
+                                );
+                              },
+                            },
+                          ],
+                          {cancelable: false},
+                        );
+                      }}>
+                      <CustomIcon name="messenger" size={25} color="#6A1616" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Text style={styles.font17}>{user.intro}</Text>
+                <ProfileInformation iconName="gender" content={user.gender} />
+                {user.lookingFor ? (
+                  <ProfileInformation
+                    iconName="lookingfor"
+                    content={user.lookingFor}
+                  />
+                ) : null}
+                <ProfileInformation
+                  iconName="location"
+                  content="Located in Ho Chi Minh City, Viet Nam"
+                />
+                <ProfileInformation
+                  iconName="scope"
+                  content={
+                    `${calculateDistance(user.coordinates, coordinate)
+                      .toFixed(1)
+                      .toString()}` + ' km'
+                  }
+                />
+                {user.height ? (
+                  <ProfileInformation
+                    iconName="height"
+                    content={user.height + ' cm'}
+                  />
+                ) : null}
+                {user.university ? (
+                  <ProfileInformation
+                    iconName="university"
+                    content={user.university}
+                  />
+                ) : null}
+                {user.province ? (
+                  <ProfileInformation
+                    iconName="province"
+                    content={user.province}
+                  />
+                ) : null}
+                {user.drinking ? (
+                  <ProfileInformation
+                    iconName="drinking"
+                    content={user.drinking}
+                  />
+                ) : null}
+                {user.smoking ? (
+                  <ProfileInformation
+                    iconName="smoking"
+                    content={user.smoking}
+                  />
+                ) : null}
+                {user.kids ? (
+                  <ProfileInformation iconName="child" content={user.kids} />
+                ) : null}
+              </View>
+              {user.images[0] ? <ImageUser urlImage={user.images[0]} /> : null}
+              {user.images[1] ? <ImageUser urlImage={user.images[1]} /> : null}
+              {user.images[2] ? <ImageUser urlImage={user.images[2]} /> : null}
+              {user.images[3] ? <ImageUser urlImage={user.images[3]} /> : null}
+              {user.images[4] ? <ImageUser urlImage={user.images[4]} /> : null}
+              {user.images[5] ? <ImageUser urlImage={user.images[5]} /> : null}
+              {user.images[6] ? <ImageUser urlImage={user.images[6]} /> : null}
+              {user.images[7] ? <ImageUser urlImage={user.images[7]} /> : null}
+            </View>
+            <View style={{height: 80}} />
+          </ScrollView>
+          <View style={styles.interactiveContainer}>
+            <ButtonIcon
+              name="dislike"
+              size={30}
+              color="#745300"
+              onPress={async () => {
+                await ignoreUser(user.userId);
+                setLoad(!load);
+              }}
+            />
+            <ButtonIcon
+              name="star"
+              size={40}
+              color="#0078D4"
+              onPress={async () => {
+                await superLikeUser(user.userId);
+                setLoad(!load);
+              }}
+            />
+            <ButtonIcon
+              name="lookingfor"
+              size={30}
+              color="#6A1616"
+              onPress={async () => {
+                await likeUser(user.userId);
+                // @ts-ignore: Object is possibly 'null'.
+                sendNotification(user.userId, auth().currentUser?.uid);
+                setLoad(!load);
+              }}
+            />
+          </View>
+          <Modal
+            swipeDirection="down"
+            onSwipeComplete={() => setIsModalVisibleMenu(false)}
+            hideModalContentWhileAnimating
+            isVisible={isModalVisibleMenu}
+            style={styles.modalMenu}
+            onBackdropPress={() => setIsModalVisibleMenu(false)}
+            backdropOpacity={0.5}>
+            <View style={styles.buttonModal}>
+              <CustomIcon
+                name="report"
+                size={30}
+                color="#6A1616"
+                style={{flex: 0.5}}
+              />
+              <Text
+                style={styles.textButtonModal}
+                onPress={() => {
+                  reportUser(user.userId);
+                  setLoad(!load);
+                  setIsModalVisibleMenu(false);
+                }}>
+                Report {user.name}'s profile
+              </Text>
+            </View>
+            <View style={styles.buttonModal}>
+              <CustomIcon
+                name="block-people"
+                size={30}
+                color="#6A1616"
+                style={{flex: 0.5}}
+              />
+              <Text
+                style={styles.textButtonModal}
+                onPress={() => {
+                  blockUser(user.userId);
+                  setLoad(!load);
+                  setIsModalVisibleMenu(false);
+                }}>
+                Block {user.name}'s profile
+              </Text>
+            </View>
+          </Modal>
+        </>
+      ) : null}
+      {!user?.name && !load && (
+        <View
+          style={[
+            styles.scrollView,
+            {justifyContent: 'center', alignItems: 'center'},
+          ]}>
+          <Text style={{fontSize: 16}}>Don't have Users with your filter</Text>
+        </View>
+      )}
       <Modal
         swipeDirection="left"
         onSwipeComplete={() => setIsModalVisibleFilter(false)}
@@ -566,6 +560,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+  },
+  load: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textLoad: {
+    marginTop: 10,
   },
 });
 
