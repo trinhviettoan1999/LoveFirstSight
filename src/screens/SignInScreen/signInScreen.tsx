@@ -41,6 +41,7 @@ const SignInScreen = ({navigation}: RouteStackParamList<'FirstScreen'>) => {
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
           <TextInput
+            keyboardType="email-address"
             style={styles.inputText}
             value={email}
             onChangeText={(text) => setEmail(text)}
