@@ -126,7 +126,7 @@ const TopPick = ({navigation}: RouteStackParamList<'InitScreen'>) => {
   );
 };
 
-const LikedYouScreen = () => {
+export const LikedYouScreen = () => {
   return (
     <Tab.Navigator
       lazy={false}
@@ -193,5 +193,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
-export default LikedYouScreen;

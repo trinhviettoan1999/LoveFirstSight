@@ -44,7 +44,7 @@ const checkKids = (kids: string) => {
   }
 };
 
-const EditYourKidScreen = ({
+export const EditYourKidScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {

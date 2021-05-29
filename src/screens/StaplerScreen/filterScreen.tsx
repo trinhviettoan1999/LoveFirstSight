@@ -251,7 +251,7 @@ const ContentView = ({title, iconName, content, onPress}: any) => {
   );
 };
 
-const FilterScreen = ({
+export const FilterScreen = ({
   setIsModalVisible,
   setFilter,
   filter,
@@ -552,5 +552,3 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-
-export default FilterScreen;

@@ -164,9 +164,8 @@ const ItemPost = ({
   );
 };
 
-const NewsScreen = ({navigation}: RouteStackParamList<'InitScreen'>) => {
+export const NewsScreen = ({navigation}: RouteStackParamList<'InitScreen'>) => {
   const [news, setNews] = useState(null);
-
   const FlatListHeader = () => {
     //View to set in Header
     return (
@@ -196,6 +195,7 @@ const NewsScreen = ({navigation}: RouteStackParamList<'InitScreen'>) => {
       </TouchableOpacity>
     );
   };
+
   useEffect(() => {
     // @ts-ignore: Object is possibly 'null'.
     const subscriber = getAllPosts(auth().currentUser?.uid, (result: any) =>
@@ -203,6 +203,7 @@ const NewsScreen = ({navigation}: RouteStackParamList<'InitScreen'>) => {
     );
     return () => subscriber;
   }, []);
+
   return (
     <View style={styles.container}>
       <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
@@ -360,5 +361,3 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
 });
-
-export default NewsScreen;

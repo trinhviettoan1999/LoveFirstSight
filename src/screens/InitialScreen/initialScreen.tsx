@@ -9,7 +9,9 @@ import {checkPermisstionGPS} from '../../controller';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import auth from '@react-native-firebase/auth';
 
-const InitialScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
+export const InitialScreen = ({
+  navigation,
+}: RouteStackParamList<'StaplerScreen'>) => {
   return (
     <View style={styles.container}>
       <View style={styles.containerLogo}>
@@ -94,5 +96,3 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
   },
 });
-
-export default InitialScreen;

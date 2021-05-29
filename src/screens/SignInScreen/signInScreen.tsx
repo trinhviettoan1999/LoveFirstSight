@@ -15,7 +15,9 @@ import {StatusBarCustom, RouteStackParamList} from '../../components';
 
 import * as firebase from '../../firebase/firebase';
 
-const SignInScreen = ({navigation}: RouteStackParamList<'FirstScreen'>) => {
+export const SignInScreen = ({
+  navigation,
+}: RouteStackParamList<'FirstScreen'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassWord] = useState('');
   const ref_input1 = useRef(null);
@@ -168,5 +170,3 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 });
-
-export default SignInScreen;

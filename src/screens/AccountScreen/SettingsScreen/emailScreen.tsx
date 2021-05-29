@@ -8,7 +8,9 @@ import {
   StatusBarCustom,
 } from '../../../components';
 
-const EmailScreen = ({navigation}: RouteStackParamList<'SettingsScreen'>) => {
+export const EmailScreen = ({
+  navigation,
+}: RouteStackParamList<'SettingsScreen'>) => {
   var isVerified = false;
   return (
     <View style={styles.screen}>
@@ -98,5 +100,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
-export default EmailScreen;

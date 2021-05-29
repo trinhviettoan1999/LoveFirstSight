@@ -29,7 +29,7 @@ const Item = ({item, onPress, isCheck}: any) => {
   );
 };
 
-const EditHomeTownScreen = ({
+export const EditHomeTownScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {
@@ -126,5 +126,3 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
   },
 });
-
-export default EditHomeTownScreen;

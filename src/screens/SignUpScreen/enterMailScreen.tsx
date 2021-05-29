@@ -30,7 +30,9 @@ const getCode = (email: string) => {
     });
 };
 
-const EnterMailScreen = ({navigation}: RouteStackParamList<'FirstScreen'>) => {
+export const EnterMailScreen = ({
+  navigation,
+}: RouteStackParamList<'FirstScreen'>) => {
   const [valueEmail, onChangeTextEmail] = useState('');
   const [isEmail, setIsEmail] = useState(false);
   const [inotify, setInotify] = useState('CONTINUE');
@@ -140,5 +142,3 @@ const styles = StyleSheet.create({
     color: '#BB2424',
   },
 });
-
-export default EnterMailScreen;

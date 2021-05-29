@@ -365,7 +365,7 @@ const ModalPicture = ({
   );
 };
 
-const AccountScreen = ({
+export const AccountScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {
@@ -792,5 +792,3 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
-
-export default AccountScreen;

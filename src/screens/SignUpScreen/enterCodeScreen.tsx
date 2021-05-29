@@ -9,7 +9,7 @@ import {
 import {Header, RouteStackParamList, StatusBarCustom} from '../../components';
 import GetLocation from 'react-native-get-location';
 
-const EnterCodeScreen = ({
+export const EnterCodeScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'FirstScreen'>) => {
@@ -246,5 +246,3 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-export default EnterCodeScreen;

@@ -53,7 +53,7 @@ const checkDrinking = (drinking: string) => {
   }
 };
 
-const EditDrinkingScreen = ({
+export const EditDrinkingScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {
@@ -97,5 +97,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 });
-
-export default EditDrinkingScreen;

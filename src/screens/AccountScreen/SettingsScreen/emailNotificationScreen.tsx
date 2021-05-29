@@ -34,7 +34,7 @@ const NotificationContainer = () => {
   );
 };
 
-const EmailNotificationScreen = ({
+export const EmailNotificationScreen = ({
   navigation,
 }: RouteStackParamList<'SettingsScreen'>) => {
   var isVerified = false;
@@ -151,5 +151,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default EmailNotificationScreen;

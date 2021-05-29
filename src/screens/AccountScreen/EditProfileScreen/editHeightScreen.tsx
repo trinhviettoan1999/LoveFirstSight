@@ -215,7 +215,7 @@ const Data = [
   },
 ];
 
-const EditHeightScreen = ({
+export const EditHeightScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {
@@ -295,5 +295,3 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
 });
-
-export default EditHeightScreen;

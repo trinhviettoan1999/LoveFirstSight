@@ -9,7 +9,7 @@ import {
 import {getListBlock, unBlockUser} from '../../../controller';
 import {SwipeListView} from 'react-native-swipe-list-view';
 
-const ListBlockScreen = ({
+export const ListBlockScreen = ({
   navigation,
 }: RouteStackParamList<'LoadingScreen'>) => {
   const [listBlock, setListBlock] = useState([]);
@@ -138,5 +138,3 @@ const styles = StyleSheet.create({
     color: '#C8C8C8',
   },
 });
-
-export default ListBlockScreen;

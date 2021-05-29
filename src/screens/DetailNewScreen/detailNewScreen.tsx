@@ -35,7 +35,6 @@ type commentProps = {
 const ItemComment = ({
   name,
   comment,
-  avatar,
   userId,
   commentId,
   postId,
@@ -124,10 +123,10 @@ const ItemComment = ({
   );
 };
 
-export default function DetailNewScreen({
+export const DetailNewScreen = ({
   navigation,
   route,
-}: RouteStackParamList<'InitScreen'>) {
+}: RouteStackParamList<'InitScreen'>) => {
   const [comment, setComment] = useState('');
   const [listComments, setListComments] = useState([
     {
@@ -232,7 +231,7 @@ export default function DetailNewScreen({
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

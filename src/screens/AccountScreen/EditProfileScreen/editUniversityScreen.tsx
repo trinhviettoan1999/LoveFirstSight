@@ -23,7 +23,7 @@ const Item = ({item, onPress, isCheck}: any) => {
   );
 };
 
-const EditUniversityScreen = ({
+export const EditUniversityScreen = ({
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {
   const [selectedId, setSelectedId] = useState(null);

@@ -53,7 +53,7 @@ const checkSmoking = (smoking: string) => {
   }
 };
 
-const EditSmokingScreen = ({
+export const EditSmokingScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'AcountScreen'>) => {

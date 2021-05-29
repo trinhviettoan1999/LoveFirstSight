@@ -15,7 +15,7 @@ import {
 
 var DATA = require('../../../assets/json/hobbies.json');
 
-const InitHobbiesScreen = ({
+export const InitHobbiesScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'FirstScreen'>) => {
@@ -114,5 +114,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
-export default InitHobbiesScreen;

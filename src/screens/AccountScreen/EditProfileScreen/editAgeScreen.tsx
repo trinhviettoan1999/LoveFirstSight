@@ -7,7 +7,9 @@ import {
   StatusBarCustom,
 } from '../../../components';
 
-const EditAgeScreen = ({navigation}: RouteStackParamList<'AccountScreen'>) => {
+export const EditAgeScreen = ({
+  navigation,
+}: RouteStackParamList<'AccountScreen'>) => {
   return (
     <View style={styles.containerAll}>
       <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
@@ -60,5 +62,3 @@ const styles = StyleSheet.create({
     color: '#ACACAC',
   },
 });
-
-export default EditAgeScreen;

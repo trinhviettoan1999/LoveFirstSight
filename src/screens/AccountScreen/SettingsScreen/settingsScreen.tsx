@@ -32,7 +32,7 @@ const Item = ({content, onPress}: Props) => {
   );
 };
 
-const SettingsScreen = ({
+export const SettingsScreen = ({
   navigation,
 }: RouteStackParamList<'SettingsScreen'>) => {
   return (
@@ -159,5 +159,3 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
 });
-
-export default SettingsScreen;

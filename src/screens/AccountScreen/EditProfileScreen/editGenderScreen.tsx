@@ -35,7 +35,7 @@ const checkValue = (gender: string) => {
   }
 };
 
-const EditGenderScreen = ({
+export const EditGenderScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {
@@ -74,5 +74,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 });
-
-export default EditGenderScreen;

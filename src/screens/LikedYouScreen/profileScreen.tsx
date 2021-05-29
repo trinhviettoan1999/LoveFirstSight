@@ -57,7 +57,7 @@ const sendNotification = async (ownerId: string, userId: string) => {
   ).then((res) => res.json());
 };
 
-const ProfileScreen = ({
+export const ProfileScreen = ({
   navigation,
   route,
 }: RouteStackParamList<'InitScreen'>) => {
@@ -379,5 +379,3 @@ const styles = StyleSheet.create({
     width: 30,
   },
 });
-
-export default ProfileScreen;

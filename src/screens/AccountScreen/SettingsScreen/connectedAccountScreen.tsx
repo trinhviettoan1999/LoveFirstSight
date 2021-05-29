@@ -20,7 +20,7 @@ const ItemContainer = ({content}: Props) => {
   );
 };
 
-const ConnectedAccountScreen = ({
+export const ConnectedAccountScreen = ({
   navigation,
 }: RouteStackParamList<'SettingsScreen'>) => {
   return (
@@ -85,5 +85,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#E1E1E1',
   },
 });
-
-export default ConnectedAccountScreen;

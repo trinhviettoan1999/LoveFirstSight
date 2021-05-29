@@ -42,7 +42,7 @@ function calculateAge(strDate: Date) {
   return age_now;
 }
 
-const InitAgeScreen = ({
+export const InitAgeScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'FirstScreen'>) => {
@@ -171,5 +171,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default InitAgeScreen;

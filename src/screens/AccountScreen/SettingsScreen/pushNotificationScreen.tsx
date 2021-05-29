@@ -20,7 +20,7 @@ const ItemContainer = ({content}: Props) => {
   );
 };
 
-const PushNotificationScreen = ({
+export const PushNotificationScreen = ({
   navigation,
 }: RouteStackParamList<'SettingsScreen'>) => {
   return (
@@ -81,5 +81,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#E1E1E1',
   },
 });
-
-export default PushNotificationScreen;

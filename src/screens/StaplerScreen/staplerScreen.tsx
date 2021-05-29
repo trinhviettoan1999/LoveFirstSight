@@ -16,7 +16,6 @@ import {
   ImageUser,
 } from '../../components';
 import Modal from 'react-native-modal';
-import FilterScreen from './filterScreen';
 import {
   likeUser,
   ignoreUser,
@@ -116,7 +115,9 @@ const sendNotification = async (ownerId: string, userId: string) => {
   ).then((res) => res.json());
 };
 
-const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
+export const StaplerScreen = ({
+  navigation,
+}: RouteStackParamList<'StaplerScreen'>) => {
   const User = {
     userId: '',
     name: '',
@@ -150,7 +151,6 @@ const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
       to: 40,
     },
   });
-  const [isModalVisibleFilter, setIsModalVisibleFilter] = useState(false);
   const [isModalVisibleMenu, setIsModalVisibleMenu] = useState(false);
   const [user, setUser] = useState(User);
   const [load, setLoad] = useState(true);
@@ -230,10 +230,7 @@ const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
   return (
     <View style={styles.containerAll}>
       <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
-        setIsModalVisibleFilter={setIsModalVisibleFilter}
-        setIsModalVisibleMenu={setIsModalVisibleMenu}
-      />
+      <Header setIsModalVisibleMenu={setIsModalVisibleMenu} />
       {load && (
         <View style={styles.load}>
           <ActivityIndicator color="#6A1616" size={20} />
@@ -438,22 +435,6 @@ const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
           <Text style={{fontSize: 16}}>Don't have Users with your filter</Text>
         </View>
       )}
-      <Modal
-        swipeDirection="left"
-        onSwipeComplete={() => setIsModalVisibleFilter(false)}
-        hideModalContentWhileAnimating
-        isVisible={isModalVisibleFilter}
-        style={styles.modalFilter}
-        onBackdropPress={() => setIsModalVisibleFilter(false)}
-        backdropOpacity={0.5}>
-        <FilterScreen
-          setIsModalVisible={setIsModalVisibleFilter}
-          setFilter={setFilter}
-          filter={filter}
-          setLoad={setLoad}
-          load={load}
-        />
-      </Modal>
     </View>
   );
 };
@@ -583,5 +564,3 @@ const styles = StyleSheet.create({
     height: 250,
   },
 });
-
-export default HomeScreen;

@@ -41,10 +41,11 @@ const requestCameraAndAudioPermission = async () => {
 var engine: RtcEngine;
 let sound: Sound;
 const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
-export default function VideoScreen({
+
+export const VideoScreen = ({
   navigation,
   route,
-}: RouteStackParamList<'InitScreen'>) {
+}: RouteStackParamList<'InitScreen'>) => {
   const {appId, channelName, token, avatar, name, userId} = route.params;
   const [props, setProps] = useState({
     peerIds: [],
@@ -158,7 +159,7 @@ export default function VideoScreen({
       </View>
     </View>
   );
-}
+};
 
 let dimensions = {
   //get dimensions of the device to use in view styles

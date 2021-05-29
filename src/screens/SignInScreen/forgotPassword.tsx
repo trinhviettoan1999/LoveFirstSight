@@ -8,7 +8,7 @@ import {
 } from '../../components';
 import * as firebase from '../../firebase/firebase';
 
-const ForgotPasswordScreen = ({
+export const ForgotPasswordScreen = ({
   navigation,
 }: RouteStackParamList<'FirstScreen'>) => {
   const [valueEmail, onChangeTextEmail] = useState('');
@@ -119,5 +119,3 @@ const styles = StyleSheet.create({
     color: '#BB2424',
   },
 });
-
-export default ForgotPasswordScreen;

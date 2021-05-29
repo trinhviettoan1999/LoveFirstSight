@@ -62,7 +62,7 @@ const checkLookingFor = (lookingFor: string) => {
   }
 };
 
-const EditLookingForScreen = ({
+export const EditLookingForScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {
@@ -106,5 +106,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 });
-
-export default EditLookingForScreen;

@@ -7,7 +7,7 @@ import {
   StatusBarCustom,
 } from '../../components';
 
-const EnterPassword = ({
+export const EnterPassword = ({
   route,
   navigation,
 }: RouteStackParamList<'FirstScreen'>) => {
@@ -112,5 +112,3 @@ const styles = StyleSheet.create({
     color: '#BB2424',
   },
 });
-
-export default EnterPassword;

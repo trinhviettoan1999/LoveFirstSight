@@ -103,7 +103,11 @@ const getAudioTimeString = (seconds: any) => {
 
 let audio: Sound;
 let valueChangeInterval: NodeJS.Timeout;
-const Chat = ({route, navigation}: RouteStackParamList<'InitScreen'>) => {
+
+export const Chat = ({
+  route,
+  navigation,
+}: RouteStackParamList<'InitScreen'>) => {
   const {ownerId, name, conversationId, avatar, flag, state} = route.params;
   const [messages, setMessages] = useState([]);
   const uid = Math.floor(Math.random() * 100) + 1;
@@ -383,6 +387,7 @@ const Chat = ({route, navigation}: RouteStackParamList<'InitScreen'>) => {
       }
     });
   };
+
   const renderAudio = (props: any) => {
     return !props.currentMessage.audioV ? null : (
       <View>
@@ -479,6 +484,7 @@ const Chat = ({route, navigation}: RouteStackParamList<'InitScreen'>) => {
       </View>
     );
   };
+
   const renderBubble = (props: any) => {
     return (
       <View>
@@ -873,5 +879,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
-export default Chat;

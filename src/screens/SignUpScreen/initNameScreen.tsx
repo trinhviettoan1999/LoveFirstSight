@@ -25,7 +25,7 @@ const Data = {
   ],
 };
 
-const InitNameScreen = ({
+export const InitNameScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'FirstScreen'>) => {
@@ -129,5 +129,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
-export default InitNameScreen;

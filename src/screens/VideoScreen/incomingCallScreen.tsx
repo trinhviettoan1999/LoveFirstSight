@@ -9,7 +9,7 @@ import {
 import {RouteStackParamList, CustomIcon} from '../../components';
 import {setStateVideoCall, createKey} from '../../controller';
 
-const IncommingCallScreen = ({
+export const IncomingCallScreen = ({
   navigation,
   route,
 }: RouteStackParamList<'InitScreen'>) => {
@@ -78,5 +78,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-export default IncommingCallScreen;

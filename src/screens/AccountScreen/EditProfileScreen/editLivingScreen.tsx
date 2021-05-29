@@ -7,7 +7,7 @@ import {
   StatusBarCustom,
 } from '../../../components';
 
-const EditLivingScreen = ({
+export const EditLivingScreen = ({
   navigation,
 }: RouteStackParamList<'AccountScreen'>) => {
   return (
@@ -61,5 +61,3 @@ const styles = StyleSheet.create({
     color: '#ACACAC',
   },
 });
-
-export default EditLivingScreen;

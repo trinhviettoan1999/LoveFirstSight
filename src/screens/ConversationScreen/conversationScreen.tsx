@@ -141,7 +141,7 @@ const Conversation = ({navigation}: RouteStackParamList<'InitScreen'>) => {
   );
 };
 
-const ConversationScreen = () => {
+export const ConversationScreen = () => {
   return (
     <Tab.Navigator
       lazy
@@ -222,5 +222,3 @@ const styles = StyleSheet.create({
     color: '#919191',
   },
 });
-
-export default ConversationScreen;

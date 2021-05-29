@@ -58,7 +58,7 @@ const sendNotification = async (ownerId: string, userId: string) => {
   ).then((res) => res.json());
 };
 
-const ListIgnoreScreen = ({
+export const ListIgnoreScreen = ({
   navigation,
 }: RouteStackParamList<'LoadingScreen'>) => {
   const User = {
@@ -394,5 +394,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default ListIgnoreScreen;

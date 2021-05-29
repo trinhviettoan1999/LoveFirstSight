@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {SwitchValue, Header, StatusBarCustom} from '../../../components';
 
-const ActiveStatusScreen = () => {
+export const ActiveStatusScreen = () => {
   return (
     <View style={styles.screen}>
       <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
@@ -49,5 +49,3 @@ const styles = StyleSheet.create({
     color: '#212121',
   },
 });
-
-export default ActiveStatusScreen;

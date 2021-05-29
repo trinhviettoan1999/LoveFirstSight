@@ -51,7 +51,7 @@ const ItemImage = ({item, onPressRemove}: any) => {
   );
 };
 
-const PostScreen = ({navigation}: RouteStackParamList<'InitScreen'>) => {
+export const PostScreen = ({navigation}: RouteStackParamList<'InitScreen'>) => {
   const [content, onChangeContent] = useState('');
   const [listCollection, setListCollection] = useState([]);
   const removeItem = (items: any, valueId: string) => {
@@ -207,5 +207,3 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-
-export default PostScreen;

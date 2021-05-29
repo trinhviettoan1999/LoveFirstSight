@@ -8,7 +8,7 @@ import {
 } from '../../../components';
 import {updateUser} from '../../../controller/updateUser';
 
-const EditNameScreen = ({
+export const EditNameScreen = ({
   navigation,
   route,
 }: RouteStackParamList<'AccountScreen'>) => {
@@ -68,5 +68,3 @@ const styles = StyleSheet.create({
     color: '#ACACAC',
   },
 });
-
-export default EditNameScreen;

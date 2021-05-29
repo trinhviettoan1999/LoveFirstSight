@@ -41,6 +41,7 @@ function cameraLaunch(setResourcePath: any) {
     });
   });
 }
+
 //get image from gallery
 function imageGalleryLaunch(setResourcePath: any) {
   checkPermissionPhoto().then((result) => {
@@ -91,7 +92,7 @@ const createUser = (user: any) => {
     });
 };
 
-const InitAvatarScreen = ({
+export const InitAvatarScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'FirstScreen'>) => {
@@ -280,5 +281,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
-export default InitAvatarScreen;

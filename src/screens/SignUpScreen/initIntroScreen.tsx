@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Header, RouteStackParamList, StatusBarCustom} from '../../components';
 
-const InitIntroScreen = ({
+export const InitIntroScreen = ({
   route,
   navigation,
 }: RouteStackParamList<'FirstScreen'>) => {
@@ -117,5 +117,3 @@ const styles = StyleSheet.create({
     color: '#919191',
   },
 });
-
-export default InitIntroScreen;

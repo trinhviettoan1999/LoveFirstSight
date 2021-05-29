@@ -9,7 +9,10 @@ import {
 import {checkPermisstionGPS} from '../../controller';
 import messaging from '@react-native-firebase/messaging';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-const LoadingScreen = ({navigation}: RouteStackParamList<'LoadingScreen'>) => {
+
+export const LoadingScreen = ({
+  navigation,
+}: RouteStackParamList<'LoadingScreen'>) => {
   function load() {
     messaging()
       .getInitialNotification()
@@ -118,5 +121,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default LoadingScreen;
