@@ -1,5 +1,11 @@
 import React, {useEffect} from 'react';
-import {View, ActivityIndicator, StyleSheet, Text} from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  Platform,
+} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {
   RouteStackParamList,
@@ -58,26 +64,37 @@ export const LoadingScreen = ({
   }
 
   useEffect(() => {
-    RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
-      interval: 10000,
-      fastInterval: 5000,
-    })
-      .then((data) => {
-        if (data) {
-          checkPermisstionGPS().then((result) => {
-            if (!result) {
-              navigation.replace('InitialScreen');
-            }
-            load();
-          });
-        }
+    console.log('oK');
+    if (Platform.OS === 'android') {
+      RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
+        interval: 10000,
+        fastInterval: 5000,
       })
-      .catch((err) => {
-        if (err.message === 'denied') {
+        .then((data) => {
+          if (data) {
+            checkPermisstionGPS().then((result) => {
+              if (!result) {
+                navigation.replace('InitialScreen');
+              }
+              load();
+            });
+          }
+        })
+        .catch((err) => {
+          if (err.message === 'denied') {
+            navigation.replace('InitialScreen');
+          }
+          console.log(err);
+        });
+    } else {
+      checkPermisstionGPS().then((result) => {
+        if (!result) {
           navigation.replace('InitialScreen');
         }
-        console.log(err);
+        load();
       });
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

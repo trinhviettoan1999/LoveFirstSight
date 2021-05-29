@@ -99,6 +99,7 @@ const App = () => {
     // @ts-ignore: Object is possibly 'null'.
     navigationRef.current && navigationRef.current.navigate(name, params);
   }
+
   useEffect(() => {
     // requestUserPermission();
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
@@ -109,6 +110,7 @@ const App = () => {
     });
     return unsubscribe;
   }, []);
+
   useEffect(() => {
     messaging().onNotificationOpenedApp((remoteMessage) => {
       console.log(
