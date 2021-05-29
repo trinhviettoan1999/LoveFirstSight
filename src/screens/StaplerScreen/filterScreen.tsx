@@ -6,12 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {
-  CustomIcon,
-  SelectionButtonGroup,
-  // DropDownPickerCustom,
-  FlatListItem,
-} from '../../components';
+import {CustomIcon, SelectionButtonGroup, FlatListItem} from '../../components';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import {Slider} from 'react-native-elements';
 import Modal from 'react-native-modal';

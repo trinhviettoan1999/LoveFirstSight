@@ -7,6 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Image,
 } from 'react-native';
 import {
   StatusBarCustom,
@@ -35,6 +36,8 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import GetLocation from 'react-native-get-location';
+
+const not_result_image = require('../../../assets/images/not_result.png');
 
 const Header = ({setIsModalVisibleFilter, setIsModalVisibleMenu}: any) => {
   return (
@@ -78,6 +81,7 @@ type Props = {
   color: string;
   onPress?: any;
 };
+
 const ButtonIcon = ({name, size, color, onPress}: Props) => {
   return (
     <TouchableOpacity style={styles.buttonIcon} onPress={onPress}>
@@ -164,6 +168,19 @@ const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
     });
     setLoad(false);
   }
+
+  const handleYesAlert = () => {
+    sendMessageRequest(user.userId).then((conversationId) => {
+      setLoad(!load);
+      navigation.navigate('Chat', {
+        name: user.name,
+        avatar: user.avatar,
+        conversationId: conversationId,
+        ownerId: user.userId,
+        state: true,
+      });
+    });
+  };
 
   useEffect(() => {
     //get token device
@@ -256,20 +273,7 @@ const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
                             },
                             {
                               text: 'OK',
-                              onPress: () => {
-                                sendMessageRequest(user.userId).then(
-                                  (conversationId) => {
-                                    setLoad(!load);
-                                    navigation.navigate('Chat', {
-                                      name: user.name,
-                                      avatar: user.avatar,
-                                      conversationId: conversationId,
-                                      ownerId: user.userId,
-                                      state: true,
-                                    });
-                                  },
-                                );
-                              },
+                              onPress: handleYesAlert,
                             },
                           ],
                           {cancelable: false},
@@ -426,6 +430,11 @@ const HomeScreen = ({navigation}: RouteStackParamList<'StaplerScreen'>) => {
             styles.scrollView,
             {justifyContent: 'center', alignItems: 'center'},
           ]}>
+          <Image
+            source={not_result_image}
+            style={styles.imageResult}
+            resizeMode="contain"
+          />
           <Text style={{fontSize: 16}}>Don't have Users with your filter</Text>
         </View>
       )}
@@ -568,6 +577,10 @@ const styles = StyleSheet.create({
   },
   textLoad: {
     marginTop: 10,
+  },
+  imageResult: {
+    width: 250,
+    height: 250,
   },
 });
 
