@@ -6,7 +6,7 @@ type props = {
   urlImage: string;
 };
 
-const ImageUser = ({urlImage}: props) => {
+export const ImageUser = ({urlImage}: props) => {
   const [load, setLoad] = useState(false);
   return (
     <View style={styles.container}>
@@ -51,5 +51,3 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
-
-export default ImageUser;

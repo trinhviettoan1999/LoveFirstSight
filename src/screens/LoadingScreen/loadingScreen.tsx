@@ -64,7 +64,6 @@ export const LoadingScreen = ({
   }
 
   useEffect(() => {
-    console.log('oK');
     if (Platform.OS === 'android') {
       RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
         interval: 10000,

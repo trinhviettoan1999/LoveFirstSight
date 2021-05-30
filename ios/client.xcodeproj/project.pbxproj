@@ -11,13 +11,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		249360881E93492990634808 /* CharlotteBella.otf in Resources */ = {isa = PBXBuildFile; fileRef = EF832748D96A4311BFE6898C /* CharlotteBella.otf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* clientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* clientTests.m */; };
-		477D1B96FF5542B4ACCA945C /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FB2E6975524A9980B8A7ED /* icomoon.ttf */; };
-		50EB3C205933476AB631CA25 /* SFProText.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7CDDE71D1EF74622ADB76C89 /* SFProText.otf */; };
 		5A7859D6A149641FEC219987 /* libPods-client-clientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 843C1D8B90BCA0F75DFF1C4F /* libPods-client-clientTests.a */; };
 		7CECA2742662632B001F08F7 /* stapler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CECA2732662632B001F08F7 /* stapler.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -77,7 +74,6 @@
 		E364B03919D6E3457270902B /* libPods-client-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-client-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		EF832748D96A4311BFE6898C /* CharlotteBella.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = CharlotteBella.otf; path = ../assets/fonts/CharlotteBella.otf; sourceTree = "<group>"; };
 		FFC6A00425734A6A00E3CFAB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FFC6A00B25734AF000E3CFAB /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = icomoon.ttf; path = ../../assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -218,7 +214,6 @@
 		D3DCFC26B582478FBA6E4C5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				EF832748D96A4311BFE6898C /* CharlotteBella.otf */,
 				27FB2E6975524A9980B8A7ED /* icomoon.ttf */,
 				7CDDE71D1EF74622ADB76C89 /* SFProText.otf */,
 			);
@@ -383,9 +378,6 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				FFC6A00525734A6A00E3CFAB /* GoogleService-Info.plist in Resources */,
 				FFC6A00C25734AF000E3CFAB /* icomoon.ttf in Resources */,
-				249360881E93492990634808 /* CharlotteBella.otf in Resources */,
-				477D1B96FF5542B4ACCA945C /* icomoon.ttf in Resources */,
-				50EB3C205933476AB631CA25 /* SFProText.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

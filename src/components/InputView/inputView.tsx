@@ -27,7 +27,7 @@ const validate = (text: string, onChangeText: any, setIsEmail: any) => {
   }
 };
 
-const InputView = ({
+export const InputView = ({
   iconName,
   showIcon,
   autoFocus,
@@ -73,5 +73,3 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
-
-export default InputView;

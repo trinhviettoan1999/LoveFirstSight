@@ -31,7 +31,7 @@ type Props = {
   defaultSelection?: any;
 };
 
-const SelectionButtonGroup = ({
+export const SelectionButtonGroup = ({
   data,
   setItemSelected,
   defaultSelection,
@@ -106,5 +106,3 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-
-export default SelectionButtonGroup;

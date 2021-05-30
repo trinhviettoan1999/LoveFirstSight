@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-const DropDownPickerCustom = ({Data}: any) => {
+export const DropDownPickerCustom = ({Data}: any) => {
   const [value, setValue] = useState(150);
   return (
     <View style={styles.container}>
@@ -60,5 +60,3 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
 });
-
-export default DropDownPickerCustom;

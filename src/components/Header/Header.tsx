@@ -19,7 +19,7 @@ type Props = {
   onPressAvatar?: any;
 };
 
-const Header = ({
+export const Header = ({
   title,
   textLeft,
   textRight,
@@ -145,5 +145,3 @@ const styles = StyleSheet.create({
     color: '#ACACAC',
   },
 });
-
-export default Header;

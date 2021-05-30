@@ -8,7 +8,7 @@ type Props = {
   setGender: any;
 };
 
-const SelectionRadioHorizontal = ({Data, gender, setGender}: Props) => {
+export const SelectionRadioHorizontal = ({Data, gender, setGender}: Props) => {
   return (
     <View style={styles.containerAll}>
       <RadioButton.Group
@@ -47,5 +47,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default SelectionRadioHorizontal;

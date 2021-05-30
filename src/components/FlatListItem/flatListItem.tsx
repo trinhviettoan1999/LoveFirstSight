@@ -23,7 +23,7 @@ type Props = {
   setIsModalVisible?: any;
 };
 
-const FlatListItem = ({data, setValue, setIsModalVisible}: any) => {
+export const FlatListItem = ({data, setValue, setIsModalVisible}: any) => {
   const [selectedId, setSelectedId] = useState(null);
   const [value, onChangeText] = useState('');
   const renderItem = ({item}: any) => {
@@ -96,5 +96,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
 });
-
-export default FlatListItem;

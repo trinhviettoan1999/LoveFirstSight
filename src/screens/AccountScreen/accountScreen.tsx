@@ -719,12 +719,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   font26: {
-    fontFamily: 'CharlotteBella',
     fontSize: 26,
     fontWeight: 'bold',
   },
   font17: {
-    fontFamily: 'SFProText',
     fontSize: 17,
     fontWeight: '600',
   },

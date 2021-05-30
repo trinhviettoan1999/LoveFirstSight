@@ -11,7 +11,11 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import {StatusBarCustom, RouteStackParamList} from '../../components';
+import {
+  StatusBarCustom,
+  RouteStackParamList,
+  InputCustom,
+} from '../../components';
 
 import * as firebase from '../../firebase/firebase';
 
@@ -32,8 +36,7 @@ export const SignInScreen = ({
         <Image
           style={{width: 270, height: 100}}
           source={{
-            uri:
-              'https://firebasestorage.googleapis.com/v0/b/stapler-cf434.appspot.com/o/logo%2FLogo.png?alt=media',
+            uri: 'https://firebasestorage.googleapis.com/v0/b/stapler-cf434.appspot.com/o/logo%2FLogo.png?alt=media',
           }}
         />
       </View>
@@ -42,27 +45,22 @@ export const SignInScreen = ({
           style={{flex: 1}}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
-          <TextInput
-            keyboardType="email-address"
-            style={styles.inputText}
+          <InputCustom
             value={email}
+            keyboardType="email-address"
+            placeholder="Example@gmail.com"
             onChangeText={(text) => setEmail(text)}
             onSubmitEditing={() => {
               // @ts-ignore: Object is possibly 'null'.
               ref_input2.current.focus();
             }}
-            textContentType="emailAddress"
-            placeholder="Example@gmail.com"
-            blurOnSubmit={false}
-            ref={ref_input1}
           />
-          <TextInput
-            style={styles.inputText}
+          <InputCustom
+            ref={ref_input2}
             value={password}
+            placeholder="Password"
             onChangeText={(text) => setPassWord(text)}
             secureTextEntry={true}
-            placeholder="Password"
-            ref={ref_input2}
           />
           <Text
             style={styles.textForgot}
@@ -154,15 +152,14 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   textForgot: {
-    marginTop: 10,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '900',
     color: '#6A1616',
     textAlign: 'right',
   },
   textOptions: {
     marginTop: 15,
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '800',
     fontStyle: 'normal',
     color: '#6A1616',

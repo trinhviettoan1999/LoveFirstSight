@@ -2,7 +2,7 @@ import React from 'react';
 import {RadioButton} from 'react-native-paper';
 import {StyleSheet, View, Text} from 'react-native';
 
-const SelectionRadioGroup = ({Data, value, setValue}: any) => {
+export const SelectionRadioGroup = ({Data, value, setValue}: any) => {
   return (
     <View style={styles.containerAll}>
       <RadioButton.Group
@@ -41,5 +41,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default SelectionRadioGroup;

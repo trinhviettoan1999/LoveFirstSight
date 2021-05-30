@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Switch} from 'react-native';
 
-const SwitchValue = () => {
+export const SwitchValue = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   return (
@@ -14,5 +14,3 @@ const SwitchValue = () => {
     />
   );
 };
-
-export default SwitchValue;

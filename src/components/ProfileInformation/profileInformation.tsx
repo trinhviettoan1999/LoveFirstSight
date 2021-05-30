@@ -8,7 +8,11 @@ type propsInformation = {
   onPress: any;
 };
 
-const ProfileInformation = ({iconName, content, onPress}: propsInformation) => {
+export const ProfileInformation = ({
+  iconName,
+  content,
+  onPress,
+}: propsInformation) => {
   return (
     <View style={styles.container}>
       <CustomIcon
@@ -53,5 +57,3 @@ const styles = StyleSheet.create({
     color: '#ACACAC',
   },
 });
-
-export default ProfileInformation;
