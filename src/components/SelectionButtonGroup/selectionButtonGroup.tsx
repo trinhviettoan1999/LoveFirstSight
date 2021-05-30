@@ -25,7 +25,7 @@ const renderButton = (
 
 type Props = {
   data: any;
-  selectionHandler: any;
+  selectionHandler?: any;
   setItemSelected?: any;
   maxMultiSelect: number;
   defaultSelection?: any;

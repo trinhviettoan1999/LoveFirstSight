@@ -48,6 +48,7 @@ import {
   DetailNewScreen,
   VideoScreen,
   IncomingCallScreen,
+  FilterScreen,
 } from './src/screens';
 import {CustomIcon} from './src/components';
 import messaging from '@react-native-firebase/messaging';
@@ -168,6 +169,7 @@ const App = () => {
         <Stack.Screen name={ROUTER.initHobbies} component={InitHobbiesScreen} />
         <Stack.Screen name={ROUTER.initAvatar} component={InitAvatarScreen} />
         <Stack.Screen name={ROUTER.home} component={AppTab} />
+        <Stack.Screen name={ROUTER.filter} component={FilterScreen} />
         <Stack.Screen name={ROUTER.setting} component={SettingsScreen} />
         <Stack.Screen name={ROUTER.listIgnore} component={ListIgnoreScreen} />
         <Stack.Screen name={ROUTER.listBlock} component={ListBlockScreen} />

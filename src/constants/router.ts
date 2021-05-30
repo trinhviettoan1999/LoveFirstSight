@@ -37,4 +37,5 @@ export const ROUTER = {
   detailNew: 'DetailNewScreen',
   video: 'VideoScreen',
   incomingCall: 'IncomingCallScreen',
+  filter: 'FilterScreen',
 };

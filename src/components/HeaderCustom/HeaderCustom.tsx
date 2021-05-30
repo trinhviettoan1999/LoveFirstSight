@@ -22,7 +22,7 @@ export const HeaderCustom = ({
   backgroundStatusBar = color.second,
   barStyle = 'dark-content',
   removeBorderWidth = false,
-  textColor = color.text,
+  textColor = color.primary,
 }: propsHeader) => {
   return (
     <Header
@@ -33,10 +33,9 @@ export const HeaderCustom = ({
       centerComponent={{
         text: title,
         style: {
-          fontWeight: '700',
+          fontWeight: 'bold',
           color: textColor,
-          fontSize: 24,
-          lineHeight: 36,
+          fontSize: 28,
           fontStyle: 'normal',
         },
       }}
@@ -47,8 +46,9 @@ export const HeaderCustom = ({
       }}
       leftComponent={leftComponent}
       rightComponent={rightComponent}
-      rightContainerStyle={{justifyContent: 'center'}}
-      leftContainerStyle={{justifyContent: 'center'}}
+      centerContainerStyle={{flex: 1}}
+      rightContainerStyle={{justifyContent: 'center', flex: 1}}
+      leftContainerStyle={{justifyContent: 'center', flex: 1}}
     />
   );
 };

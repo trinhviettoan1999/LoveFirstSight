@@ -3,7 +3,7 @@ import {StyleSheet, ActivityIndicator, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 type props = {
-  urlImage: string;
+  urlImage?: string;
 };
 
 export const ImageUser = ({urlImage}: props) => {

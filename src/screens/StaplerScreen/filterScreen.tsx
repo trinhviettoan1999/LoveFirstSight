@@ -6,10 +6,18 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {CustomIcon, SelectionButtonGroup, FlatListItem} from '../../components';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {
+  CustomIcon,
+  SelectionButtonGroup,
+  FlatListItem,
+  HeaderCustom,
+  Back,
+} from '../../components';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import {Slider} from 'react-native-elements';
 import Modal from 'react-native-modal';
+import {color} from '../../theme/color';
 
 var dataHeight = require('../../../assets/json/height.json');
 var dataProvince = require('../../../assets/json/provice.json');
@@ -254,228 +262,247 @@ const ContentView = ({title, iconName, content, onPress}: any) => {
 export const FilterScreen = ({
   setIsModalVisible,
   setFilter,
-  filter,
   setLoad,
   load,
 }: any) => {
+  const route = useRoute();
+  const navigation = useNavigation();
   const [isModalVisibleHeight, setIsModalVisibleHeight] = useState(false);
   const [isModalVisibleProvince, setIsModalVisibleProvince] = useState(false);
-  const [isModalVisibleUniversity, setIsModalVisibleUniversity] = useState(
-    false,
+  const [isModalVisibleUniversity, setIsModalVisibleUniversity] =
+    useState(false);
+  const [gender, setGender] = useState(
+    checkGender(route.params?.filter.gender),
   );
-  const [gender, setGender] = useState(checkGender(filter.gender));
   const [lookingFor, setLookingFor] = useState(
-    checkLookingFor(filter.lookingFor),
+    checkLookingFor(route.params?.filter.lookingFor),
   );
-  const [drinking, setDrinking] = useState(checkDrinking(filter.drinking));
-  const [smoking, setSmoking] = useState(checkDrinking(filter.smoking));
-  const [child, setChild] = useState(checkChild(filter.kids));
-  const [height, setHeight] = useState(filter.height);
-  const [province, setProvince] = useState(filter.province);
-  const [university, setUniversity] = useState(filter.university);
-  const [age, setAge] = useState([filter.age.from, filter.age.to]);
-  const [distance, setDistance] = useState(filter.distance);
+  const [drinking, setDrinking] = useState(
+    checkDrinking(route.params?.filter.drinking),
+  );
+  const [smoking, setSmoking] = useState(
+    checkDrinking(route.params?.filter.smoking),
+  );
+  const [child, setChild] = useState(checkChild(route.params?.filter.kids));
+  const [height, setHeight] = useState(route.params?.filter.height);
+  const [province, setProvince] = useState(route.params?.filter.province);
+  const [university, setUniversity] = useState(route.params?.filter.university);
+  const [age, setAge] = useState([
+    route.params?.filter.age.from,
+    route.params?.filter.age.to,
+  ]);
+  const [distance, setDistance] = useState(route.params?.filter.distance);
   return (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.textTitle}>Filter</Text>
-        </View>
-        <SelectionGroup
-          setItemSelected={setGender}
-          title="Who do you want to date?"
-          iconName="gender"
-          data={genderData}
-          defaultSelection={gender.optionText}
-        />
-        <View style={styles.selectionContainer}>
-          <View style={styles.titleContainer}>
-            <CustomIcon
-              name="scope"
-              size={20}
-              color="#6A1616"
-              style={{marginRight: 10}}
-            />
-            <Text style={styles.textTitle}>Distance from you</Text>
+    <View style={{flex: 1, backgroundColor: color.bgWhiteLight}}>
+      <HeaderCustom
+        title="Filter"
+        backgroundStatusBar={color.bgWhite}
+        leftComponent={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Back />
+          </TouchableOpacity>
+        }
+      />
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.container}>
+          <SelectionGroup
+            setItemSelected={setGender}
+            title="Who do you want to date?"
+            iconName="gender"
+            data={genderData}
+            defaultSelection={gender.optionText}
+          />
+          <View style={styles.selectionContainer}>
+            <View style={styles.titleContainer}>
+              <CustomIcon
+                name="scope"
+                size={20}
+                color="#6A1616"
+                style={{marginRight: 10}}
+              />
+              <Text style={styles.textTitle}>Distance from you</Text>
+            </View>
+            <View style={styles.sliderContainer}>
+              <Text style={[styles.textContent, {width: 50}]}>
+                {distance} km
+              </Text>
+              <Slider
+                style={{marginLeft: 16, flex: 1}}
+                value={distance}
+                step={1}
+                maximumValue={100}
+                minimumValue={1}
+                onSlidingComplete={setDistance}
+                trackStyle={{
+                  width: '100%',
+                  height: 2,
+                }}
+                maximumTrackTintColor="#C8C8C8"
+                minimumTrackTintColor="#6A1616"
+                thumbStyle={{
+                  height: 15,
+                  width: 15,
+                  backgroundColor: '#6A1616',
+                }}
+              />
+            </View>
           </View>
-          <View style={styles.sliderContainer}>
-            <Text style={[styles.textContent, {width: 50}]}>{distance} km</Text>
-            <Slider
-              style={{marginLeft: 16, flex: 1}}
-              value={distance}
-              step={1}
-              maximumValue={100}
-              minimumValue={1}
-              onSlidingComplete={setDistance}
-              trackStyle={{
-                width: '100%',
-                height: 2,
-              }}
-              maximumTrackTintColor="#C8C8C8"
-              minimumTrackTintColor="#6A1616"
-              thumbStyle={{
-                height: 15,
-                width: 15,
-                backgroundColor: '#6A1616',
-              }}
-            />
-          </View>
-        </View>
-        <SliderView
-          title="Age range"
-          iconName="scope"
-          min={18}
-          max={60}
-          isTwoSlider={true}
-          age={age}
-          setAge={setAge}
-        />
-        <ContentView
-          title="Height range"
-          iconName="height"
-          content={height ? height + ' cm' : 'Select to...'}
-          onPress={() => {
-            setIsModalVisibleHeight(true);
-          }}
-        />
-        <SelectionGroup
-          setItemSelected={setLookingFor}
-          title="Looking for..."
-          iconName="lookingfor"
-          data={lookingForData}
-          defaultSelection={lookingFor.optionText}
-        />
-        <SelectionGroup
-          setItemSelected={setDrinking}
-          title="Drinking"
-          iconName="drinking"
-          data={drinkingData}
-          defaultSelection={drinking.optionText}
-        />
-        <SelectionGroup
-          setItemSelected={setSmoking}
-          title="Smoking"
-          iconName="smoking"
-          data={drinkingData}
-          defaultSelection={smoking.optionText}
-        />
-        <SelectionGroup
-          setItemSelected={setChild}
-          title="Kids"
-          iconName="child"
-          data={childData}
-          defaultSelection={child.optionText}
-        />
-        <ContentView
-          title="From"
-          iconName="province"
-          content={province ? province : 'Select to...'}
-          onPress={() => {
-            setIsModalVisibleProvince(true);
-          }}
-        />
-        <ContentView
-          title="University"
-          iconName="university"
-          content={university ? university : 'Select to...'}
-          onPress={() => {
-            setIsModalVisibleUniversity(true);
-          }}
-        />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={[styles.button, {backgroundColor: '#E1E1E1'}]}
+          <SliderView
+            title="Age range"
+            iconName="scope"
+            min={18}
+            max={60}
+            isTwoSlider={true}
+            age={age}
+            setAge={setAge}
+          />
+          <ContentView
+            title="Height range"
+            iconName="height"
+            content={height ? height + ' cm' : 'Select to...'}
             onPress={() => {
-              setChild({
-                optionText: 3,
-                value: '',
-              });
-              setDrinking({
-                optionText: 4,
-                value: '',
-              });
-              setGender({
-                optionText: 3,
-                value: '',
-              });
-              setSmoking({
-                optionText: 4,
-                value: '',
-              });
-              setLookingFor({
-                optionText: 5,
-                value: '',
-              });
-              setHeight('');
-              setUniversity('');
-              setProvince('');
-            }}>
-            <Text style={[styles.textContent, {color: '#ACACAC'}]}>
-              Clear All
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={async () => {
-              await setFilter({
-                gender: gender.value,
-                lookingFor: lookingFor.value,
-                drinking: drinking.value,
-                smoking: smoking.value,
-                kids: child.value,
-                province: province,
-                university: university,
-                height: height,
-                age: {
-                  from: age[0],
-                  to: age[1],
-                },
-                distance: distance,
-              });
-              await setIsModalVisible(false);
-              setLoad(!load);
+              setIsModalVisibleHeight(true);
             }}
-            style={[styles.button, {backgroundColor: '#6A1616'}]}>
-            <Text style={[styles.textContent, {color: '#FFFFFF'}]}>
-              Apply changes
-            </Text>
-          </TouchableOpacity>
+          />
+          <SelectionGroup
+            setItemSelected={setLookingFor}
+            title="Looking for..."
+            iconName="lookingfor"
+            data={lookingForData}
+            defaultSelection={lookingFor.optionText}
+          />
+          <SelectionGroup
+            setItemSelected={setDrinking}
+            title="Drinking"
+            iconName="drinking"
+            data={drinkingData}
+            defaultSelection={drinking.optionText}
+          />
+          <SelectionGroup
+            setItemSelected={setSmoking}
+            title="Smoking"
+            iconName="smoking"
+            data={drinkingData}
+            defaultSelection={smoking.optionText}
+          />
+          <SelectionGroup
+            setItemSelected={setChild}
+            title="Kids"
+            iconName="child"
+            data={childData}
+            defaultSelection={child.optionText}
+          />
+          <ContentView
+            title="From"
+            iconName="province"
+            content={province ? province : 'Select to...'}
+            onPress={() => {
+              setIsModalVisibleProvince(true);
+            }}
+          />
+          <ContentView
+            title="University"
+            iconName="university"
+            content={university ? university : 'Select to...'}
+            onPress={() => {
+              setIsModalVisibleUniversity(true);
+            }}
+          />
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={[styles.button, {backgroundColor: '#E1E1E1'}]}
+              onPress={() => {
+                setChild({
+                  optionText: 3,
+                  value: '',
+                });
+                setDrinking({
+                  optionText: 4,
+                  value: '',
+                });
+                setGender({
+                  optionText: 3,
+                  value: '',
+                });
+                setSmoking({
+                  optionText: 4,
+                  value: '',
+                });
+                setLookingFor({
+                  optionText: 5,
+                  value: '',
+                });
+                setHeight('');
+                setUniversity('');
+                setProvince('');
+              }}>
+              <Text style={[styles.textContent, {color: '#ACACAC'}]}>
+                Clear All
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={async () => {
+                await setFilter({
+                  gender: gender.value,
+                  lookingFor: lookingFor.value,
+                  drinking: drinking.value,
+                  smoking: smoking.value,
+                  kids: child.value,
+                  province: province,
+                  university: university,
+                  height: height,
+                  age: {
+                    from: age[0],
+                    to: age[1],
+                  },
+                  distance: distance,
+                });
+                await setIsModalVisible(false);
+                setLoad(!load);
+              }}
+              style={[styles.button, {backgroundColor: '#6A1616'}]}>
+              <Text style={[styles.textContent, {color: '#FFFFFF'}]}>
+                Apply changes
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <Modal
-        isVisible={isModalVisibleHeight}
-        style={styles.modal}
-        onBackdropPress={() => setIsModalVisibleHeight(false)}
-        backdropOpacity={0.5}>
-        <FlatListItem
-          data={dataHeight}
-          setValue={setHeight}
-          setIsModalVisible={setIsModalVisibleHeight}
-        />
-      </Modal>
-      <Modal
-        isVisible={isModalVisibleProvince}
-        style={styles.modal}
-        onBackdropPress={() => setIsModalVisibleProvince(false)}
-        backdropOpacity={0.5}>
-        <FlatListItem
-          data={dataProvince}
-          setValue={setProvince}
-          setIsModalVisible={setIsModalVisibleProvince}
-        />
-      </Modal>
-      <Modal
-        isVisible={isModalVisibleUniversity}
-        style={styles.modal}
-        onBackdropPress={() => setIsModalVisibleUniversity(false)}
-        backdropOpacity={0.5}>
-        <FlatListItem
-          data={dataUniversity}
-          setValue={setUniversity}
-          setIsModalVisible={setIsModalVisibleUniversity}
-        />
-      </Modal>
-    </ScrollView>
+        <Modal
+          isVisible={isModalVisibleHeight}
+          style={styles.modal}
+          onBackdropPress={() => setIsModalVisibleHeight(false)}
+          backdropOpacity={0.5}>
+          <FlatListItem
+            data={dataHeight}
+            setValue={setHeight}
+            setIsModalVisible={setIsModalVisibleHeight}
+          />
+        </Modal>
+        <Modal
+          isVisible={isModalVisibleProvince}
+          style={styles.modal}
+          onBackdropPress={() => setIsModalVisibleProvince(false)}
+          backdropOpacity={0.5}>
+          <FlatListItem
+            data={dataProvince}
+            setValue={setProvince}
+            setIsModalVisible={setIsModalVisibleProvince}
+          />
+        </Modal>
+        <Modal
+          isVisible={isModalVisibleUniversity}
+          style={styles.modal}
+          onBackdropPress={() => setIsModalVisibleUniversity(false)}
+          backdropOpacity={0.5}>
+          <FlatListItem
+            data={dataUniversity}
+            setValue={setUniversity}
+            setIsModalVisible={setIsModalVisibleUniversity}
+          />
+        </Modal>
+      </ScrollView>
+    </View>
   );
 };
 

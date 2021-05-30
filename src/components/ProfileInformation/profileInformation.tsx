@@ -5,7 +5,7 @@ import CustomIcon from '../CustomIcon/customIcon';
 type propsInformation = {
   iconName: string;
   content?: any;
-  onPress: any;
+  onPress?: any;
 };
 
 export const ProfileInformation = ({

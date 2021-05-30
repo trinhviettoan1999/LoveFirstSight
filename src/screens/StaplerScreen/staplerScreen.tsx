@@ -10,10 +10,11 @@ import {
   Image,
 } from 'react-native';
 import {
-  StatusBarCustom,
   CustomIcon,
   ProfileInformation,
   ImageUser,
+  Filter,
+  Options,
 } from '../../components';
 import Modal from 'react-native-modal';
 import {
@@ -29,50 +30,17 @@ import {
   updateUser,
   calculateDistance,
 } from '../../controller';
-import {RouteStackParamList} from '../../components';
+import {HeaderCustom} from '../../components';
 import messaging from '@react-native-firebase/messaging';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import GetLocation from 'react-native-get-location';
+import {useNavigation} from '@react-navigation/native';
+import {spacing} from '../../theme';
+import {ROUTER} from '../../constants/router';
 
 const not_result_image = require('../../../assets/images/not_result.png');
-
-const Header = ({setIsModalVisibleFilter, setIsModalVisibleMenu}: any) => {
-  return (
-    <View style={styles.headerContainer}>
-      <View style={styles.header}>
-        <Text
-          style={{
-            fontSize: 26,
-            fontWeight: 'bold',
-            fontStyle: 'normal',
-            color: '#6A1616',
-            flex: 12,
-          }}>
-          Stapler
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.9}
-          style={{
-            flex: 2,
-            alignItems: 'flex-end',
-            marginRight: 5,
-          }}
-          onPress={() => setIsModalVisibleFilter(true)}>
-          <CustomIcon name="filter" color="#212121" size={15} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{flex: 2, alignItems: 'flex-end'}}
-          activeOpacity={0.9}
-          onPress={() => setIsModalVisibleMenu(true)}>
-          <CustomIcon name="menu" color="#212121" size={25} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.divider} />
-    </View>
-  );
-};
 
 type Props = {
   name: string;
@@ -115,9 +83,8 @@ const sendNotification = async (ownerId: string, userId: string) => {
   ).then((res) => res.json());
 };
 
-export const StaplerScreen = ({
-  navigation,
-}: RouteStackParamList<'StaplerScreen'>) => {
+export const StaplerScreen = () => {
+  const navigation = useNavigation();
   const User = {
     userId: '',
     name: '',
@@ -229,8 +196,26 @@ export const StaplerScreen = ({
 
   return (
     <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header setIsModalVisibleMenu={setIsModalVisibleMenu} />
+      <HeaderCustom
+        rightComponent={
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{marginRight: spacing[3]}}
+              onPress={() =>
+                navigation.navigate(ROUTER.filter, {
+                  filter: filter,
+                })
+              }>
+              <Filter />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setIsModalVisibleMenu(true)}>
+              <Options />
+            </TouchableOpacity>
+          </View>
+        }
+        leftComponent={<Text style={styles.titleHeader}>Stapler</Text>}
+      />
+      {/* <Header setIsModalVisibleMenu={setIsModalVisibleMenu} /> */}
       {load && (
         <View style={styles.load}>
           <ActivityIndicator color="#6A1616" size={20} />
@@ -377,6 +362,7 @@ export const StaplerScreen = ({
             />
           </View>
           <Modal
+            backdropTransitionOutTiming={0}
             swipeDirection="down"
             onSwipeComplete={() => setIsModalVisibleMenu(false)}
             hideModalContentWhileAnimating
@@ -447,6 +433,12 @@ const styles = StyleSheet.create({
   modalFilter: {
     flex: 1,
     margin: 0,
+  },
+  titleHeader: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    fontStyle: 'normal',
+    color: '#6A1616',
   },
   modalMenu: {
     flex: 1,
