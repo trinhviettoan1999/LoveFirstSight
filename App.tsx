@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {Alert} from 'react-native';
-import {NavigationContainer, RouteProp} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   createStackNavigator,

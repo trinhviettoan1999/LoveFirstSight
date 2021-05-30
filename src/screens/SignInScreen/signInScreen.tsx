@@ -1,37 +1,42 @@
 import React, {useState, useRef} from 'react';
 import {StyleSheet, View, Text, Image, Dimensions, Alert} from 'react-native';
 import {
-  RouteStackParamList,
   InputCustom,
   ButtonCustom,
   Eye,
   EyeDisable,
+  HeaderCustom,
 } from '../../components';
 
 import * as firebase from '../../firebase/firebase';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {spacing, color} from '../../theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ROUTER} from '../../constants/router';
 
 const HEIGHT = Dimensions.get('screen').height;
 const logo = require('../../../assets/images/Logo.png');
 
-export const SignInScreen = ({
-  navigation,
-}: RouteStackParamList<'FirstScreen'>) => {
+export const SignInScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassWord] = useState('');
   const ref_input2 = useRef(null);
   const [load, setLoad] = useState(false);
   const [show, setShow] = useState(false);
+  const [required, setRequired] = useState(false);
 
   const handleLogin = () => {
     setLoad(true);
+    if (!password || !email) {
+      setRequired(true);
+      setLoad(false);
+      return;
+    }
     firebase.loginAccount(
       email,
       password,
       () => {
-        navigation.replace('StaplerScreen');
+        navigation.replace(ROUTER.home);
         setLoad(false);
       },
       (error: any) => {
@@ -52,6 +57,7 @@ export const SignInScreen = ({
   return (
     <KeyboardAwareScrollView>
       <View style={styles.allContainer}>
+        <HeaderCustom backgroundStatusBar={color.bgWhite} removeBorderWidth />
         <View style={styles.introductionContainer}>
           <Image style={{width: 270, height: 100}} source={logo} />
         </View>
@@ -65,6 +71,7 @@ export const SignInScreen = ({
               // @ts-ignore: Object is possibly 'null'.
               ref_input2.current.focus();
             }}
+            errorMessage={required && !email ? 'Email is required' : ''}
           />
           <InputCustom
             ref={ref_input2}
@@ -77,10 +84,11 @@ export const SignInScreen = ({
                 {!show ? <Eye /> : <EyeDisable />}
               </TouchableOpacity>
             }
+            errorMessage={required && !password ? 'Password is required' : ''}
           />
           <Text
             style={styles.textForgot}
-            onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+            onPress={() => navigation.navigate(ROUTER.forGotPassword)}>
             Forgot Password?
           </Text>
           <View style={{alignItems: 'center'}}>
@@ -94,7 +102,7 @@ export const SignInScreen = ({
           <Text
             style={styles.textOptions}
             onPress={() => {
-              navigation.navigate('EnterMailScreen');
+              navigation.navigate(ROUTER.enterMail);
             }}>
             Create an account
           </Text>
@@ -109,7 +117,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: HEIGHT,
     backgroundColor: color.bgWhite,
-    justifyContent: 'center',
   },
   loginContainer: {
     justifyContent: 'center',
@@ -117,8 +124,9 @@ const styles = StyleSheet.create({
     marginTop: spacing[8],
   },
   introductionContainer: {
+    height: '20%',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
   },
   introductionText: {
     marginLeft: 16,
