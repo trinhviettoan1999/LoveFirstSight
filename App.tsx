@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {Alert} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, RouteProp} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   createStackNavigator,
@@ -49,11 +49,12 @@ import {
   VideoScreen,
   IncomingCallScreen,
 } from './src/screens';
-import {CustomIcon, RouteParamList} from './src/components';
+import {CustomIcon} from './src/components';
 import messaging from '@react-native-firebase/messaging';
+import {ROUTER} from './src/constants';
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator<RouteParamList>();
+const Stack = createStackNavigator();
 const AppTab = () => {
   return (
     <Tab.Navigator
@@ -146,199 +147,82 @@ const App = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
-        initialRouteName="LoadingScreen"
+        initialRouteName={ROUTER.loading}
         screenOptions={{
+          headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}>
+        <Stack.Screen name={ROUTER.loading} component={LoadingScreen} />
+        <Stack.Screen name={ROUTER.initial} component={InitialScreen} />
+        <Stack.Screen name={ROUTER.signIn} component={SignInScreen} />
         <Stack.Screen
-          name="LoadingScreen"
-          component={LoadingScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="InitialScreen"
-          component={InitialScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SignInScreen"
-          component={SignInScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ForgotPasswordScreen"
+          name={ROUTER.forGotPassword}
           component={ForgotPasswordScreen}
-          options={{headerShown: false}}
         />
+        <Stack.Screen name={ROUTER.enterMail} component={EnterMailScreen} />
+        <Stack.Screen name={ROUTER.enterCode} component={EnterCodeScreen} />
+        <Stack.Screen name={ROUTER.enterPassword} component={EnterPassword} />
+        <Stack.Screen name={ROUTER.initName} component={InitNameScreen} />
+        <Stack.Screen name={ROUTER.initAge} component={InitAgeScreen} />
+        <Stack.Screen name={ROUTER.initIntro} component={InitIntroScreen} />
+        <Stack.Screen name={ROUTER.initHobbies} component={InitHobbiesScreen} />
+        <Stack.Screen name={ROUTER.initAvatar} component={InitAvatarScreen} />
+        <Stack.Screen name={ROUTER.home} component={AppTab} />
+        <Stack.Screen name={ROUTER.setting} component={SettingsScreen} />
+        <Stack.Screen name={ROUTER.listIgnore} component={ListIgnoreScreen} />
+        <Stack.Screen name={ROUTER.listBlock} component={ListBlockScreen} />
+        <Stack.Screen name={ROUTER.email} component={EmailScreen} />
         <Stack.Screen
-          name="EnterMailScreen"
-          component={EnterMailScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EnterCodeScreen"
-          component={EnterCodeScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EnterPassword"
-          component={EnterPassword}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="InitNameScreen"
-          component={InitNameScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="InitAgeScreen"
-          component={InitAgeScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="InitIntroScreen"
-          component={InitIntroScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="InitHobbiesScreen"
-          component={InitHobbiesScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="InitAvatarScreen"
-          component={InitAvatarScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="StaplerScreen"
-          component={AppTab}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SettingsScreen"
-          component={SettingsScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ListIgnoreScreen"
-          component={ListIgnoreScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ListBlockScreen"
-          component={ListBlockScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EmailScreen"
-          component={EmailScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ConnectedAccountScreen"
+          name={ROUTER.connectedAccount}
           component={ConnectedAccountScreen}
-          options={{headerShown: false}}
         />
         <Stack.Screen
-          name="EmailNotificationScreen"
+          name={ROUTER.emailNotification}
           component={EmailNotificationScreen}
-          options={{headerShown: false}}
         />
         <Stack.Screen
-          name="PushNotificationScreen"
+          name={ROUTER.pushNotification}
           component={PushNotificationScreen}
-          options={{headerShown: false}}
         />
+        <Stack.Screen name={ROUTER.editName} component={EditNameScreen} />
+        <Stack.Screen name={ROUTER.editAge} component={EditAgeScreen} />
+        <Stack.Screen name={ROUTER.editGender} component={EditGenderScreen} />
         <Stack.Screen
-          name="EditNameScreen"
-          component={EditNameScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EditAgeScreen"
-          component={EditAgeScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EditGenderScreen"
-          component={EditGenderScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EditLookingForScreen"
+          name={ROUTER.editLookingFor}
           component={EditLookingForScreen}
-          options={{headerShown: false}}
         />
-        <Stack.Screen
-          name="EditLivingScreen"
-          component={EditLivingScreen}
-          options={{headerShown: false}}
-        />
+        <Stack.Screen name={ROUTER.editLiving} component={EditLivingScreen} />
         <Stack.Screen
           name="EditHeightScreen"
           component={EditHeightScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="EditUniversityScreen"
+          name={ROUTER.editUniversity}
           component={EditUniversityScreen}
-          options={{headerShown: false}}
         />
         <Stack.Screen
-          name="EditHomeTownScreen"
+          name={ROUTER.editHomeTown}
           component={EditHomeTownScreen}
-          options={{headerShown: false}}
         />
         <Stack.Screen
-          name="EditDrinkingScreen"
+          name={ROUTER.editDrinking}
           component={EditDrinkingScreen}
-          options={{headerShown: false}}
         />
+        <Stack.Screen name={ROUTER.editSmoking} component={EditSmokingScreen} />
+        <Stack.Screen name={ROUTER.editYourKid} component={EditYourKidScreen} />
+        <Stack.Screen name={ROUTER.chat} component={Chat} />
         <Stack.Screen
-          name="EditSmokingScreen"
-          component={EditSmokingScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EditYourKidScreen"
-          component={EditYourKidScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Chat"
-          component={Chat}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ConversationScreen"
+          name={ROUTER.conversation}
           component={ConversationScreen}
-          options={{headerShown: false}}
         />
+        <Stack.Screen name={ROUTER.profile} component={ProfileScreen} />
+        <Stack.Screen name={ROUTER.post} component={PostScreen} />
+        <Stack.Screen name={ROUTER.detailNew} component={DetailNewScreen} />
+        <Stack.Screen name={ROUTER.video} component={VideoScreen} />
         <Stack.Screen
-          name="ProfileScreen"
-          component={ProfileScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="PostScreen"
-          component={PostScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="DetailNewScreen"
-          component={DetailNewScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="VideoScreen"
-          component={VideoScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="IncomingCallScreen"
+          name={ROUTER.incomingCall}
           component={IncomingCallScreen}
-          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
