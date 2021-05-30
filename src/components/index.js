@@ -12,5 +12,6 @@ export * from './StatusBar/statusBarCustom';
 export * from './DropDownPicker/dropDownPickerCustom';
 export * from './FlatListItem/flatListItem';
 export * from './Input/Input';
+export * from './Button/Button';
 
 export {CustomIcon};

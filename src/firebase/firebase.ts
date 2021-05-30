@@ -5,23 +5,12 @@ export const loginAccount = async (
   email: string,
   password: string,
   success_callback: any,
-  setTextNotify: any,
+  fail_callback: any,
 ) => {
   await auth()
     .signInWithEmailAndPassword(email, password)
     .then(success_callback)
-    .catch((error: any) => {
-      if (error.code === 'auth/invalid-email') {
-        Alert.alert('Invalid-email. Please again!');
-      }
-      if (
-        error.code === 'auth/wrong-password' ||
-        error.code === 'auth/user-not-found'
-      ) {
-        Alert.alert('Invalid Account. Please again!');
-      }
-      setTextNotify('LOG IN');
-    });
+    .catch(fail_callback);
 };
 
 //Create Account
