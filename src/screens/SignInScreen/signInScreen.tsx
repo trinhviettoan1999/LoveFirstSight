@@ -1,10 +1,17 @@
 import React, {useState, useRef} from 'react';
 import {StyleSheet, View, Text, Image, Dimensions, Alert} from 'react-native';
-import {RouteStackParamList, InputCustom, ButtonCustom} from '../../components';
+import {
+  RouteStackParamList,
+  InputCustom,
+  ButtonCustom,
+  Eye,
+  EyeDisable,
+} from '../../components';
 
 import * as firebase from '../../firebase/firebase';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {spacing, color} from '../../theme';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const HEIGHT = Dimensions.get('screen').height;
 const logo = require('../../../assets/images/Logo.png');
@@ -16,6 +23,7 @@ export const SignInScreen = ({
   const [password, setPassWord] = useState('');
   const ref_input2 = useRef(null);
   const [load, setLoad] = useState(false);
+  const [show, setShow] = useState(false);
 
   const handleLogin = () => {
     setLoad(true);
@@ -63,7 +71,12 @@ export const SignInScreen = ({
             value={password}
             placeholder="Password"
             onChangeText={(text) => setPassWord(text)}
-            secureTextEntry={true}
+            secureTextEntry={!show}
+            rightIcon={
+              <TouchableOpacity onPress={() => setShow(!show)}>
+                {!show ? <Eye /> : <EyeDisable />}
+              </TouchableOpacity>
+            }
           />
           <Text
             style={styles.textForgot}
@@ -132,5 +145,10 @@ const styles = StyleSheet.create({
     color: '#6A1616',
     textAlign: 'center',
     textDecorationLine: 'underline',
+  },
+  textShow: {
+    fontSize: 14,
+    color: color.primary,
+    fontWeight: '500',
   },
 });
