@@ -103,6 +103,25 @@ const App = () => {
   }
 
   useEffect(() => {
+    const unsubscribe = messaging().setBackgroundMessageHandler(
+      async (remoteMessage) => {
+        console.log(remoteMessage);
+        if (remoteMessage.data?.type === 'CallVideo') {
+          navigate(ROUTER.incomingCall, {
+            name: remoteMessage.data?.name,
+            avatar: remoteMessage.data?.avatar,
+            appId: JSON.parse(remoteMessage.data.infoChannel).appId,
+            channelName: JSON.parse(remoteMessage.data.infoChannel).channelName,
+            userId: parseInt(remoteMessage.data?.userId),
+          });
+          return;
+        }
+      },
+    );
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       if (remoteMessage.data?.type === 'CallVideo') {
         navigate(ROUTER.incomingCall, {
@@ -110,7 +129,7 @@ const App = () => {
           avatar: remoteMessage.data?.avatar,
           appId: JSON.parse(remoteMessage.data.infoChannel).appId,
           channelName: JSON.parse(remoteMessage.data.infoChannel).channelName,
-          userId: remoteMessage.data?.userId,
+          userId: parseInt(remoteMessage.data?.userId),
         });
         return;
       }
