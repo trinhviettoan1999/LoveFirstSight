@@ -11,12 +11,3 @@ export const getUser = async (userId: string) => {
     },
   ).then((res) => res.json());
 };
-
-export const checkUserInCall = async (userId: string, next: any) => {
-  return await firestore()
-    .collection('users')
-    .doc(userId)
-    .onSnapshot((user) => {
-      next(user.data()!.stateJoinCall);
-    });
-};

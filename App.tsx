@@ -103,8 +103,17 @@ const App = () => {
   }
 
   useEffect(() => {
-    // requestUserPermission();
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (remoteMessage.data?.type === 'CallVideo') {
+        navigate(ROUTER.incomingCall, {
+          name: remoteMessage.data?.name,
+          avatar: remoteMessage.data?.avatar,
+          appId: JSON.parse(remoteMessage.data.infoChannel).appId,
+          channelName: JSON.parse(remoteMessage.data.infoChannel).channelName,
+          userId: remoteMessage.data?.userId,
+        });
+        return;
+      }
       Alert.alert(
         'A new FCM message arrived!',
         JSON.stringify(remoteMessage.notification),
