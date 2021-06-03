@@ -14,6 +14,7 @@ import {
   HeaderCustom,
   InputCustom,
   BackCircle,
+  openNotification,
 } from '../../components';
 import {spacing, color} from '../../theme';
 import {ROUTER} from '../../constants/router';
@@ -52,6 +53,7 @@ export const EnterMailScreen = () => {
   const [required, setRequired] = useState(false);
 
   const handleContinue = () => {
+    setLoad(true);
     if (!valueEmail) {
       setRequired(true);
       setLoad(false);
@@ -59,8 +61,10 @@ export const EnterMailScreen = () => {
     }
     getCode(valueEmail).then((data) => {
       if (data === 'that email address is already in use!') {
-        Alert.alert('That email address is already in use!');
+        setLoad(false);
+        openNotification('danger', 'That email address is already in use!');
       } else {
+        setLoad(false);
         navigation.navigate(ROUTER.enterCode, {
           user: {
             email: valueEmail,
