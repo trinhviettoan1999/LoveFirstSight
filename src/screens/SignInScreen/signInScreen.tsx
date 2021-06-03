@@ -14,6 +14,7 @@ import {
   EyeDisable,
   Google,
   Facebook,
+  HeaderCustom,
 } from '../../components';
 
 import * as firebase from '../../firebase/firebase';
@@ -66,6 +67,10 @@ export const SignInScreen = ({navigation}) => {
   return (
     <KeyboardAwareScrollView>
       <ImageBackground style={styles.image} source={background_image}>
+        <HeaderCustom
+          backgroundStatusBar={color.transparent}
+          removeBorderWidth
+        />
         <Text style={styles.textWelcome}>Welcome</Text>
         <ButtonCustom
           loading={load}
@@ -146,7 +151,6 @@ const styles = StyleSheet.create({
     height: HEIGHT,
     width: WIDTH,
     paddingHorizontal: spacing[4],
-    justifyContent: 'center',
   },
   containerButton: {
     marginTop: spacing[5],
