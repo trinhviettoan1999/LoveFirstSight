@@ -1,11 +1,19 @@
 import React, {useState, useRef} from 'react';
-import {StyleSheet, View, Text, Image, Dimensions, Alert} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ImageBackground,
+  Dimensions,
+  Alert,
+} from 'react-native';
 import {
   InputCustom,
   ButtonCustom,
   Eye,
   EyeDisable,
-  HeaderCustom,
+  Google,
+  Facebook,
 } from '../../components';
 
 import * as firebase from '../../firebase/firebase';
@@ -14,8 +22,9 @@ import {spacing, color} from '../../theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ROUTER} from '../../constants/router';
 
-const HEIGHT = Dimensions.get('screen').height;
-const logo = require('../../../assets/images/Logo.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+const background_image = require('../../../assets/images/background_default.png');
 
 export const SignInScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -56,107 +65,158 @@ export const SignInScreen = ({navigation}) => {
 
   return (
     <KeyboardAwareScrollView>
-      <View style={styles.allContainer}>
-        <HeaderCustom backgroundStatusBar={color.bgWhite} removeBorderWidth />
-        <View style={styles.introductionContainer}>
-          <Image style={{width: 270, height: 100}} source={logo} />
-        </View>
-        <View style={styles.loginContainer}>
-          <InputCustom
-            value={email}
-            keyboardType="email-address"
-            placeholder="Example@gmail.com"
-            onChangeText={(text) => setEmail(text)}
-            onSubmitEditing={() => {
-              // @ts-ignore: Object is possibly 'null'.
-              ref_input2.current.focus();
-            }}
-            errorMessage={required && !email ? 'Email is required' : ''}
-          />
-          <InputCustom
-            ref={ref_input2}
-            value={password}
-            placeholder="Password"
-            onChangeText={(text) => setPassWord(text)}
-            secureTextEntry={!show}
-            rightIcon={
-              <TouchableOpacity onPress={() => setShow(!show)}>
-                {!show ? <Eye /> : <EyeDisable />}
-              </TouchableOpacity>
-            }
-            errorMessage={required && !password ? 'Password is required' : ''}
-          />
-          <Text
-            style={styles.textForgot}
-            onPress={() => navigation.navigate(ROUTER.forGotPassword)}>
-            Forgot Password?
-          </Text>
-          <View style={{alignItems: 'center'}}>
-            <ButtonCustom
-              loading={load}
-              title="LOG IN"
-              onPress={handleLogin}
-              containerStyle={styles.button}
-            />
-          </View>
+      <ImageBackground style={styles.image} source={background_image}>
+        <Text style={styles.textWelcome}>Welcome</Text>
+        <ButtonCustom
+          loading={load}
+          title="CONTINUE WITH FACEBOOK"
+          titleStyle={styles.textFacebook}
+          containerStyle={styles.containerButton}
+          buttonStyle={styles.buttonFacebook}
+          icon={<Facebook />}
+        />
+        <ButtonCustom
+          loading={load}
+          title="CONTINUE WITH GOOGLE"
+          titleStyle={styles.textGoogle}
+          containerStyle={styles.containerButton}
+          buttonStyle={styles.buttonGoogle}
+          icon={<Google />}
+        />
+        <Text style={styles.textOrEmail}>OR LOGIN WITH EMAIL</Text>
+        <InputCustom
+          value={email}
+          keyboardType="email-address"
+          placeholder="Example@gmail.com"
+          onChangeText={(text) => setEmail(text)}
+          onSubmitEditing={() => {
+            // @ts-ignore: Object is possibly 'null'.
+            ref_input2.current.focus();
+          }}
+          errorMessage={required && !email ? 'Email is required' : ''}
+        />
+        <InputCustom
+          ref={ref_input2}
+          value={password}
+          placeholder="Password"
+          onChangeText={(text) => setPassWord(text)}
+          secureTextEntry={!show}
+          rightIcon={
+            <TouchableOpacity onPress={() => setShow(!show)}>
+              {!show ? <Eye /> : <EyeDisable />}
+            </TouchableOpacity>
+          }
+          errorMessage={required && !password ? 'Password is required' : ''}
+        />
+        <Text
+          style={styles.textForgot}
+          onPress={() => navigation.navigate(ROUTER.forGotPassword)}>
+          Forgot Password?
+        </Text>
+        <ButtonCustom
+          loading={load}
+          title="LOG IN"
+          onPress={handleLogin}
+          containerStyle={styles.containerButton}
+          buttonStyle={styles.button}
+        />
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Text
             style={styles.textOptions}
             onPress={() => {
               navigation.navigate(ROUTER.enterMail);
             }}>
-            Create an account
+            {'ALREADY HAVE AN ACCOUNT? '}
+          </Text>
+          <Text
+            style={[styles.textOptions, {color: '#8E97FD'}]}
+            onPress={() => {
+              navigation.navigate(ROUTER.enterMail);
+            }}>
+            SIGN UP
           </Text>
         </View>
-      </View>
+      </ImageBackground>
     </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  allContainer: {
-    width: '100%',
+  image: {
     height: HEIGHT,
-    backgroundColor: color.bgWhite,
-  },
-  loginContainer: {
+    width: WIDTH,
+    paddingHorizontal: spacing[4],
     justifyContent: 'center',
-    paddingHorizontal: 16,
-    marginTop: spacing[8],
   },
-  introductionContainer: {
-    height: '20%',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  introductionText: {
-    marginLeft: 16,
-    color: '#6A1616',
-    fontSize: 56,
-    fontWeight: '600',
-    fontStyle: 'normal',
-  },
-  button: {
+  containerButton: {
     marginTop: spacing[5],
   },
-  textForgot: {
+  textOrEmail: {
+    marginVertical: spacing[6],
     fontSize: 16,
-    fontWeight: '500',
-    color: '#6A1616',
+    color: '#A1A4B2',
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  button: {
+    minHeight: 50,
+    borderRadius: spacing[5],
+    width: WIDTH - 32,
+    backgroundColor: color.primary,
+  },
+  buttonGoogle: {
+    minHeight: 50,
+    borderRadius: spacing[5],
+    width: WIDTH - 32,
+    backgroundColor: color.bgWhite,
+    borderWidth: 2,
+    borderColor: '#EBEAEC',
+  },
+  textGoogle: {
+    fontSize: 14,
+    color: color.text,
+    lineHeight: 19,
+    fontWeight: '400',
+    marginLeft: spacing[4],
+  },
+  buttonFacebook: {
+    minHeight: 50,
+    borderRadius: spacing[5],
+    width: WIDTH - 32,
+    backgroundColor: '#7583CA',
+  },
+  textFacebook: {
+    fontSize: 14,
+    color: '#F6F1FB',
+    lineHeight: 19,
+    fontWeight: '400',
+    marginLeft: spacing[4],
+  },
+  textForgot: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: color.text,
     textAlign: 'right',
     marginTop: -10,
   },
   textOptions: {
-    marginTop: 15,
-    fontSize: 16,
-    fontWeight: '500',
+    marginTop: spacing[5],
+    fontSize: 15,
+    fontWeight: '400',
+    lineHeight: 15,
     fontStyle: 'normal',
-    color: '#6A1616',
-    textAlign: 'center',
-    textDecorationLine: 'underline',
+    color: '#A1A4B2',
   },
   textShow: {
     fontSize: 14,
     color: color.primary,
     fontWeight: '500',
+  },
+  textWelcome: {
+    fontSize: 30,
+    color: color.text,
+    fontWeight: '700',
+    lineHeight: 37,
+    textAlign: 'center',
   },
 });

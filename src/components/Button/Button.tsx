@@ -17,8 +17,8 @@ export const ButtonCustom = (props: ButtonProps) => {
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 45,
-    borderRadius: spacing[2],
+    minHeight: 50,
+    borderRadius: spacing[5],
     width: WIDTH - 150,
     backgroundColor: color.primary,
     marginTop: spacing[4],

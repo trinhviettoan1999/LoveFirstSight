@@ -25,28 +25,30 @@ export const InputCustom = React.forwardRef(
 const styles = StyleSheet.create({
   input: {
     width: '100%',
-    backgroundColor: color.bgWhiteLight,
-    borderRadius: spacing[1],
+    height: 50,
+    backgroundColor: color.light,
+    borderRadius: spacing[4],
     paddingHorizontal: spacing[3],
     borderBottomWidth: 0,
   },
   inputFocused: {
     width: '100%',
+    height: 50,
     backgroundColor: color.bgWhite,
-    borderRadius: spacing[1],
+    borderRadius: spacing[4],
     paddingHorizontal: spacing[3],
     borderWidth: 1,
     borderColor: color.primary,
   },
   label: {
-    color: color.text,
+    color: color.primary,
     lineHeight: 22,
     fontSize: 18,
     fontWeight: '500',
   },
   textInput: {
-    fontSize: 16,
-    color: color.text,
+    fontSize: 14,
+    color: color.primary,
   },
   containerInput: {
     paddingHorizontal: spacing[0],

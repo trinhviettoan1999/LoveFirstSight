@@ -5,6 +5,6 @@ export const color = {
   second: '#F8F8F8',
   bgWhite: '#FFFFFF',
   bgWhiteLight: '#F1F1F1',
-  text: '#2b2731',
+  text: '#3F414E',
   textGray: '#BDBDBD',
 };

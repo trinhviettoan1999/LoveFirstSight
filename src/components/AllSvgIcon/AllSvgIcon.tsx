@@ -5,8 +5,8 @@ export const Eye = () => (
   <SvgXml
     xml={`
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M22 12C22 12 19 18 12 18C5 18 2 12 2 12C2 12 5 6 12 6C19 6 22 12 22 12Z" stroke="#6A1616" stroke-linecap="round"/>
-    <circle cx="12" cy="12" r="3" stroke="#6A1616" stroke-linecap="round"/>
+    <path d="M22 12C22 12 19 18 12 18C5 18 2 12 2 12C2 12 5 6 12 6C19 6 22 12 22 12Z" stroke="#E0694E" stroke-linecap="round"/>
+    <circle cx="12" cy="12" r="3" stroke="#E0694E" stroke-linecap="round"/>
     </svg>
     `}
   />
@@ -16,9 +16,9 @@ export const EyeDisable = () => (
   <SvgXml
     xml={`
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M22 12C22 12 19 18 12 18C5 18 2 12 2 12C2 12 5 6 12 6C19 6 22 12 22 12Z" stroke="#6A1616" stroke-linecap="round"/>
-      <circle cx="12" cy="12" r="3" stroke="#6A1616" stroke-linecap="round"/>
-      <path d="M3 21L20 4" stroke="#6A1616" stroke-linecap="round"/>
+      <path d="M22 12C22 12 19 18 12 18C5 18 2 12 2 12C2 12 5 6 12 6C19 6 22 12 22 12Z" stroke="#E0694E" stroke-linecap="round"/>
+      <circle cx="12" cy="12" r="3" stroke="#E0694E" stroke-linecap="round"/>
+      <path d="M3 21L20 4" stroke="#E0694E" stroke-linecap="round"/>
       </svg>      
       `}
   />
@@ -52,6 +52,29 @@ export const Back = () => (
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M14 6L8 12L14 18" stroke="#212121" stroke-width="2" stroke-linecap="round"/>
     </svg>  
+    `}
+  />
+);
+
+export const Google = () => (
+  <SvgXml
+    xml={`
+    <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M23.6496 13.2334C23.6496 12.244 23.5693 11.5221 23.3956 10.7734H12.0984V15.2388H18.7296C18.596 16.3484 17.874 18.0196 16.2697 19.1426L16.2472 19.2921L19.8191 22.0592L20.0666 22.0839C22.3394 19.9849 23.6496 16.8966 23.6496 13.2334Z" fill="#4285F4"/>
+    <path d="M12.0984 24.9984C15.3471 24.9984 18.0745 23.9288 20.0666 22.0839L16.2696 19.1426C15.2536 19.8511 13.8899 20.3458 12.0984 20.3458C8.91653 20.3458 6.21593 18.2469 5.25324 15.3457L5.11213 15.3577L1.39797 18.2321L1.3494 18.3672C3.32805 22.2977 7.39235 24.9984 12.0984 24.9984Z" fill="#34A853"/>
+    <path d="M5.25326 15.3457C4.99924 14.5971 4.85223 13.7948 4.85223 12.966C4.85223 12.137 4.99924 11.3349 5.23989 10.5862L5.23316 10.4268L1.47245 7.50616L1.34941 7.56469C0.533913 9.19578 0.065979 11.0274 0.065979 12.966C0.065979 14.9045 0.533913 16.7361 1.34941 18.3672L5.25326 15.3457Z" fill="#FBBC05"/>
+    <path d="M12.0988 5.58611C14.3582 5.58611 15.8823 6.56208 16.7513 7.37767L20.1471 4.06203C18.0616 2.12348 15.3475 0.933594 12.0988 0.933594C7.39272 0.933594 3.32841 3.63419 1.34976 7.56477L5.24024 10.5863C6.2163 7.68514 8.91689 5.58611 12.0988 5.58611Z" fill="#EB4335"/>
+    </svg>
+    `}
+  />
+);
+
+export const Facebook = () => (
+  <SvgXml
+    xml={`
+    <svg width="24" height="25" viewBox="0 0 10 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10.6776 4.46331H12.8745V0.636986C12.4955 0.584846 11.192 0.467529 9.67389 0.467529C6.50635 0.467529 4.33649 2.4599 4.33649 6.12178V9.49187H0.841064V13.7694H4.33649V24.5324H8.62206V13.7704H11.9761L12.5085 9.49288H8.62105V6.54593C8.62206 5.30959 8.95495 4.46331 10.6776 4.46331Z" fill="white"/>
+    </svg>    
     `}
   />
 );
