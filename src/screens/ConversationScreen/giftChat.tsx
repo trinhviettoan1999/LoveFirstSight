@@ -12,13 +12,9 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
-import {
-  Header,
-  StatusBarCustom,
-  RouteStackParamList,
-  CustomIcon,
-} from '../../components';
+import {Header, StatusBarCustom, CustomIcon} from '../../components';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
 import Sound from 'react-native-sound';
 import uuid from 'react-native-uuid';
@@ -35,12 +31,11 @@ import {
   likeUser,
   updateStateConversation,
   createKey,
-  setStateVideoCall,
-  getStateVideoCall,
-  checkUserInCall,
   updateUser,
+  callVideo,
 } from '../../controller';
 import 'react-native-console-time-polyfill';
+import {ROUTER} from './../../constants/router';
 const messagesRef = firestore().collection('conversations');
 
 const checkPermissionPhoto = () => {
@@ -104,10 +99,9 @@ const getAudioTimeString = (seconds: any) => {
 let audio: Sound;
 let valueChangeInterval: NodeJS.Timeout;
 
-export const Chat = ({
-  route,
-  navigation,
-}: RouteStackParamList<'InitScreen'>) => {
+export const Chat = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const {ownerId, name, conversationId, avatar, flag, state} = route.params;
   const [messages, setMessages] = useState([]);
   const uid = Math.floor(Math.random() * 100) + 1;
@@ -145,21 +139,7 @@ export const Chat = ({
     IncludeBase64: true,
     AudioEncodingBitRate: 32000,
   });
-  useEffect(() => {
-    checkUserInCall(ownerId, (isUserCalling: any) => {
-      getStateVideoCall(conversationId, (result: any) => {
-        if (result && isUserCalling) {
-          navigation.navigate('IncomingCallScreen', {
-            name: name,
-            avatar: avatar,
-            appId: '904b6f3ec0bd44ac991b9d0166cb741c',
-            channelName: conversationId,
-            userId: uid,
-          });
-        }
-      });
-    });
-  }, []);
+
   useEffect(() => {
     // @ts-ignore: Object is possibly 'null'.
     getUser(auth().currentUser.uid).then((result) => {
@@ -168,6 +148,7 @@ export const Chat = ({
     // @ts-ignore: Object is possibly 'null'.
     setUserId(auth().currentUser.uid);
   }, []);
+
   useEffect(() => {
     AudioRecorder.onProgress = (data: any) => {
       setCurrentTime(Math.floor(data.currentTime));
@@ -232,6 +213,7 @@ export const Chat = ({
   //   console.log('re-render because x changed:', valueSlider);
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [valueSlider]);
+
   useEffect(() => {
     const unsubscribe = messagesRef
       .doc(conversationId)
@@ -255,6 +237,7 @@ export const Chat = ({
     return () => unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const getMesssages = () => {
     messagesRef
       .doc(conversationId)
@@ -698,11 +681,16 @@ export const Chat = ({
             )
               .then((result) => result.json())
               .then((key) => {
-                setStateVideoCall(conversationId, true);
+                // setStateVideoCall(conversationId, true);
                 updateUser({
                   stateJoinCall: true,
                 });
-                navigation.navigate('VideoScreen', {
+                callVideo(
+                  '904b6f3ec0bd44ac991b9d0166cb741c',
+                  conversationId,
+                  ownerId,
+                );
+                navigation.navigate(ROUTER.video, {
                   name: name,
                   avatar: avatar,
                   appId: '904b6f3ec0bd44ac991b9d0166cb741c',

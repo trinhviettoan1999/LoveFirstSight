@@ -7,7 +7,7 @@ import {superLikeUser} from './superLikeUser';
 import {getAvailableUsers} from './getAvailableUsers';
 import {computeAge} from './computeAge';
 import {getUserRandom} from './getUserRandom';
-import {getUser, checkUserInCall} from './getUser';
+import {getUser} from './getUser';
 import {getLikedUsers} from './getLikedUsers';
 import {getTopPick} from './getTopPick';
 import {getConversation} from './getConversation';
@@ -43,7 +43,10 @@ import {
 import {createKey} from './createKey';
 import {setStateVideoCall} from './setStateVideoCall';
 import {getStateVideoCall} from './getStateVideoCall';
+import {callVideo} from './callVideo';
+
 export {
+  callVideo,
   blockUser,
   unBlockUser,
   unMatchUser,
@@ -85,5 +88,4 @@ export {
   createKey,
   setStateVideoCall,
   getStateVideoCall,
-  checkUserInCall,
 };

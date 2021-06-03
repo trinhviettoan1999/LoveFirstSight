@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {Alert} from 'react-native';
+import {Alert, AppState} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
@@ -103,8 +103,37 @@ const App = () => {
   }
 
   useEffect(() => {
-    // requestUserPermission();
+    console.log('state: ', AppState.currentState);
+    const unsubscribe = messaging().setBackgroundMessageHandler(
+      async (remoteMessage) => {
+        console.log(remoteMessage);
+        if (remoteMessage.data?.type === 'CallVideo') {
+          navigate(ROUTER.incomingCall, {
+            name: remoteMessage.data?.name,
+            avatar: remoteMessage.data?.avatar,
+            appId: JSON.parse(remoteMessage.data.infoChannel).appId,
+            channelName: JSON.parse(remoteMessage.data.infoChannel).channelName,
+            userId: parseInt(remoteMessage.data?.userId),
+          });
+          return;
+        }
+      },
+    );
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (remoteMessage.data?.type === 'CallVideo') {
+        navigate(ROUTER.incomingCall, {
+          name: remoteMessage.data?.name,
+          avatar: remoteMessage.data?.avatar,
+          appId: JSON.parse(remoteMessage.data.infoChannel).appId,
+          channelName: JSON.parse(remoteMessage.data.infoChannel).channelName,
+          userId: parseInt(remoteMessage.data?.userId),
+        });
+        return;
+      }
       Alert.alert(
         'A new FCM message arrived!',
         JSON.stringify(remoteMessage.notification),

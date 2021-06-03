@@ -7,7 +7,6 @@ import {
   ImageBackground,
   Text,
 } from 'react-native';
-import {RouteStackParamList} from '../../components';
 import {updateUser} from '../../controller';
 import RtcEngine, {
   RtcLocalView,
@@ -16,6 +15,7 @@ import RtcEngine, {
 } from 'react-native-agora';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Sound from 'react-native-sound';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const requestCameraAndAudioPermission = async () => {
   try {
@@ -42,17 +42,18 @@ var engine: RtcEngine;
 let sound: Sound;
 const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
 
-export const VideoScreen = ({
-  navigation,
-  route,
-}: RouteStackParamList<'InitScreen'>) => {
+export const VideoScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const {appId, channelName, token, avatar, name, userId} = route.params;
+  console.log(typeof userId);
   const [props, setProps] = useState({
     peerIds: [],
     vidMute: false,
     audMute: false,
     joinSucceed: false,
   });
+
   async function init() {
     sound = new Sound(nhachuong);
     sound.setNumberOfLoops(-1);
@@ -84,14 +85,17 @@ export const VideoScreen = ({
       console.info('Error', errorCode);
     });
   }
+
   function toggleAudio() {
     engine.muteLocalAudioStream(!props.audMute);
     setProps({...props, audMute: !props.audMute});
   }
+
   function toggleVideo() {
     engine.muteLocalVideoStream(!props.vidMute);
     setProps({...props, vidMute: !props.vidMute});
   }
+
   function endCall() {
     sound.stop();
     engine.leaveChannel();
@@ -101,11 +105,15 @@ export const VideoScreen = ({
     setProps({...props, peerIds: [], joinSucceed: false});
     navigation.goBack();
   }
+
   useEffect(() => {
     requestCameraAndAudioPermission();
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log(props.peerIds.length);
+
   return (
     <View style={styles.full}>
       {props.peerIds.length === 0 && (
