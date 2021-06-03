@@ -15,5 +15,6 @@ export * from './Input/Input';
 export * from './Button/Button';
 export * from './AllSvgIcon/AllSvgIcon';
 export * from './HeaderCustom/HeaderCustom';
+export * from './Notification/Notification';
 
 export {CustomIcon};

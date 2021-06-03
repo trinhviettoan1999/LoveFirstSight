@@ -37,6 +37,7 @@
     "react-native-dropdown-picker": "^5.1.19",
     "react-native-elements": "^3.4.1",
     "react-native-fast-image": "^8.3.4",
+    "react-native-flash-message": "^0.1.23",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-get-location": "^2.0.0",

@@ -1,11 +1,22 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, TouchableHighlight, Alert} from 'react-native';
 import {
-  Header,
-  RouteStackParamList,
-  InputView,
-  StatusBarCustom,
+  View,
+  StyleSheet,
+  Text,
+  Alert,
+  ImageBackground,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {
+  ButtonCustom,
+  HeaderCustom,
+  InputCustom,
+  BackCircle,
 } from '../../components';
+import {spacing, color} from '../../theme';
+import {ROUTER} from '../../constants/router';
 
 const getCode = (email: string) => {
   return fetch(
@@ -30,82 +41,84 @@ const getCode = (email: string) => {
     });
 };
 
-export const EnterMailScreen = ({
-  navigation,
-}: RouteStackParamList<'FirstScreen'>) => {
+const background_image = require('../../../assets/images/background_default.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
+export const EnterMailScreen = () => {
+  const navigation = useNavigation();
   const [valueEmail, onChangeTextEmail] = useState('');
-  const [isEmail, setIsEmail] = useState(false);
-  const [inotify, setInotify] = useState('CONTINUE');
+  const [load, setLoad] = useState(false);
+  const [required, setRequired] = useState(false);
+
+  const handleContinue = () => {
+    if (!valueEmail) {
+      setRequired(true);
+      setLoad(false);
+      return;
+    }
+    getCode(valueEmail).then((data) => {
+      if (data === 'that email address is already in use!') {
+        Alert.alert('That email address is already in use!');
+      } else {
+        navigation.navigate(ROUTER.enterCode, {
+          user: {
+            email: valueEmail,
+          },
+          code: data,
+        });
+      }
+    });
+  };
+
   return (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => navigation.goBack()}
+    <ImageBackground style={styles.image} source={background_image}>
+      <HeaderCustom
+        backgroundStatusBar={color.transparent}
+        removeBorderWidth
+        leftComponent={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackCircle />
+          </TouchableOpacity>
+        }
       />
       <View style={styles.container}>
         <Text style={styles.textQuestion}>What's your email?</Text>
         <Text style={styles.textReminder}>
           Don’t lose access to your account, verify your email.
         </Text>
-        <View style={styles.inputContainer}>
-          <InputView
-            placeHolder="Enter email"
-            value={valueEmail}
-            onChangeText={onChangeTextEmail}
-            autoFocus={true}
-            checkEmail={true}
-            setIsEmail={setIsEmail}
-          />
-        </View>
-        {isEmail ? null : (
-          <Text style={styles.textError}>Invalid email address</Text>
-        )}
-        <TouchableHighlight
-          style={[
-            styles.button,
-            {backgroundColor: isEmail ? '#6A1616' : '#E1E1E1'},
-          ]}
-          disabled={!isEmail}
-          onPress={() => {
-            setInotify('SUBMITTING');
-            getCode(valueEmail).then((data) => {
-              console.log(data);
-              if (data === 'that email address is already in use!') {
-                Alert.alert('That email address is already in use!');
-              } else {
-                navigation.navigate('EnterCodeScreen', {
-                  user: {
-                    email: valueEmail,
-                  },
-                  code: data,
-                });
-              }
-              setInotify('CONTINUE');
-            });
-          }}>
-          <Text style={styles.textButton}>{inotify}</Text>
-        </TouchableHighlight>
+        <InputCustom
+          value={valueEmail}
+          keyboardType="email-address"
+          placeholder="Example@gmail.com"
+          onChangeText={(text) => onChangeTextEmail(text)}
+          errorMessage={required && !valueEmail ? 'Email is required' : ''}
+        />
+        <ButtonCustom
+          loading={load}
+          title="CONTINUE"
+          containerStyle={styles.containerButton}
+          onPress={handleContinue}
+        />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  containerAll: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+  image: {
+    height: HEIGHT,
+    width: WIDTH,
   },
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing[4],
   },
   textQuestion: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
     fontStyle: 'normal',
-    color: '#000000',
+    color: color.text,
     marginTop: 40,
   },
   textReminder: {
@@ -114,31 +127,9 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     color: '#919191',
     marginTop: 10,
+    marginBottom: spacing[5],
   },
-  inputContainer: {
-    height: 40,
-    marginTop: 20,
-    borderBottomWidth: 2,
-  },
-  button: {
-    width: 190,
-    height: 54,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
+  containerButton: {
     alignSelf: 'center',
-  },
-  textButton: {
-    fontSize: 17,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#FFFFFF',
-  },
-  textError: {
-    fontSize: 15,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#BB2424',
   },
 });

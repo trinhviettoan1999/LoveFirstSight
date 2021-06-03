@@ -56,6 +56,17 @@ export const Back = () => (
   />
 );
 
+export const BackCircle = () => (
+  <SvgXml
+    xml={`
+    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="49.5" y="49.5" width="49" height="49" rx="24.5" transform="rotate(-180 49.5 49.5)" stroke="#EBEAEC"/>
+    <path d="M33.4991 25.9091L19.6117 25.9091L25.4402 31.899L24.1898 33.1818L16.7073 25.5152C16.4317 25.2323 16.4317 24.7778 16.7073 24.495L24.1898 16.8182L25.4402 18.101L19.6117 24.0909L33.4991 24.0909L33.4991 25L33.4991 25.9091Z" fill="#3F414E"/>
+    </svg>    
+    `}
+  />
+);
+
 export const Google = () => (
   <SvgXml
     xml={`

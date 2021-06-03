@@ -53,6 +53,7 @@ import {
 } from './src/screens';
 import {CustomIcon} from './src/components';
 import messaging from '@react-native-firebase/messaging';
+import FlashMessage from 'react-native-flash-message';
 import {ROUTER} from './src/constants';
 
 const Tab = createBottomTabNavigator();
@@ -267,6 +268,7 @@ const App = () => {
             component={IncomingCallScreen}
           />
         </Stack.Navigator>
+        <FlashMessage position="bottom" />
       </NavigationContainer>
     </SafeAreaProvider>
   );
