@@ -10,7 +10,6 @@ import {
 import {
   HeaderCustom,
   ButtonCustom,
-  StatusBarCustom,
   BackCircle,
   InputCustom,
 } from '../../components';
@@ -46,7 +45,6 @@ export const EnterPassword = () => {
 
   return (
     <ImageBackground style={styles.image} source={background_image}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
       <HeaderCustom
         backgroundStatusBar={color.transparent}
         removeBorderWidth

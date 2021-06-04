@@ -1,6 +1,7 @@
 import React from 'react';
 import {RadioButton} from 'react-native-paper';
 import {StyleSheet, View, Text} from 'react-native';
+import {color} from '../../theme/color';
 
 type Props = {
   Data: any;
@@ -17,7 +18,7 @@ export const SelectionRadioHorizontal = ({Data, gender, setGender}: Props) => {
         {Data.Options.map((item: any, i: any) => (
           <View style={styles.container} key={i}>
             <Text style={styles.text}>{item.value}</Text>
-            <RadioButton value={item.value} color="#6A1616" />
+            <RadioButton value={item.value} color={color.primary} />
           </View>
         ))}
       </RadioButton.Group>
