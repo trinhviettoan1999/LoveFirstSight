@@ -5,14 +5,29 @@ import {
   Text,
   TouchableHighlight,
   TextInput,
+  ImageBackground,
+  Dimensions,
+  TouchableOpacity,
 } from 'react-native';
-import {Header, RouteStackParamList, StatusBarCustom} from '../../components';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {
+  BackCircle,
+  ButtonCustom,
+  Header,
+  HeaderCustom,
+  StatusBarCustom,
+} from '../../components';
 import GetLocation from 'react-native-get-location';
+import {color, spacing} from '../../theme';
+import {ROUTER} from '../../constants/router';
 
-export const EnterCodeScreen = ({
-  route,
-  navigation,
-}: RouteStackParamList<'FirstScreen'>) => {
+const background_image = require('../../../assets/images/background_default.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
+export const EnterCodeScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const [value1, onChangeText1] = useState('');
   const [value2, onChangeText2] = useState('');
   const [value3, onChangeText3] = useState('');
@@ -20,6 +35,7 @@ export const EnterCodeScreen = ({
   const [value5, onChangeText5] = useState('');
   const [value6, onChangeText6] = useState('');
   const [isCode, setIsCode] = useState(true);
+  const [load, setLoad] = useState(false);
   const ref_input1 = useRef(null);
   const ref_input2 = useRef(null);
   const ref_input3 = useRef(null);
@@ -47,13 +63,37 @@ export const EnterCodeScreen = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleContinue = () => {
+    setLoad(true);
+    var value = value1 + value2 + value3 + value4 + value5 + value6;
+    if (value === code) {
+      setIsCode(true);
+      setLoad(false);
+      navigation.navigate(ROUTER.enterPassword, {user: user});
+    } else {
+      setLoad(false);
+      setIsCode(false);
+      onChangeText1('');
+      onChangeText2('');
+      onChangeText3('');
+      onChangeText4('');
+      onChangeText5('');
+      onChangeText6('');
+      // @ts-ignore: Object is possibly 'null'.
+      ref_input1.current.focus();
+    }
+  };
+
   return (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => navigation.goBack('EnterMailScreen')}
+    <ImageBackground style={styles.image} source={background_image}>
+      <HeaderCustom
+        backgroundStatusBar={color.transparent}
+        removeBorderWidth
+        leftComponent={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackCircle />
+          </TouchableOpacity>
+        }
       />
       <View style={styles.container}>
         <Text style={styles.textQuestion}>Your code is:</Text>
@@ -143,51 +183,35 @@ export const EnterCodeScreen = ({
           />
         </View>
         {isCode ? null : <Text style={styles.textError}>Invalid code</Text>}
-        <TouchableHighlight
-          ref={ref_button}
-          style={[
-            styles.button,
-            {backgroundColor: value6 != '' ? '#6A1616' : '#E1E1E1'},
-          ]}
-          disabled={value6 != '' ? false : true}
-          onPress={() => {
-            var value = value1 + value2 + value3 + value4 + value5 + value6;
-            if (value === code) {
-              setIsCode(true);
-              navigation.navigate('EnterPassword', {user: user});
-            } else {
-              setIsCode(false);
-              onChangeText1('');
-              onChangeText2('');
-              onChangeText3('');
-              onChangeText4('');
-              onChangeText5('');
-              onChangeText6('');
-              // @ts-ignore: Object is possibly 'null'.
-              ref_input1.current.focus();
-            }
-          }}>
-          <Text style={styles.textButton}>CONTINUE</Text>
-        </TouchableHighlight>
+        <ButtonCustom
+          loading={load}
+          title="CONTINUE"
+          containerStyle={styles.containerButton}
+          onPress={handleContinue}
+        />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  containerAll: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+  image: {
+    height: HEIGHT,
+    width: WIDTH,
   },
   container: {
     flex: 1,
     paddingHorizontal: 16,
   },
+  containerButton: {
+    marginTop: spacing[6],
+    alignSelf: 'center',
+  },
   textQuestion: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
     fontStyle: 'normal',
-    color: '#000000',
+    color: color.text,
     marginTop: 40,
   },
   emailContainer: {
@@ -202,13 +226,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     color: '#6E6E6E',
   },
-  textResend: {
-    flex: 1,
-    fontSize: 17,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#ACACAC',
-  },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -219,30 +236,16 @@ const styles = StyleSheet.create({
     height: 50,
     width: 30,
     borderBottomWidth: 2,
+    borderColor: color.primary,
     textAlign: 'center',
     fontSize: 36,
     paddingBottom: 0,
   },
-  button: {
-    width: 190,
-    height: 54,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
-    alignSelf: 'center',
-  },
-  textButton: {
-    fontSize: 17,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#FFFFFF',
-  },
   textError: {
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '400',
     fontStyle: 'normal',
-    color: '#BB2424',
-    marginTop: 10,
+    color: 'red',
+    marginTop: spacing[3],
   },
 });
