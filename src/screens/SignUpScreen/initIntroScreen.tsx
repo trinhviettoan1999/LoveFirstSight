@@ -3,78 +3,109 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TextInput,
+  Dimensions,
+  TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
-import {Header, RouteStackParamList, StatusBarCustom} from '../../components';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {color, spacing} from '../../theme';
+import {ROUTER} from '../../constants/router';
+import {
+  BackCircle,
+  HeaderCustom,
+  ButtonCustom,
+  openNotification,
+} from '../../components';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export const InitIntroScreen = ({
-  route,
-  navigation,
-}: RouteStackParamList<'FirstScreen'>) => {
+const background_image = require('../../../assets/images/background_default.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
+export const InitIntroScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const [load, setLoad] = useState(false);
   const [value, setValue] = useState('');
   const {user} = route.params;
   user.intro = value;
+
+  const handleContinue = () => {
+    setLoad(true);
+    if (!value) {
+      openNotification('danger', 'You must type any intro!!');
+      setLoad(false);
+      return;
+    }
+    navigation.navigate(ROUTER.initHobbies, {
+      user: user,
+    });
+    setLoad(false);
+  };
+
   return (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => navigation.goBack()}
-      />
-      <View style={styles.container}>
-        <Text style={styles.textQuestion}>Your intro?</Text>
-        <View style={styles.introContainer}>
-          <TextInput
-            autoFocus={true}
-            value={value}
-            onChangeText={setValue}
-            style={styles.textInput}
-            multiline={true}
-            maxLength={500}
+    <KeyboardAwareScrollView>
+      <ImageBackground style={styles.image} source={background_image}>
+        <HeaderCustom
+          backgroundStatusBar={color.transparent}
+          removeBorderWidth
+          leftComponent={
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <BackCircle />
+            </TouchableOpacity>
+          }
+        />
+        <View style={styles.container}>
+          <Text style={styles.textQuestion}>Your intro?</Text>
+          <View style={styles.introContainer}>
+            <TextInput
+              autoFocus={true}
+              value={value}
+              onChangeText={setValue}
+              style={styles.textInput}
+              multiline={true}
+              maxLength={500}
+            />
+          </View>
+          <View style={styles.lengthContainer}>
+            <Text style={styles.textLength}>{value.length} / 500</Text>
+          </View>
+          <Text style={styles.textNote}>Visible on your Stapler profile</Text>
+          <ButtonCustom
+            loading={load}
+            title="CONTINUE"
+            containerStyle={styles.containerButton}
+            onPress={handleContinue}
           />
         </View>
-        <View style={styles.lengthContainer}>
-          <Text style={styles.textLength}>{value.length} / 500</Text>
-        </View>
-        <Text style={styles.textNote}>Visible on your Stapler profile</Text>
-        <TouchableHighlight
-          style={[
-            styles.button,
-            {backgroundColor: value.trim() ? '#6A1616' : '#E1E1E1'},
-          ]}
-          disabled={value.trim() ? false : true}
-          onPress={() =>
-            navigation.navigate('InitHobbiesScreen', {
-              user: user,
-            })
-          }>
-          <Text style={styles.textButton}>CONTINUE</Text>
-        </TouchableHighlight>
-      </View>
-    </View>
+      </ImageBackground>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  containerAll: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+  image: {
+    width: WIDTH,
+    height: HEIGHT,
   },
   container: {
     flex: 1,
     paddingHorizontal: 16,
   },
+  containerButton: {
+    marginTop: spacing[2],
+    alignSelf: 'center',
+  },
   textQuestion: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
     fontStyle: 'normal',
-    color: '#000000',
+    color: color.text,
     marginTop: 40,
   },
   textNote: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
     fontStyle: 'normal',
     color: '#ACACAC',
@@ -100,15 +131,9 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 17,
-    fontWeight: '700',
+    fontWeight: '400',
     fontStyle: 'normal',
-    color: '#919191',
-  },
-  textButton: {
-    fontSize: 17,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#FFFFFF',
+    color: color.primary,
   },
   textLength: {
     fontSize: 12,
