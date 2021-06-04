@@ -1,10 +1,23 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
 import {
-  Header,
-  RouteStackParamList,
+  View,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  Dimensions,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
+import {useRoute} from '@react-navigation/native';
+import {color, spacing} from '../../theme';
+import {ROUTER} from '../../constants/router';
+import {
   CustomIcon,
   StatusBarCustom,
+  BackCircle,
+  HeaderCustom,
+  ButtonCustom,
+  openNotification,
 } from '../../components';
 import {checkPermissionCamera, checkPermissionPhoto} from '../../controller';
 import Modal from 'react-native-modal';
@@ -92,11 +105,14 @@ const createUser = (user: any) => {
     });
 };
 
-export const InitAvatarScreen = ({
-  route,
-  navigation,
-}: RouteStackParamList<'FirstScreen'>) => {
+const background_image = require('../../../assets/images/background_default.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
+export const InitAvatarScreen = ({navigation}: any) => {
+  const route = useRoute();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [load, setLoad] = useState(false);
   const [resourcePath, setResourcePath] = useState({
     fileUri: null,
     filePath: null,
@@ -104,13 +120,45 @@ export const InitAvatarScreen = ({
   });
   const {user} = route.params;
   console.log(user);
+
+  const handleContinue = async () => {
+    setLoad(true);
+    if (!resourcePath.fileUri) {
+      setLoad(false);
+      openNotification('danger', 'Please choose a avatar!!');
+      return;
+    }
+    await firebase.createAccount(user.email, user.password, async () => {
+      user.userId = auth().currentUser?.uid;
+      await upload(
+        user.userId,
+        'images',
+        'avatar.png',
+        // @ts-ignore: Object is possibly 'null'.
+        resourcePath.fileUri,
+        () => {
+          getUrl(user.userId, 'images', 'avatar.png').then((result) => {
+            user.avatar = result;
+          });
+          createUser(user);
+        },
+      );
+    });
+    navigation.replace(ROUTER.home);
+    setLoad(false);
+  };
+
   return (
-    <View style={styles.containerAll}>
+    <ImageBackground style={styles.image} source={background_image}>
       <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => navigation.goBack()}
+      <HeaderCustom
+        backgroundStatusBar={color.transparent}
+        removeBorderWidth
+        leftComponent={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackCircle />
+          </TouchableOpacity>
+        }
       />
       <View style={styles.container}>
         <Text style={styles.textQuestion}>Almost Done</Text>
@@ -171,52 +219,29 @@ export const InitAvatarScreen = ({
             </Text>
           </View>
         </Modal>
-        <TouchableHighlight
-          style={[
-            styles.button,
-            {backgroundColor: resourcePath.fileUri ? '#6A1616' : '#E1E1E1'},
-          ]}
-          disabled={resourcePath != null ? false : true}
-          onPress={async () => {
-            await firebase.createAccount(
-              user.email,
-              user.password,
-              async () => {
-                user.userId = auth().currentUser?.uid;
-                await upload(
-                  user.userId,
-                  'images',
-                  'avatar.png',
-                  // @ts-ignore: Object is possibly 'null'.
-                  resourcePath.fileUri,
-                  () => {
-                    getUrl(user.userId, 'images', 'avatar.png').then(
-                      (result) => {
-                        user.avatar = result;
-                      },
-                    );
-                    createUser(user);
-                  },
-                );
-              },
-            );
-            navigation.replace('StaplerScreen');
-          }}>
-          <Text style={styles.textButton}>CONTINUE</Text>
-        </TouchableHighlight>
+        <ButtonCustom
+          loading={load}
+          title="CONTINUE"
+          containerStyle={styles.containerButton}
+          onPress={handleContinue}
+        />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  containerAll: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+  image: {
+    width: WIDTH,
+    height: HEIGHT,
   },
   container: {
     flex: 1,
     paddingHorizontal: 16,
+  },
+  containerButton: {
+    marginTop: spacing[2],
+    alignSelf: 'center',
   },
   avatarContainer: {
     width: '100%',
@@ -253,11 +278,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   textQuestion: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
     fontStyle: 'normal',
-    color: '#000000',
-    marginTop: 40,
+    color: color.text,
+    marginTop: spacing[4],
   },
   textNote: {
     fontSize: 17,
@@ -265,20 +290,5 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     color: '#ACACAC',
     marginTop: 10,
-  },
-  button: {
-    width: 190,
-    height: 54,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-    alignSelf: 'center',
-  },
-  textButton: {
-    fontSize: 17,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#FFFFFF',
   },
 });
