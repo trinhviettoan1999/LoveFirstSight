@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   textWelcome: {
-    fontSize: 30,
+    fontSize: 40,
     color: color.text,
     fontWeight: '700',
     lineHeight: 37,
