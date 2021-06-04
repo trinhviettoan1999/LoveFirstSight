@@ -112,15 +112,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: 'center',
   },
-  button: {
-    width: 190,
-    height: 54,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
-    alignSelf: 'center',
-  },
   introContainer: {
     height: 100,
   },

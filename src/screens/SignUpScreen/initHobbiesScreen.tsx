@@ -5,31 +5,43 @@ import {
   Text,
   TouchableHighlight,
   ScrollView,
+  Dimensions,
+  TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
-import {
-  Header,
-  RouteStackParamList,
-  SelectionButtonGroup,
-  StatusBarCustom,
-} from '../../components';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {color, spacing} from '../../theme';
+import {ROUTER} from '../../constants/router';
+import {SelectionButtonGroup, BackCircle, HeaderCustom} from '../../components';
 
 var DATA = require('../../../assets/json/hobbies.json');
+const background_image = require('../../../assets/images/background_default.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
-export const InitHobbiesScreen = ({
-  route,
-  navigation,
-}: RouteStackParamList<'FirstScreen'>) => {
+export const InitHobbiesScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const [selectedItems, setItemSelected] = useState([]);
   const {user} = route.params;
   user.hobbies = selectedItems;
 
+  const handleContinue = () => {
+    navigation.navigate(ROUTER.initAvatar, {
+      user: user,
+    });
+  };
+
   return (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => navigation.goBack()}
+    <ImageBackground style={styles.image} source={background_image}>
+      <HeaderCustom
+        backgroundStatusBar={color.transparent}
+        removeBorderWidth
+        leftComponent={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackCircle />
+          </TouchableOpacity>
+        }
       />
       <View style={styles.container}>
         <Text style={styles.textQuestion}>Hobbies</Text>
@@ -50,28 +62,26 @@ export const InitHobbiesScreen = ({
             styles.button,
             {
               backgroundColor:
-                Object.keys(selectedItems).length == 5 ? '#6A1616' : '#E1E1E1',
+                Object.keys(selectedItems).length == 5
+                  ? color.primary
+                  : '#E1E1E1',
             },
           ]}
           disabled={Object.keys(selectedItems).length === 5 ? false : true}
-          onPress={() =>
-            navigation.navigate('InitAvatarScreen', {
-              user: user,
-            })
-          }>
+          onPress={handleContinue}>
           <Text style={styles.textButton}>
             CONTINUE {Object.keys(selectedItems).length}/5
           </Text>
         </TouchableHighlight>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  containerAll: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+  image: {
+    width: WIDTH,
+    height: HEIGHT,
   },
   container: {
     flex: 1,
@@ -83,11 +93,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   textQuestion: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
     fontStyle: 'normal',
-    color: '#000000',
-    marginTop: 40,
+    color: color.text,
+    marginTop: spacing[4],
   },
   textNote: {
     fontSize: 17,

@@ -103,6 +103,7 @@ export const InitAvatarScreen = ({
     fileData: null,
   });
   const {user} = route.params;
+  console.log(user);
   return (
     <View style={styles.containerAll}>
       <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
