@@ -3,16 +3,22 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableHighlight,
   Platform,
+  Dimensions,
+  TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {color, spacing} from '../../theme';
 import {
-  Header,
-  RouteStackParamList,
   CustomIcon,
-  StatusBarCustom,
+  BackCircle,
+  HeaderCustom,
+  ButtonCustom,
+  openNotification,
 } from '../../components';
+import {ROUTER} from '../../constants/router';
 
 //format date
 function getParsedDate(strDate: Date) {
@@ -42,12 +48,16 @@ function calculateAge(strDate: Date) {
   return age_now;
 }
 
-export const InitAgeScreen = ({
-  route,
-  navigation,
-}: RouteStackParamList<'FirstScreen'>) => {
+const background_image = require('../../../assets/images/background_default.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
+export const InitAgeScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const [load, setLoad] = useState(false);
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
@@ -57,13 +67,30 @@ export const InitAgeScreen = ({
   const [age, setAge] = useState(0);
   const {user} = route.params;
   user.birthday = getParsedDate(date);
+
+  const handleContinue = () => {
+    setLoad(true);
+    if (age < 18) {
+      setLoad(false);
+      openNotification('danger', "You haven't enough age to use app!!");
+      return;
+    }
+    navigation.navigate(ROUTER.initIntro, {
+      user: user,
+    });
+    setLoad(false);
+  };
+
   return (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => navigation.goBack()}
+    <ImageBackground style={styles.image} source={background_image}>
+      <HeaderCustom
+        backgroundStatusBar={color.transparent}
+        removeBorderWidth
+        leftComponent={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackCircle />
+          </TouchableOpacity>
+        }
       />
       <View style={styles.container}>
         <Text style={styles.textQuestion}>
@@ -92,67 +119,44 @@ export const InitAgeScreen = ({
         <Text style={styles.textNote}>
           We need this to make sure you’ve over 18
         </Text>
-        <TouchableHighlight
-          style={[
-            styles.button,
-            {backgroundColor: age >= 18 ? '#6A1616' : '#E1E1E1'},
-          ]}
-          disabled={age >= 18 ? false : true}
-          onPress={() =>
-            navigation.navigate('InitIntroScreen', {
-              user: user,
-            })
-          }>
-          <Text style={styles.textButton}>CONTINUE</Text>
-        </TouchableHighlight>
+        <ButtonCustom
+          loading={load}
+          title="CONTINUE"
+          containerStyle={styles.containerButton}
+          onPress={handleContinue}
+        />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  containerAll: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+  image: {
+    width: WIDTH,
+    height: HEIGHT,
   },
   container: {
     flex: 1,
     paddingHorizontal: 16,
   },
+  containerButton: {
+    marginTop: spacing[2],
+    alignSelf: 'center',
+  },
   textQuestion: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
     fontStyle: 'normal',
-    color: '#000000',
+    color: color.text,
     marginTop: 40,
   },
   textNote: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '500',
     fontStyle: 'normal',
     color: '#ACACAC',
     marginTop: 10,
     alignSelf: 'center',
-  },
-  inputContainer: {
-    height: 40,
-    marginTop: 20,
-    borderBottomWidth: 2,
-  },
-  button: {
-    width: 190,
-    height: 54,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
-    alignSelf: 'center',
-  },
-  textButton: {
-    fontSize: 17,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#FFFFFF',
   },
   textDate: {
     fontSize: 22,

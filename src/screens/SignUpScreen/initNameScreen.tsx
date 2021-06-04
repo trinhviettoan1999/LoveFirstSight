@@ -17,6 +17,7 @@ import {
 } from '../../components';
 import {color, spacing} from '../../theme';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {ROUTER} from '../../constants/router';
 
 const Data = {
   Options: [
@@ -57,7 +58,7 @@ export const InitNameScreen = () => {
       setLoad(false);
       return;
     }
-    navigation.navigate('InitAgeScreen', {
+    navigation.navigate(ROUTER.initAge, {
       user: user,
     });
     setLoad(false);
