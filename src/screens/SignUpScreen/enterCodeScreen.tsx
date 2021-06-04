@@ -3,20 +3,13 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TextInput,
   ImageBackground,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {
-  BackCircle,
-  ButtonCustom,
-  Header,
-  HeaderCustom,
-  StatusBarCustom,
-} from '../../components';
+import {BackCircle, ButtonCustom, HeaderCustom} from '../../components';
 import GetLocation from 'react-native-get-location';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
@@ -42,7 +35,6 @@ export const EnterCodeScreen = () => {
   const ref_input4 = useRef(null);
   const ref_input5 = useRef(null);
   const ref_input6 = useRef(null);
-  const ref_button = useRef(null);
   const {user, code} = route.params;
 
   useEffect(() => {

@@ -1,81 +1,102 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
 import {
-  Header,
-  RouteStackParamList,
-  InputView,
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
+import {
+  HeaderCustom,
+  ButtonCustom,
   StatusBarCustom,
+  BackCircle,
+  InputCustom,
 } from '../../components';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {color, spacing} from '../../theme';
+import {ROUTER} from '../../constants/router';
 
-export const EnterPassword = ({
-  route,
-  navigation,
-}: RouteStackParamList<'FirstScreen'>) => {
+const background_image = require('../../../assets/images/background_default.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
+export const EnterPassword = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const [valuePassword, onChangeTextPassword] = useState('');
+  const [required, setRequired] = useState(false);
+  const [load, setLoad] = useState(false);
   const {user} = route.params;
   user.password = valuePassword;
+
+  const handleContinue = () => {
+    setLoad(true);
+    if (!valuePassword) {
+      setLoad(false);
+      setRequired(true);
+      return;
+    }
+    navigation.navigate(ROUTER.initName, {
+      user: user,
+    });
+    setLoad(false);
+  };
+
   return (
-    <View style={styles.containerAll}>
+    <ImageBackground style={styles.image} source={background_image}>
       <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => navigation.goBack()}
+      <HeaderCustom
+        backgroundStatusBar={color.transparent}
+        removeBorderWidth
+        leftComponent={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackCircle />
+          </TouchableOpacity>
+        }
       />
       <View style={styles.container}>
         <Text style={styles.textQuestion}>Type your password</Text>
         <Text style={styles.textReminder}>
           To access to your account, please type password.
         </Text>
-        <View style={styles.inputContainer}>
-          <InputView
-            placeHolder="Enter password"
-            value={valuePassword}
-            onChangeText={onChangeTextPassword}
-            autoFocus={true}
-            secureTextEntry={true}
-          />
-        </View>
-        {valuePassword.length >= 8 ? null : (
-          <Text style={styles.textError}>
-            Password must contain at least 8 characters
-          </Text>
-        )}
-        <TouchableHighlight
-          style={[
-            styles.button,
-            {
-              backgroundColor:
-                valuePassword.length >= 8 ? '#6A1616' : '#E1E1E1',
-            },
-          ]}
-          disabled={valuePassword.length >= 8 ? false : true}
-          onPress={() => {
-            navigation.navigate('InitNameScreen', {
-              user: user,
-            });
-          }}>
-          <Text style={styles.textButton}>CONTINUE</Text>
-        </TouchableHighlight>
+        <InputCustom
+          value={valuePassword}
+          placeholder="Password must contain at least 8 characters"
+          onChangeText={(text) => onChangeTextPassword(text)}
+          errorMessage={
+            required && !valuePassword ? 'Password is required' : ''
+          }
+        />
+        <ButtonCustom
+          loading={load}
+          title="CONTINUE"
+          containerStyle={styles.containerButton}
+          onPress={handleContinue}
+        />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  containerAll: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+  image: {
+    height: HEIGHT,
+    width: WIDTH,
   },
   container: {
     flex: 1,
     paddingHorizontal: 16,
   },
+  containerButton: {
+    alignSelf: 'center',
+  },
   textQuestion: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
     fontStyle: 'normal',
-    color: '#000000',
+    color: color.text,
     marginTop: 40,
   },
   textReminder: {
@@ -83,32 +104,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontStyle: 'normal',
     color: '#919191',
-    marginTop: 10,
-  },
-  inputContainer: {
-    height: 40,
-    marginTop: 20,
-    borderBottomWidth: 2,
-  },
-  button: {
-    width: 190,
-    height: 54,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
-    alignSelf: 'center',
-  },
-  textButton: {
-    fontSize: 17,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#FFFFFF',
-  },
-  textError: {
-    fontSize: 15,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#BB2424',
+    marginTop: spacing[2],
+    marginBottom: spacing[5],
   },
 });
