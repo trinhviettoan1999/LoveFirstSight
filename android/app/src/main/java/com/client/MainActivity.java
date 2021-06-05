@@ -1,6 +1,8 @@
-package com.client;
+package com.stapler.client;
 
 import com.facebook.react.ReactActivity;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 public class MainActivity extends ReactActivity {
 

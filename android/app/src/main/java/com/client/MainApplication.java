@@ -1,4 +1,4 @@
-package com.client;
+package com.stapler.client;
 
 import android.app.Application;
 import android.content.Context;
@@ -59,8 +59,10 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    FacebookSdk.sdkInitialize(getApplicationContext());
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    AppEventsLogger.activateApp(this);
   }
 
   /**
@@ -78,7 +80,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("com.client.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.stapler.client.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

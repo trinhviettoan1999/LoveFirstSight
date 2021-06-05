@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:500865270015:android:2e86ff9cfc72ec2e224cca",
+        "mobilesdk_app_id": "1:500865270015:android:f235e9eba0979127224cca",
         "android_client_info": {
-          "package_name": "com.client"
+          "package_name": "com.stapler.client"
         }
       },
       "oauth_client": [
@@ -30,6 +30,13 @@
             {
               "client_id": "500865270015-2uat70emstop40v4v0cc9rmnhd3ogecm.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "500865270015-3ufak8rrveu1pnd1bhlcidgdibk3losr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.staplerapp"
+              }
             }
           ]
         }
