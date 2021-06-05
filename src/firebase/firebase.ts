@@ -1,4 +1,5 @@
 import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {Alert} from 'react-native';
 //Login Account
 export const loginAccount = async (
@@ -33,10 +34,14 @@ export const createAccount = async (
 };
 
 //Sign Out
-export const signOutAccount = () => {
-  auth()
-    .signOut()
-    .then(() => console.log('User singed out!'));
+export const signOutAccount = async (success_callback: any) => {
+  GoogleSignin.configure({
+    webClientId:
+      '500865270015-2uat70emstop40v4v0cc9rmnhd3ogecm.apps.googleusercontent.com',
+  });
+  await GoogleSignin.revokeAccess();
+  await GoogleSignin.signOut();
+  auth().signOut().then(success_callback);
 };
 
 //Reset password

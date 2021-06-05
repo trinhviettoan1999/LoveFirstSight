@@ -16,7 +16,9 @@ import {
   Facebook,
   HeaderCustom,
 } from '../../components';
-
+import auth from '@react-native-firebase/auth';
+import {LoginManager, AccessToken} from 'react-native-fbsdk';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import * as firebase from '../../firebase/firebase';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {spacing, color} from '../../theme';
@@ -34,6 +36,45 @@ export const SignInScreen = ({navigation}) => {
   const [load, setLoad] = useState(false);
   const [show, setShow] = useState(false);
   const [required, setRequired] = useState(false);
+  GoogleSignin.configure({
+    webClientId:
+      '500865270015-2uat70emstop40v4v0cc9rmnhd3ogecm.apps.googleusercontent.com',
+  });
+
+  const onFacebookButtonPress = async () => {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+    // Once signed in, get the users AccessToken
+    const data = await AccessToken.getCurrentAccessToken();
+    console.log(data);
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+    // // Create a Firebase credential with the AccessToken
+    // const facebookCredential = auth.FacebookAuthProvider.credential(
+    //   data.accessToken,
+    // );
+    // // Sign-in the user with the credential
+    // return auth()
+    //   .signInWithCredential(facebookCredential)
+    //   .then((result) => console.log(result))
+    //   .catch((err) => console.log(err));
+  };
+
+  const onGoogleButtonPress = async () => {
+    // Get the users ID token
+    const {idToken} = await GoogleSignin.signIn();
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  };
 
   const handleLogin = () => {
     setLoad(true);
@@ -79,6 +120,7 @@ export const SignInScreen = ({navigation}) => {
           containerStyle={styles.containerButton}
           buttonStyle={styles.buttonFacebook}
           icon={<Facebook />}
+          onPress={onFacebookButtonPress}
         />
         <ButtonCustom
           loading={load}
@@ -87,6 +129,7 @@ export const SignInScreen = ({navigation}) => {
           containerStyle={styles.containerButton}
           buttonStyle={styles.buttonGoogle}
           icon={<Google />}
+          onPress={onGoogleButtonPress}
         />
         <Text style={styles.textOrEmail}>OR LOGIN WITH EMAIL</Text>
         <InputCustom

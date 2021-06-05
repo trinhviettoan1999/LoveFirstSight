@@ -274,6 +274,7 @@ type propsModal = {
   setLoadAvatar?: any;
   loadAvatar?: boolean;
 };
+
 //Modal image
 const ModalPicture = ({
   isModalVisible,
@@ -668,8 +669,9 @@ export const AccountScreen = ({
                   .getToken()
                   .then((token) => {
                     deleteTokenToDatabase(token).then(() => {
-                      signOutAccount();
-                      navigation.replace('LoadingScreen');
+                      signOutAccount(() => {
+                        navigation.replace('LoadingScreen');
+                      });
                     });
                   });
               }}>

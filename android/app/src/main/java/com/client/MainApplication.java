@@ -26,6 +26,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -59,9 +61,9 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    FacebookSdk.sdkInitialize(getApplicationContext());
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    FacebookSdk.sdkInitialize(getApplicationContext());
     AppEventsLogger.activateApp(this);
   }
 

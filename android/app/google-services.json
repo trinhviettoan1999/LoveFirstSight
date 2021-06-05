@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "500865270015-0si2o6um9qu19rqs1oi75rqcfqnqcpho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stapler.client",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "500865270015-2uat70emstop40v4v0cc9rmnhd3ogecm.apps.googleusercontent.com",
           "client_type": 3
         }
