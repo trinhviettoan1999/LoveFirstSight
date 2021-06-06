@@ -116,6 +116,7 @@ export const InitAvatarScreen = ({navigation}: any) => {
       return;
     }
     if (auth().currentUser) {
+      user.userId = auth().currentUser?.uid;
       await upload(
         auth().currentUser?.uid,
         'images',
