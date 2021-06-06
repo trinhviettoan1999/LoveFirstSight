@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {BackCircle, ButtonCustom, HeaderCustom} from '../../components';
-import GetLocation from 'react-native-get-location';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
 
@@ -36,24 +35,6 @@ export const EnterCodeScreen = () => {
   const ref_input5 = useRef(null);
   const ref_input6 = useRef(null);
   const {user, code} = route.params;
-
-  useEffect(() => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 10000,
-    })
-      .then((location) => {
-        user.coordinates = {
-          lat: location.latitude,
-          long: location.longitude,
-        };
-      })
-      .catch((error) => {
-        const {code, message} = error;
-        console.warn(code, message);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleContinue = () => {
     setLoad(true);

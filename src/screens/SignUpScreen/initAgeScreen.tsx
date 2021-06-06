@@ -66,6 +66,7 @@ export const InitAgeScreen = () => {
   };
   const [age, setAge] = useState(0);
   const {user} = route.params;
+  console.log('usser: ', user);
   user.birthday = getParsedDate(date);
 
   const handleContinue = () => {

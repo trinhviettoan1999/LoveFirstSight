@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -17,6 +17,7 @@ import {
 } from '../../components';
 import {color, spacing} from '../../theme';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import GetLocation from 'react-native-get-location';
 import {ROUTER} from '../../constants/router';
 
 const Data = {
@@ -43,13 +44,31 @@ const HEIGHT = Dimensions.get('window').height;
 export const InitNameScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [value, onChangeText] = useState('');
   const [gender, setGender] = useState('Man');
   const [required, setRequired] = useState(false);
   const [load, setLoad] = useState(false);
   const {user} = route.params;
+  const [value, onChangeText] = useState(user.name);
   user.name = value;
   user.gender = gender;
+
+  useEffect(() => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 10000,
+    })
+      .then((location) => {
+        user.coordinates = {
+          lat: location.latitude,
+          long: location.longitude,
+        };
+      })
+      .catch((error) => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleContinue = () => {
     setLoad(true);

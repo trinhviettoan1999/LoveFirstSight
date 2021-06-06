@@ -35,12 +35,14 @@ export const createAccount = async (
 
 //Sign Out
 export const signOutAccount = async (success_callback: any) => {
-  GoogleSignin.configure({
-    webClientId:
-      '500865270015-2uat70emstop40v4v0cc9rmnhd3ogecm.apps.googleusercontent.com',
-  });
-  await GoogleSignin.revokeAccess();
-  await GoogleSignin.signOut();
+  if (auth().currentUser?.providerData[0].providerId === 'google.com') {
+    GoogleSignin.configure({
+      webClientId:
+        '500865270015-2uat70emstop40v4v0cc9rmnhd3ogecm.apps.googleusercontent.com',
+    });
+    await GoogleSignin.revokeAccess();
+    await GoogleSignin.signOut();
+  }
   auth().signOut().then(success_callback);
 };
 

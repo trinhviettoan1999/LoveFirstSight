@@ -45,11 +45,7 @@ function cameraLaunch(setResourcePath: any) {
       } else if (res.error) {
         console.log('ImagePicker Error: ', res.error);
       } else {
-        setResourcePath({
-          filePath: res,
-          fileData: res.data,
-          fileUri: res.uri,
-        });
+        setResourcePath(res.assets[0].uri);
       }
     });
   });
@@ -73,11 +69,7 @@ function imageGalleryLaunch(setResourcePath: any) {
       } else if (res.error) {
         console.log('ImagePicker Error: ', res.error);
       } else {
-        setResourcePath({
-          filePath: res,
-          fileData: res.data,
-          fileUri: res.uri,
-        });
+        setResourcePath(res.assets[0].uri);
       }
     });
   });
@@ -113,39 +105,70 @@ export const InitAvatarScreen = ({navigation}: any) => {
   const route = useRoute();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [load, setLoad] = useState(false);
-  const [resourcePath, setResourcePath] = useState({
-    fileUri: null,
-    filePath: null,
-    fileData: null,
-  });
+  const [resourcePath, setResourcePath] = useState(null);
   const {user} = route.params;
-  console.log(user);
 
   const handleContinue = async () => {
     setLoad(true);
-    if (!resourcePath.fileUri) {
+    if (!resourcePath) {
       setLoad(false);
       openNotification('danger', 'Please choose a avatar!!');
       return;
     }
-    await firebase.createAccount(user.email, user.password, async () => {
-      user.userId = auth().currentUser?.uid;
+    if (auth().currentUser) {
       await upload(
-        user.userId,
+        auth().currentUser?.uid,
         'images',
         'avatar.png',
         // @ts-ignore: Object is possibly 'null'.
-        resourcePath.fileUri,
-        () => {
-          getUrl(user.userId, 'images', 'avatar.png').then((result) => {
-            user.avatar = result;
-          });
-          createUser(user);
+        resourcePath,
+        async () => {
+          const result = await getUrl(user.userId, 'images', 'avatar.png');
+          if (result) {
+            createUser({...user, avatar: result})
+              .then(() => {
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: ROUTER.home}],
+                });
+                setLoad(false);
+              })
+              .catch((err) => {
+                setLoad(false);
+                console.log(err);
+              });
+          }
         },
       );
-    });
-    navigation.replace(ROUTER.home);
-    setLoad(false);
+    } else {
+      await firebase.createAccount(user.email, user.password, async () => {
+        user.userId = auth().currentUser?.uid;
+        await upload(
+          user.userId,
+          'images',
+          'avatar.png',
+          // @ts-ignore: Object is possibly 'null'.
+          resourcePath,
+          async () => {
+            const result = await getUrl(user.userId, 'images', 'avatar.png');
+            if (result) {
+              createUser({...user, avatar: result})
+                .then(() => {
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: ROUTER.home}],
+                  });
+                  setLoad(false);
+                })
+                .catch((err) => {
+                  setLoad(false);
+                  console.log(err);
+                });
+            }
+          },
+        );
+      });
+    }
   };
 
   return (
@@ -171,8 +194,8 @@ export const InitAvatarScreen = ({navigation}: any) => {
             style={styles.avatar}
             source={{
               // @ts-ignore: Object is possibly 'null'.
-              uri: resourcePath.fileUri
-                ? resourcePath.fileUri
+              uri: resourcePath
+                ? resourcePath
                 : 'https://vsmcamp.com/wp-content/uploads/2020/11/JaZBMzV14fzRI4vBWG8jymplSUGSGgimkqtJakOV.jpeg',
               headers: {Authorization: 'staplerapp123456'},
               priority: FastImage.priority.normal,
