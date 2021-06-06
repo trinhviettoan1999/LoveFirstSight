@@ -44,8 +44,10 @@ import {createKey} from './createKey';
 import {setStateVideoCall} from './setStateVideoCall';
 import {getStateVideoCall} from './getStateVideoCall';
 import {callVideo} from './callVideo';
+import {checkAccount} from './checkAccount';
 
 export {
+  checkAccount,
   callVideo,
   blockUser,
   unBlockUser,

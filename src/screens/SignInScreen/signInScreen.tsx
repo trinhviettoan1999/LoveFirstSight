@@ -24,6 +24,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {spacing, color} from '../../theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ROUTER} from '../../constants/router';
+import {checkAccount} from '../../controller';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -56,15 +57,15 @@ export const SignInScreen = ({navigation}) => {
     if (!data) {
       throw 'Something went wrong obtaining access token';
     }
-    // // Create a Firebase credential with the AccessToken
-    // const facebookCredential = auth.FacebookAuthProvider.credential(
-    //   data.accessToken,
-    // );
-    // // Sign-in the user with the credential
-    // return auth()
-    //   .signInWithCredential(facebookCredential)
-    //   .then((result) => console.log(result))
-    //   .catch((err) => console.log(err));
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(
+      data.accessToken,
+    );
+    // Sign-in the user with the credential
+    return auth()
+      .signInWithCredential(facebookCredential)
+      .then((result) => console.log(result))
+      .catch((err) => console.log(err));
   };
 
   const onGoogleButtonPress = async () => {
@@ -75,13 +76,21 @@ export const SignInScreen = ({navigation}) => {
     // Sign-in the user with the credential
     return auth()
       .signInWithCredential(googleCredential)
-      .then((result) => {
-        navigation.navigate(ROUTER.initName, {
-          user: {
-            name: result.user.displayName,
-            email: result.user.email,
-          },
-        });
+      .then(async (result) => {
+        const check = await checkAccount(auth().currentUser?.uid || '');
+        if (check) {
+          navigation.reset({
+            index: 0,
+            routes: [{name: ROUTER.home}],
+          });
+        } else {
+          navigation.navigate(ROUTER.initName, {
+            user: {
+              name: result.user.displayName,
+              email: result.user.email,
+            },
+          });
+        }
       });
   };
 
