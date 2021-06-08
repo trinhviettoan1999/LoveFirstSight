@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  ImageBackground,
 } from 'react-native';
 import {
   CustomIcon,
@@ -39,8 +40,10 @@ import GetLocation from 'react-native-get-location';
 import {useNavigation} from '@react-navigation/native';
 import {spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
+import LinearGradient from 'react-native-linear-gradient';
 
 const not_result_image = require('../../../assets/images/not_result.png');
+const avatar = require('../../../assets/images/avt1.png');
 
 type Props = {
   name: string;
@@ -102,6 +105,7 @@ export const StaplerScreen = () => {
     province: '',
     coordinates: '',
     images: [null, null, null, null, null, null, null, null],
+    hobbies: [],
   };
   const [filter, setFilter] = useState({
     gender: '',
@@ -195,364 +199,19 @@ export const StaplerScreen = () => {
   }, [load]);
 
   return (
-    <View style={styles.containerAll}>
-      <HeaderCustom
-        rightComponent={
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <TouchableOpacity
-              style={{marginRight: spacing[3]}}
-              onPress={() =>
-                navigation.navigate(ROUTER.filter, {
-                  filter: filter,
-                })
-              }>
-              <Filter />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setIsModalVisibleMenu(true)}>
-              <Options />
-            </TouchableOpacity>
-          </View>
-        }
-        leftComponent={<Text style={styles.titleHeader}>Stapler</Text>}
+    <ImageBackground source={avatar} style={{flex: 1}} resizeMode="cover">
+      <LinearGradient
+        // angle={180}
+        colors={['rgba(255, 255, 255, 0)', '#000000']}
+        locations={[0.5323, 0.993]}
+        style={styles.containerAll}
       />
-      {/* <Header setIsModalVisibleMenu={setIsModalVisibleMenu} /> */}
-      {load && (
-        <View style={styles.load}>
-          <ActivityIndicator color="#6A1616" size={20} />
-          <Text style={styles.textLoad}>Loading...</Text>
-        </View>
-      )}
-      {user?.name && !load ? (
-        <>
-          <ScrollView style={styles.scrollView}>
-            <FastImage
-              style={styles.avatar}
-              source={{
-                // @ts-ignore: Object is possibly 'null'.
-                uri: user.avatar,
-                headers: {Authorization: 'staplerapp123456'},
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-            <View style={styles.container}>
-              <View style={styles.informationContainer}>
-                <View style={styles.firstContainer}>
-                  <Text style={styles.font26}>{user.name}</Text>
-                  <Text style={styles.font26}>
-                    , {computeAge(user.birthday)}
-                  </Text>
-                  <View style={styles.containerMessageIcon}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        Alert.alert(
-                          'Notification',
-                          `Do you want to send message to ${user.name}?`,
-                          [
-                            {
-                              text: 'Cancel',
-                              style: 'cancel',
-                            },
-                            {
-                              text: 'OK',
-                              onPress: handleYesAlert,
-                            },
-                          ],
-                          {cancelable: false},
-                        );
-                      }}>
-                      <CustomIcon name="messenger" size={25} color="#6A1616" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <Text style={styles.font17}>{user.intro}</Text>
-                <ProfileInformation iconName="gender" content={user.gender} />
-                {user.lookingFor ? (
-                  <ProfileInformation
-                    iconName="lookingfor"
-                    content={user.lookingFor}
-                  />
-                ) : null}
-                <ProfileInformation
-                  iconName="location"
-                  content="Located in Ho Chi Minh City, Viet Nam"
-                />
-                <ProfileInformation
-                  iconName="scope"
-                  content={
-                    `${calculateDistance(user.coordinates, coordinate)
-                      .toFixed(1)
-                      .toString()}` + ' km'
-                  }
-                />
-                {user.height ? (
-                  <ProfileInformation
-                    iconName="height"
-                    content={user.height + ' cm'}
-                  />
-                ) : null}
-                {user.university ? (
-                  <ProfileInformation
-                    iconName="university"
-                    content={user.university}
-                  />
-                ) : null}
-                {user.province ? (
-                  <ProfileInformation
-                    iconName="province"
-                    content={user.province}
-                  />
-                ) : null}
-                {user.drinking ? (
-                  <ProfileInformation
-                    iconName="drinking"
-                    content={user.drinking}
-                  />
-                ) : null}
-                {user.smoking ? (
-                  <ProfileInformation
-                    iconName="smoking"
-                    content={user.smoking}
-                  />
-                ) : null}
-                {user.kids ? (
-                  <ProfileInformation iconName="child" content={user.kids} />
-                ) : null}
-              </View>
-              {user.images[0] ? <ImageUser urlImage={user.images[0]} /> : null}
-              {user.images[1] ? <ImageUser urlImage={user.images[1]} /> : null}
-              {user.images[2] ? <ImageUser urlImage={user.images[2]} /> : null}
-              {user.images[3] ? <ImageUser urlImage={user.images[3]} /> : null}
-              {user.images[4] ? <ImageUser urlImage={user.images[4]} /> : null}
-              {user.images[5] ? <ImageUser urlImage={user.images[5]} /> : null}
-              {user.images[6] ? <ImageUser urlImage={user.images[6]} /> : null}
-              {user.images[7] ? <ImageUser urlImage={user.images[7]} /> : null}
-            </View>
-            <View style={{height: 80}} />
-          </ScrollView>
-          <View style={styles.interactiveContainer}>
-            <ButtonIcon
-              name="dislike"
-              size={30}
-              color="#745300"
-              onPress={async () => {
-                await ignoreUser(user.userId);
-                setLoad(!load);
-              }}
-            />
-            <ButtonIcon
-              name="star"
-              size={40}
-              color="#0078D4"
-              onPress={async () => {
-                await superLikeUser(user.userId);
-                setLoad(!load);
-              }}
-            />
-            <ButtonIcon
-              name="lookingfor"
-              size={30}
-              color="#6A1616"
-              onPress={async () => {
-                await likeUser(user.userId);
-                // @ts-ignore: Object is possibly 'null'.
-                sendNotification(user.userId, auth().currentUser?.uid);
-                setLoad(!load);
-              }}
-            />
-          </View>
-          <Modal
-            backdropTransitionOutTiming={0}
-            swipeDirection="down"
-            onSwipeComplete={() => setIsModalVisibleMenu(false)}
-            hideModalContentWhileAnimating
-            isVisible={isModalVisibleMenu}
-            style={styles.modalMenu}
-            onBackdropPress={() => setIsModalVisibleMenu(false)}
-            backdropOpacity={0.5}>
-            <View style={styles.buttonModal}>
-              <CustomIcon
-                name="report"
-                size={30}
-                color="#6A1616"
-                style={{flex: 0.5}}
-              />
-              <Text
-                style={styles.textButtonModal}
-                onPress={() => {
-                  reportUser(user.userId);
-                  setLoad(!load);
-                  setIsModalVisibleMenu(false);
-                }}>
-                Report {user.name}'s profile
-              </Text>
-            </View>
-            <View style={styles.buttonModal}>
-              <CustomIcon
-                name="block-people"
-                size={30}
-                color="#6A1616"
-                style={{flex: 0.5}}
-              />
-              <Text
-                style={styles.textButtonModal}
-                onPress={() => {
-                  blockUser(user.userId);
-                  setLoad(!load);
-                  setIsModalVisibleMenu(false);
-                }}>
-                Block {user.name}'s profile
-              </Text>
-            </View>
-          </Modal>
-        </>
-      ) : null}
-      {!user?.name && !load && (
-        <View
-          style={[
-            styles.scrollView,
-            {justifyContent: 'center', alignItems: 'center'},
-          ]}>
-          <Image
-            source={not_result_image}
-            style={styles.imageResult}
-            resizeMode="contain"
-          />
-          <Text style={{fontSize: 16}}>Don't have Users with your filter</Text>
-        </View>
-      )}
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   containerAll: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
-  },
-  modalFilter: {
-    flex: 1,
-    margin: 0,
-  },
-  titleHeader: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-    color: '#6A1616',
-  },
-  modalMenu: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  interactiveContainer: {
-    width: '100%',
-    height: 50,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 5,
-    position: 'absolute',
-    bottom: 0,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  container: {
-    paddingHorizontal: 16,
-  },
-  buttonIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0.2,
-  },
-  headerContainer: {
-    width: '100%',
-    height: 45,
-    backgroundColor: '#F8F8F8',
-  },
-  header: {
-    width: '100%',
-    height: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-  },
-  divider: {
-    width: '100%',
-    height: 1,
-    backgroundColor: '#C8C8C8',
-  },
-  avatar: {
-    height: 400,
-    width: '100%',
-    resizeMode: 'cover',
-  },
-  informationContainer: {
-    flex: 1,
-    marginTop: 16,
-    paddingBottom: 16,
-    borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-  },
-  firstContainer: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  font26: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-  },
-  font17: {
-    fontSize: 17,
-    fontWeight: '600',
-    fontStyle: 'normal',
-  },
-  buttonModal: {
-    backgroundColor: '#F8F8F8',
-    height: 50,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    paddingHorizontal: 40,
-  },
-  textButtonModal: {
-    flex: 2,
-    fontSize: 17,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-    color: '#000000',
-  },
-  modalLoading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  containerMessageIcon: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  load: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textLoad: {
-    marginTop: 10,
-  },
-  imageResult: {
-    width: 250,
-    height: 250,
   },
 });
