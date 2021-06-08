@@ -1,20 +1,12 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  Platform,
-} from 'react-native';
+import {View, StyleSheet, Platform, Image} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {
-  RouteStackParamList,
-  CustomIcon,
-  StatusBarCustom,
-} from '../../components';
+import {RouteStackParamList, HeaderCustom} from '../../components';
 import {checkPermisstionGPS} from '../../controller';
 import messaging from '@react-native-firebase/messaging';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+
+const logo = require('../../../assets/images/Logo.png');
 
 export const LoadingScreen = ({
   navigation,
@@ -54,11 +46,14 @@ export const LoadingScreen = ({
             });
           }
         } else {
-          if (auth().currentUser) {
-            navigation.replace('StaplerScreen');
-          } else {
-            navigation.replace('SignInScreen');
-          }
+          const time = setTimeout(() => {
+            if (auth().currentUser) {
+              navigation.replace('StaplerScreen');
+            } else {
+              navigation.replace('SignInScreen');
+            }
+          }, 2000);
+          // clearTimeout(time);
         }
       });
   }
@@ -98,15 +93,10 @@ export const LoadingScreen = ({
   }, []);
   return (
     <View style={styles.container}>
-      <StatusBarCustom backgroundColor="#6A1616" barStyle="light-content" />
-      <View style={styles.containerLogo}>
-        <CustomIcon name="stapler-outline" size={50} color="#FFEBEB" />
-        <Text style={styles.text}>STAPLER</Text>
-      </View>
-      <ActivityIndicator
-        color="#white"
-        size="large"
-        style={styles.activityIndicator}
+      <Image
+        style={{height: 250, width: 250}}
+        source={logo}
+        resizeMode="contain"
       />
     </View>
   );
@@ -115,21 +105,9 @@ export const LoadingScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#6A1616',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
-  },
-  containerLogo: {
-    flexDirection: 'row',
-    top: 200,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    marginLeft: 16,
-    color: '#FFEBEB',
-    fontSize: 50,
-    fontWeight: '600',
-    fontStyle: 'normal',
   },
   activityIndicator: {
     bottom: 15,
