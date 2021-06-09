@@ -17,7 +17,7 @@ export const ProfileInformation = ({
     <View style={styles.container}>
       <CustomIcon
         name={iconName}
-        color="#6A1616"
+        color="#ADACAC"
         size={20}
         style={{paddingTop: 16}}
       />

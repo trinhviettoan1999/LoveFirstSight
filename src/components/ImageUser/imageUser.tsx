@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, ActivityIndicator, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {spacing} from '../../theme/spacing';
 
 type props = {
   urlImage?: string;
@@ -42,7 +43,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 400,
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: spacing[1],
+    marginBottom: spacing[1],
     alignItems: 'center',
   },
   activityIndicator: {

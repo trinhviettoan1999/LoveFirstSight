@@ -125,3 +125,17 @@ export const Star = () => (
     `}
   />
 );
+
+export const Info = () => (
+  <SvgXml
+    xml={`
+    <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M21.2502 11.9999C21.2502 18.9369 18.9372 21.2499 12.0002 21.2499C5.0632 21.2499 2.7502 18.9369 2.7502 11.9999C2.7502 5.06289 5.0632 2.74989 12.0002 2.74989C18.9372 2.74989 21.2502 5.06289 21.2502 11.9999Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0002 15.895V12Z" fill="white"/>
+    <path d="M12.0002 15.895V12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0045 8.5H11.9955Z" fill="white"/>
+    <path d="M12.0045 8.5H11.9955" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    `}
+  />
+);

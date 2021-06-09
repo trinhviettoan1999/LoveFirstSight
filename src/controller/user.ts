@@ -23,6 +23,13 @@ export const getUser = async (userId: string) => {
   ).then((res) => res.json());
 };
 
+export const getHobbiesUser = async () => {
+  const listHobbies = (
+    await firestore().collection('users').doc(auth().currentUser?.uid).get()
+  ).data();
+  return listHobbies?.hobbies;
+};
+
 export const getUserRandom = (availableUsers: any) => {
   return availableUsers[Math.floor(availableUsers.length * Math.random())];
 };

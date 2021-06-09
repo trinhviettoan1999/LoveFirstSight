@@ -21,6 +21,8 @@ import {
   DisLike,
   Star,
   Like,
+  Hobbies,
+  Info,
 } from '../../components';
 import Modal from 'react-native-modal';
 import {
@@ -35,6 +37,8 @@ import {
   sendMessageRequest,
   updateUser,
   calculateDistance,
+  getHobbiesUser,
+  sendNotification,
 } from '../../controller';
 import {HeaderCustom} from '../../components';
 import messaging from '@react-native-firebase/messaging';
@@ -43,28 +47,12 @@ import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import GetLocation from 'react-native-get-location';
 import {useNavigation} from '@react-navigation/native';
-import {spacing} from '../../theme';
+import {spacing, color} from '../../theme';
 import {ROUTER} from '../../constants/router';
 import LinearGradient from 'react-native-linear-gradient';
-import {color} from '../../theme/color';
 
 const not_result_image = require('../../../assets/images/not_result.png');
 const avatar = require('../../../assets/images/avt1.png');
-
-type Props = {
-  name: string;
-  size: number;
-  color: string;
-  onPress?: any;
-};
-
-const ButtonIcon = ({name, size, color, onPress}: Props) => {
-  return (
-    <TouchableOpacity style={styles.buttonIcon} onPress={onPress}>
-      <CustomIcon name={name} size={size} color={color} />
-    </TouchableOpacity>
-  );
-};
 
 const saveTokenToDatabase = async (token: string) => {
   const userId = auth().currentUser?.uid;
@@ -75,25 +63,29 @@ const saveTokenToDatabase = async (token: string) => {
       tokens: firestore.FieldValue.arrayUnion(token),
     });
 };
-
-const sendNotification = async (ownerId: string, userId: string) => {
-  return await fetch(
-    'https://still-brushlands-96770.herokuapp.com/notification/like/' +
-      ownerId +
-      '/' +
-      userId,
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json());
-};
-
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
+
+// interface User {
+//   userId: string;
+//   name: string;
+//   birthday: string;
+//   gender: string;
+//   avatar?: string;
+//   email: string;
+//   intro: string;
+//   lookingFor: string;
+//   height: string;
+//   university: string;
+//   drinking: string;
+//   smoking: string;
+//   kids: string;
+//   province: string;
+//   coordinates: string;
+//   images: Array<string>;
+//   hobbies: Array<{id: number; value: string}>;
+// }
+
 export const StaplerScreen = () => {
   const navigation = useNavigation();
   const tabBarHeight = useBottomTabBarHeight();
@@ -134,6 +126,7 @@ export const StaplerScreen = () => {
   const [isModalVisibleMenu, setIsModalVisibleMenu] = useState(false);
   const [user, setUser] = useState(User);
   const [load, setLoad] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
   const [coordinate, setCoordinate] = useState({
     lat: 0,
     long: 0,
@@ -207,24 +200,126 @@ export const StaplerScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load]);
 
-  return (
-    <ScrollView style={{width: WIDTH, height: HEIGHT - tabBarHeight}}>
-      <ImageBackground
-        source={avatar}
-        style={styles.containerAll}
-        resizeMode="cover">
-        <HeaderCustom
-          backgroundStatusBar={color.transparent}
-          removeBorderWidth
-          barStyle="light-content"
-        />
-        <LinearGradient
-          colors={['rgba(255, 255, 255, 0)', '#000000']}
-          locations={[0.5323, 0.993]}
-          style={styles.image}>
-          <Text style={{color: 'red'}}>ABC</Text>
-        </LinearGradient>
-      </ImageBackground>
+  return !user?.name && !load ? (
+    <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+      <Image
+        source={not_result_image}
+        style={styles.imageResult}
+        resizeMode="contain"
+      />
+      <Text style={{fontSize: 16}}>Don't have Users with your filter</Text>
+    </View>
+  ) : (
+    <View>
+      <ScrollView
+        style={{width: WIDTH, height: HEIGHT - tabBarHeight}}
+        contentContainerStyle={{paddingBottom: showInfo ? 70 : 0}}>
+        <ImageBackground
+          source={{uri: user.avatar || undefined}}
+          style={styles.containerAll}
+          resizeMode="cover">
+          <HeaderCustom
+            backgroundStatusBar={color.transparent}
+            removeBorderWidth
+            barStyle="light-content"
+          />
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0)', '#000000']}
+            locations={[0.5323, 0.993]}
+            style={styles.image}>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.name}>
+                {`${user.name}  ${computeAge(user.birthday)}`}
+              </Text>
+              <TouchableOpacity onPress={() => setShowInfo(!showInfo)}>
+                <Info />
+              </TouchableOpacity>
+            </View>
+            <Hobbies data={user.hobbies} />
+          </LinearGradient>
+        </ImageBackground>
+        {showInfo && (
+          <View>
+            <View style={styles.infoContainer}>
+              <ProfileInformation iconName="gender" content={user.gender} />
+              {user.lookingFor ? (
+                <ProfileInformation
+                  iconName="lookingfor"
+                  content={user.lookingFor}
+                />
+              ) : null}
+              <ProfileInformation
+                iconName="location"
+                content="Located in Ho Chi Minh City, Viet Nam"
+              />
+              <ProfileInformation
+                iconName="scope"
+                content={
+                  `${calculateDistance(user.coordinates, coordinate)
+                    .toFixed(1)
+                    .toString()}` + ' km'
+                }
+              />
+              {user.height ? (
+                <ProfileInformation
+                  iconName="height"
+                  content={user.height + ' cm'}
+                />
+              ) : null}
+              {user.university ? (
+                <ProfileInformation
+                  iconName="university"
+                  content={user.university}
+                />
+              ) : null}
+              {user.province ? (
+                <ProfileInformation
+                  iconName="province"
+                  content={user.province}
+                />
+              ) : null}
+              {user.drinking ? (
+                <ProfileInformation
+                  iconName="drinking"
+                  content={user.drinking}
+                />
+              ) : null}
+              {user.smoking ? (
+                <ProfileInformation iconName="smoking" content={user.smoking} />
+              ) : null}
+              {user.kids ? (
+                <ProfileInformation iconName="child" content={user.kids} />
+              ) : null}
+            </View>
+            <View style={{paddingHorizontal: spacing[4]}}>
+              {user.images[0] ? (
+                <ImageUser urlImage={user.images[0] || ''} />
+              ) : null}
+              {user.images[1] ? (
+                <ImageUser urlImage={user.images[1] || ''} />
+              ) : null}
+              {user.images[2] ? (
+                <ImageUser urlImage={user.images[2] || ''} />
+              ) : null}
+              {user.images[3] ? (
+                <ImageUser urlImage={user.images[3] || ''} />
+              ) : null}
+              {user.images[4] ? (
+                <ImageUser urlImage={user.images[4] || ''} />
+              ) : null}
+              {user.images[5] ? (
+                <ImageUser urlImage={user.images[5] || ''} />
+              ) : null}
+              {user.images[6] ? (
+                <ImageUser urlImage={user.images[6] || ''} />
+              ) : null}
+              {user.images[7] ? (
+                <ImageUser urlImage={user.images[7] || ''} />
+              ) : null}
+            </View>
+          </View>
+        )}
+      </ScrollView>
       <View style={styles.containerButton}>
         <TouchableOpacity
           activeOpacity={0.6}
@@ -253,7 +348,7 @@ export const StaplerScreen = () => {
           <Like />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -262,11 +357,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: HEIGHT - 49,
   },
+  imageResult: {
+    width: 250,
+    height: 250,
+  },
   image: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingBottom: 80,
+    paddingBottom: 70,
+    paddingHorizontal: spacing[4],
   },
   containerButton: {
     width: WIDTH,
@@ -274,5 +373,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     bottom: spacing[2],
+  },
+  name: {
+    marginBottom: spacing[4],
+    marginRight: spacing[2],
+    color: color.bgWhite,
+    lineHeight: 27,
+    fontWeight: '700',
+    fontSize: 25,
+  },
+  infoContainer: {
+    marginHorizontal: spacing[4],
+    marginTop: spacing[4],
+    paddingHorizontal: spacing[4],
+    paddingBottom: spacing[4],
+    backgroundColor: color.bgWhite,
+    borderRadius: spacing[2],
   },
 });

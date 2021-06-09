@@ -16,5 +16,5 @@ export * from './Button/Button';
 export * from './AllSvgIcon/AllSvgIcon';
 export * from './HeaderCustom/HeaderCustom';
 export * from './Notification/Notification';
-
+export * from './Hobbies/Hobbies';
 export {CustomIcon};
