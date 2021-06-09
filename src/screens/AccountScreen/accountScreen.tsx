@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import {
   CustomIcon,
@@ -365,6 +366,8 @@ const ModalPicture = ({
     </Modal>
   );
 };
+
+const add_image_default = require('../../../assets/images/add_image_default.png');
 
 export const AccountScreen = ({
   route,

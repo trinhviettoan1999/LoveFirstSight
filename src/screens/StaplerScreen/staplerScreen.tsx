@@ -9,13 +9,18 @@ import {
   Alert,
   Image,
   ImageBackground,
+  Dimensions,
 } from 'react-native';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {
   CustomIcon,
   ProfileInformation,
   ImageUser,
   Filter,
   Options,
+  DisLike,
+  Star,
+  Like,
 } from '../../components';
 import Modal from 'react-native-modal';
 import {
@@ -41,6 +46,7 @@ import {useNavigation} from '@react-navigation/native';
 import {spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
 import LinearGradient from 'react-native-linear-gradient';
+import {color} from '../../theme/color';
 
 const not_result_image = require('../../../assets/images/not_result.png');
 const avatar = require('../../../assets/images/avt1.png');
@@ -86,8 +92,11 @@ const sendNotification = async (ownerId: string, userId: string) => {
   ).then((res) => res.json());
 };
 
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 export const StaplerScreen = () => {
   const navigation = useNavigation();
+  const tabBarHeight = useBottomTabBarHeight();
   const User = {
     userId: '',
     name: '',
@@ -199,19 +208,71 @@ export const StaplerScreen = () => {
   }, [load]);
 
   return (
-    <ImageBackground source={avatar} style={{flex: 1}} resizeMode="cover">
-      <LinearGradient
-        // angle={180}
-        colors={['rgba(255, 255, 255, 0)', '#000000']}
-        locations={[0.5323, 0.993]}
+    <ScrollView style={{width: WIDTH, height: HEIGHT - tabBarHeight}}>
+      <ImageBackground
+        source={avatar}
         style={styles.containerAll}
-      />
-    </ImageBackground>
+        resizeMode="cover">
+        <HeaderCustom
+          backgroundStatusBar={color.transparent}
+          removeBorderWidth
+          barStyle="light-content"
+        />
+        <LinearGradient
+          colors={['rgba(255, 255, 255, 0)', '#000000']}
+          locations={[0.5323, 0.993]}
+          style={styles.image}>
+          <Text style={{color: 'red'}}>ABC</Text>
+        </LinearGradient>
+      </ImageBackground>
+      <View style={styles.containerButton}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={async () => {
+            await ignoreUser(user.userId);
+            setLoad(!load);
+          }}>
+          <DisLike />
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={async () => {
+            await superLikeUser(user.userId);
+            setLoad(!load);
+          }}>
+          <Star />
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={async () => {
+            await likeUser(user.userId);
+            // @ts-ignore: Object is possibly 'null'.
+            sendNotification(user.userId, auth().currentUser?.uid);
+            setLoad(!load);
+          }}>
+          <Like />
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   containerAll: {
+    width: '100%',
+    height: HEIGHT - 49,
+  },
+  image: {
     flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: 80,
+  },
+  containerButton: {
+    width: WIDTH,
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    bottom: spacing[2],
   },
 });

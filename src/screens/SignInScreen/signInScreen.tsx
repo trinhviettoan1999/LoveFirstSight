@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     height: HEIGHT,
     width: WIDTH,
     paddingHorizontal: spacing[4],
+    justifyContent: 'center',
   },
   containerButton: {
     marginTop: spacing[5],
