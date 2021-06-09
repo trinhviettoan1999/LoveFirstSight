@@ -2,20 +2,6 @@ import auth from '@react-native-firebase/auth';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
-// export const getConversation = async () => {
-//   return await fetch(
-//     'https://still-brushlands-96770.herokuapp.com/conversation/' +
-//       auth().currentUser?.uid +
-//       '/false',
-//     {
-//       method: 'GET',
-//       headers: {
-//         Accept: 'application/json, text/plain, */*',
-//         'Content-Type': 'application/json',
-//       },
-//     },
-//   ).then((res) => res.json());
-// };
 
 const splitName = (name: string) => {
   return name.split(/[, ]+/).pop();
@@ -115,4 +101,52 @@ export const getConversation = async (state: boolean, next: any) => {
         }
       });
     });
+};
+
+export const getConversationWait = async () => {
+  return await fetch(
+    'https://still-brushlands-96770.herokuapp.com/conversation/' +
+      auth().currentUser?.uid +
+      '/true',
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    },
+  ).then((res) => res.json());
+};
+
+export const updateStateConversation = (conversationId: any) => {
+  return fetch(
+    'https://still-brushlands-96770.herokuapp.com/conversation/update-state',
+    {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        conversationId: conversationId,
+      }),
+    },
+  );
+};
+
+export const sendMessageRequest = (receiverId: string) => {
+  return fetch(
+    'https://still-brushlands-96770.herokuapp.com/conversation/send-message',
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        senderId: auth().currentUser?.uid,
+        receiverId: receiverId,
+      }),
+    },
+  ).then((res) => res.json());
 };

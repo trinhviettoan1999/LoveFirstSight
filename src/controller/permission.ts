@@ -1,4 +1,5 @@
 import {Platform, PermissionsAndroid} from 'react-native';
+
 export const checkPermissionCamera = () => {
   if (Platform.OS !== 'android') {
     return Promise.resolve(true);

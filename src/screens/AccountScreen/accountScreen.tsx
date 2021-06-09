@@ -20,7 +20,7 @@ import {getUrl, upload} from '../../firebase/storage';
 import {signOutAccount} from '../../firebase/firebase';
 import Modal from 'react-native-modal';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {updateUser} from '../../controller/updateUser';
+import {updateUser} from '../../controller';
 import 'react-native-console-time-polyfill';
 import FastImage from 'react-native-fast-image';
 import {checkPermissionPhoto, checkPermissionCamera} from '../../controller';

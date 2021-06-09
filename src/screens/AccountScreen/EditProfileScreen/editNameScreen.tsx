@@ -6,7 +6,7 @@ import {
   RouteStackParamList,
   StatusBarCustom,
 } from '../../../components';
-import {updateUser} from '../../../controller/updateUser';
+import {updateUser} from '../../../controller';
 
 export const EditNameScreen = ({
   navigation,

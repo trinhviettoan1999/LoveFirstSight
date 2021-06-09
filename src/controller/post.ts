@@ -84,8 +84,6 @@ export const deletePost = (postId: string) => {
     .then(() => console.log('Delete Success!!'));
 };
 
-//export const editPost = (postId:string) => {};
-
 const getListMatched = async (userId: string) => {
   let listMatched: string[] = [];
   await firestore()

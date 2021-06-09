@@ -7,7 +7,7 @@ import {
   RouteStackParamList,
   StatusBarCustom,
 } from '../../../components';
-import {updateUser} from '../../../controller/updateUser';
+import {updateUser} from '../../../controller';
 
 var DATA = require('../../../../assets/json/university.json');
 const Item = ({item, onPress, isCheck}: any) => {
