@@ -84,7 +84,7 @@ async function cameraLaunch(
         console.log('ImagePicker Error: ', res.error);
       } else {
         if (edit) {
-          await upload(uid, fileFolder, fileName, res.uri, () => {
+          await upload(uid, fileFolder, fileName, res.assets[0].uri, () => {
             getUrl(uid, 'images', fileName).then((result) => {
               switch (fileName) {
                 case 'image1.png':
@@ -118,7 +118,7 @@ async function cameraLaunch(
             });
           });
         } else {
-          await upload(uid, fileFolder, fileName, res.uri, () => {
+          await upload(uid, fileFolder, fileName, res.assets[0].uri, () => {
             getUrl(uid, 'images', fileName).then((result) => {
               if (fileName === 'avatar.png') {
                 updateUser({avatar: result}).then(() => {
@@ -164,7 +164,7 @@ function imageGalleryLaunch(
         console.log('ImagePicker Error: ', res.error);
       } else {
         if (edit) {
-          await upload(uid, fileFolder, fileName, res.uri, () => {
+          await upload(uid, fileFolder, fileName, res.assets[0].uri, () => {
             getUrl(uid, 'images', fileName).then((result) => {
               switch (fileName) {
                 case 'image1.png':
@@ -198,7 +198,7 @@ function imageGalleryLaunch(
             });
           });
         } else {
-          await upload(uid, fileFolder, fileName, res.uri, () => {
+          await upload(uid, fileFolder, fileName, res.assets[0].uri, () => {
             getUrl(uid, 'images', fileName).then((result) => {
               if (fileName === 'avatar.png') {
                 updateUser({avatar: result}).then(() => {
