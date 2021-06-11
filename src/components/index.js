@@ -1,4 +1,5 @@
 import CustomIcon from './CustomIcon/customIcon.js';
+export {CustomIcon};
 export * from './ProfileInformation/profileInformation';
 export * from './ImageUser/imageUser';
 export * from './RouteParamList/routeParamList';
@@ -17,4 +18,7 @@ export * from './AllSvgIcon/AllSvgIcon';
 export * from './HeaderCustom/HeaderCustom';
 export * from './Notification/Notification';
 export * from './Hobbies/Hobbies';
-export {CustomIcon};
+export * from './NotUser/NotUser';
+export * from './Loading/Loading';
+export * from './ProfileContainer/ProfileContainer';
+export * from './ImagesContainer/ImagesContainer';

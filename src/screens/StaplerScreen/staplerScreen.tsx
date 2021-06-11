@@ -23,6 +23,10 @@ import {
   Like,
   Hobbies,
   Info,
+  NotUser,
+  Loading,
+  ProfileContainer,
+  ImagesContainer,
 } from '../../components';
 import Modal from 'react-native-modal';
 import {
@@ -50,9 +54,6 @@ import {useNavigation} from '@react-navigation/native';
 import {spacing, color} from '../../theme';
 import {ROUTER} from '../../constants/router';
 import LinearGradient from 'react-native-linear-gradient';
-
-const not_result_image = require('../../../assets/images/not_result.png');
-const avatar = require('../../../assets/images/avt1.png');
 
 const saveTokenToDatabase = async (token: string) => {
   const userId = auth().currentUser?.uid;
@@ -94,7 +95,7 @@ export const StaplerScreen = () => {
     name: '',
     birthday: '',
     gender: '',
-    avatar: null,
+    avatar: '',
     email: '',
     intro: '',
     lookingFor: '',
@@ -105,7 +106,7 @@ export const StaplerScreen = () => {
     kids: '',
     province: '',
     coordinates: '',
-    images: [null, null, null, null, null, null, null, null],
+    images: ['', '', '', '', '', '', '', ''],
     hobbies: [],
   };
   const [filter, setFilter] = useState({
@@ -202,12 +203,7 @@ export const StaplerScreen = () => {
 
   return (
     <View style={styles.wrap}>
-      {load && (
-        <View style={styles.load}>
-          <ActivityIndicator color={color.primary} size="large" />
-          <Text style={styles.textLoad}>Loading...</Text>
-        </View>
-      )}
+      {load && <Loading />}
       {user?.name && !load ? (
         <View>
           <ScrollView
@@ -239,86 +235,8 @@ export const StaplerScreen = () => {
             </ImageBackground>
             {showInfo && (
               <View>
-                <View style={styles.infoContainer}>
-                  <ProfileInformation iconName="gender" content={user.gender} />
-                  {user.lookingFor ? (
-                    <ProfileInformation
-                      iconName="lookingfor"
-                      content={user.lookingFor}
-                    />
-                  ) : null}
-                  <ProfileInformation
-                    iconName="location"
-                    content="Located in Ho Chi Minh City, Viet Nam"
-                  />
-                  <ProfileInformation
-                    iconName="scope"
-                    content={
-                      `${calculateDistance(user.coordinates, coordinate)
-                        .toFixed(1)
-                        .toString()}` + ' km'
-                    }
-                  />
-                  {user.height ? (
-                    <ProfileInformation
-                      iconName="height"
-                      content={user.height + ' cm'}
-                    />
-                  ) : null}
-                  {user.university ? (
-                    <ProfileInformation
-                      iconName="university"
-                      content={user.university}
-                    />
-                  ) : null}
-                  {user.province ? (
-                    <ProfileInformation
-                      iconName="province"
-                      content={user.province}
-                    />
-                  ) : null}
-                  {user.drinking ? (
-                    <ProfileInformation
-                      iconName="drinking"
-                      content={user.drinking}
-                    />
-                  ) : null}
-                  {user.smoking ? (
-                    <ProfileInformation
-                      iconName="smoking"
-                      content={user.smoking}
-                    />
-                  ) : null}
-                  {user.kids ? (
-                    <ProfileInformation iconName="child" content={user.kids} />
-                  ) : null}
-                </View>
-                <View style={{paddingHorizontal: spacing[4]}}>
-                  {user.images[0] ? (
-                    <ImageUser urlImage={user.images[0] || ''} />
-                  ) : null}
-                  {user.images[1] ? (
-                    <ImageUser urlImage={user.images[1] || ''} />
-                  ) : null}
-                  {user.images[2] ? (
-                    <ImageUser urlImage={user.images[2] || ''} />
-                  ) : null}
-                  {user.images[3] ? (
-                    <ImageUser urlImage={user.images[3] || ''} />
-                  ) : null}
-                  {user.images[4] ? (
-                    <ImageUser urlImage={user.images[4] || ''} />
-                  ) : null}
-                  {user.images[5] ? (
-                    <ImageUser urlImage={user.images[5] || ''} />
-                  ) : null}
-                  {user.images[6] ? (
-                    <ImageUser urlImage={user.images[6] || ''} />
-                  ) : null}
-                  {user.images[7] ? (
-                    <ImageUser urlImage={user.images[7] || ''} />
-                  ) : null}
-                </View>
+                <ProfileContainer user={user} coordinate={coordinate} />
+                <ImagesContainer images={user.images} />
               </View>
             )}
           </ScrollView>
@@ -352,20 +270,7 @@ export const StaplerScreen = () => {
           </View>
         </View>
       ) : null}
-      {/* {!user?.name && !load && (
-        <View
-          style={[
-            styles.wrap,
-            {justifyContent: 'center', alignItems: 'center'},
-          ]}>
-          <Image
-            source={not_result_image}
-            style={styles.imageResult}
-            resizeMode="contain"
-          />
-          <Text style={{fontSize: 16}}>Don't have Users with your filter</Text>
-        </View>
-      )} */}
+      {!user?.name && !load && <NotUser />}
     </View>
   );
 };
@@ -378,10 +283,6 @@ const styles = StyleSheet.create({
   containerAll: {
     width: '100%',
     height: HEIGHT - 49,
-  },
-  imageResult: {
-    width: 250,
-    height: 250,
   },
   image: {
     flex: 1,
@@ -411,13 +312,5 @@ const styles = StyleSheet.create({
     paddingBottom: spacing[4],
     backgroundColor: color.bgWhite,
     borderRadius: spacing[2],
-  },
-  load: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textLoad: {
-    marginTop: 10,
   },
 });
