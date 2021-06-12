@@ -1,34 +1,47 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, FlatList, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {
-  Header,
   CustomIcon,
-  InputView,
-  RouteStackParamList,
-  StatusBarCustom,
+  HeaderCustom,
+  InputCustom,
+  Search,
+  Tick,
 } from '../../../components';
 import {updateUser} from '../../../controller';
+import {color, spacing} from '../../../theme';
+import {ROUTER} from '../../../constants';
 
 var DATA = require('../../../../assets/json/university.json');
+
 const Item = ({item, onPress, isCheck}: any) => {
   return (
     <View style={styles.itemContainer}>
       <Text
         onPress={onPress}
-        style={[styles.text, {color: isCheck ? '#6A1616' : '#000000'}]}>
+        style={[styles.text, {color: isCheck ? color.primary : '#000000'}]}>
         {item.name}
       </Text>
-      {isCheck ? <CustomIcon name="check" size={10} color="#6A1616" /> : null}
+      {isCheck ? <Tick /> : null}
     </View>
   );
 };
 
-export const EditUniversityScreen = ({
-  navigation,
-}: RouteStackParamList<'AccountScreen'>) => {
+export const EditUniversityScreen = () => {
+  const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
   const [university, setUniversity] = useState(null);
   const [value, onChangeText] = useState('');
+
+  const handleCancel = () => {
+    navigation.goBack();
+  };
+
+  const handleDone = () => {
+    updateUser({university: university});
+    navigation.navigate(ROUTER.account, {flag: true});
+  };
+
   const renderItem = ({item}: any) => {
     const isCheck = item.id === selectedId ? true : false;
     return (
@@ -44,30 +57,31 @@ export const EditUniversityScreen = ({
   };
   return (
     <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         title="University"
-        showTextLeft={true}
-        textLeft="Cancel"
-        showTextRight={true}
-        textRight="Done"
-        onPressLeft={() => navigation.goBack()}
-        onPressRight={() => {
-          updateUser({university: university});
-          navigation.navigate('AccountScreen', {flag: true});
-        }}
+        leftComponent={
+          <Text
+            onPress={handleCancel}
+            style={[styles.title, {color: color.text}]}>
+            Cancel
+          </Text>
+        }
+        rightComponent={
+          <Text
+            onPress={handleDone}
+            style={[styles.title, {color: color.blue}]}>
+            Done
+          </Text>
+        }
       />
       <View style={styles.container}>
-        <View style={styles.search}>
-          <InputView
-            showIcon={true}
-            iconName="search"
-            defaultValue=""
-            placeHolder="search"
-            value={value}
-            onChangeText={onChangeText}
-          />
-        </View>
+        <InputCustom
+          placeholder="search"
+          leftIcon={<Search />}
+          value={value}
+          onChangeText={onChangeText}
+        />
         <FlatList
           data={DATA.filter((item: any) =>
             item.name.toLowerCase().match(value.toLowerCase()),
@@ -76,6 +90,7 @@ export const EditUniversityScreen = ({
           keyExtractor={(item) => item.id}
           extraData={selectedId}
           style={styles.flatList}
+          contentContainerStyle={{paddingVertical: spacing[2]}}
         />
       </View>
     </View>
@@ -103,7 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: -10,
   },
   itemContainer: {
     flex: 1,
@@ -116,6 +131,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     fontStyle: 'normal',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '400',
   },
 });
 
