@@ -75,6 +75,7 @@ const LikedYou = () => {
       setStatus(await result.status);
     });
   }, []);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getLikedUsers().then(async (result) => {
@@ -84,6 +85,7 @@ const LikedYou = () => {
     });
     return unsubscribe;
   }, [navigation]);
+
   return (
     <View style={{flex: 1, backgroundColor: '#F8F8F8'}}>
       {status === 200 ? (

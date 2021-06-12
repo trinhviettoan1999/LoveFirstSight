@@ -46,11 +46,11 @@ export const Options = () => (
   />
 );
 
-export const Back = () => (
+export const Back = ({color = '#212121'}) => (
   <SvgXml
     xml={`
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M14 6L8 12L14 18" stroke="#212121" stroke-width="2" stroke-linecap="round"/>
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 6L8 12L14 18" stroke="${color}" stroke-width="2" stroke-linecap="round"/>
     </svg>  
     `}
   />

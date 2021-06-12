@@ -33,6 +33,9 @@ export const Hobbies = ({data}: props) => {
 
   useEffect(() => {
     loadData();
+    return () => {
+      loadData();
+    };
   }, []);
 
   return (

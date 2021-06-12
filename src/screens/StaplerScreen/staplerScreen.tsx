@@ -53,6 +53,7 @@ const saveTokenToDatabase = async (token: string) => {
       tokens: firestore.FieldValue.arrayUnion(token),
     });
 };
+
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
@@ -247,13 +248,6 @@ const styles = StyleSheet.create({
     paddingBottom: 70,
     paddingHorizontal: spacing[4],
   },
-  containerButton: {
-    width: WIDTH,
-    position: 'absolute',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    bottom: spacing[2],
-  },
   name: {
     marginBottom: spacing[4],
     marginRight: spacing[2],
@@ -261,13 +255,5 @@ const styles = StyleSheet.create({
     lineHeight: 27,
     fontWeight: '700',
     fontSize: 25,
-  },
-  infoContainer: {
-    marginHorizontal: spacing[4],
-    marginTop: spacing[4],
-    paddingHorizontal: spacing[4],
-    paddingBottom: spacing[4],
-    backgroundColor: color.bgWhite,
-    borderRadius: spacing[2],
   },
 });

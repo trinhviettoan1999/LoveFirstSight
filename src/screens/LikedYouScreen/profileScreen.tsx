@@ -5,17 +5,21 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Image,
-  ActivityIndicator,
+  ImageBackground,
+  Dimensions,
 } from 'react-native';
 import {
-  StatusBarCustom,
-  CustomIcon,
-  ProfileInformation,
-  ImageUser,
   RouteStackParamList,
+  Loading,
+  HeaderCustom,
+  NotUser,
+  OptionsGroup,
+  ProfileContainer,
+  ImagesContainer,
+  Hobbies,
+  Info,
+  Back,
 } from '../../components';
-import Modal from 'react-native-modal';
 import auth from '@react-native-firebase/auth';
 import {
   likeUser,
@@ -23,23 +27,10 @@ import {
   superLikeUser,
   computeAge,
   getUser,
-  calculateDistance,
+  uploadCoordinates,
 } from '../../controller';
-import GetLocation from 'react-native-get-location';
-
-type Props = {
-  name: string;
-  size: number;
-  color: string;
-  onPress?: any;
-};
-const ButtonIcon = ({name, size, color, onPress}: Props) => {
-  return (
-    <TouchableOpacity style={styles.buttonIcon} onPress={onPress}>
-      <CustomIcon name={name} size={size} color={color} />
-    </TouchableOpacity>
-  );
-};
+import LinearGradient from 'react-native-linear-gradient';
+import {color, spacing} from '../../theme';
 
 const sendNotification = async (ownerId: string, userId: string) => {
   return await fetch(
@@ -57,6 +48,9 @@ const sendNotification = async (ownerId: string, userId: string) => {
   ).then((res) => res.json());
 };
 
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
 export const ProfileScreen = ({
   navigation,
   route,
@@ -66,7 +60,7 @@ export const ProfileScreen = ({
     name: '',
     birthday: '',
     gender: '',
-    avatar: null,
+    avatar: '',
     email: '',
     intro: '',
     lookingFor: '',
@@ -77,305 +71,161 @@ export const ProfileScreen = ({
     kids: '',
     province: '',
     coordinates: '',
-    images: [null, null, null, null, null, null, null, null],
-    likedUsers: [],
+    images: ['', '', '', '', '', '', '', ''],
+    hobbies: [],
   };
-  const [isModalVisibleLoading, setIsModalVisibleLoading] = useState(false);
   const [user, setUser] = useState(User);
   const [isMatched, setIsMatched] = useState(-1);
+  const [load, setLoad] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
   const [coordinate, setCoordinate] = useState({
     lat: 0,
     long: 0,
   });
-  async function loadData(isMounted: boolean) {
-    setIsModalVisibleLoading(true);
-    await getUser(route.params.userId).then(async (result) => {
-      if (isMounted) {
-        setUser(result);
-        setIsMatched(result.availableUsers.indexOf(auth().currentUser?.uid));
-      }
-    });
-    setIsModalVisibleLoading(false);
-  }
+
+  const loadData = async () => {
+    setLoad(true);
+    const result = await getUser(route.params.userId);
+    if (result) {
+      setUser(result);
+      setIsMatched(result.availableUsers.indexOf(auth().currentUser?.uid));
+    }
+    setLoad(false);
+  };
 
   useEffect(() => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 60000,
-    })
-      .then((location) => {
-        setCoordinate({
-          lat: location.latitude,
-          long: location.longitude,
-        });
-      })
-      .catch((error) => {
-        const {code, message} = error;
-        console.log(code, message);
-      });
+    uploadCoordinates(setCoordinate);
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-    loadData(isMounted);
+    loadData();
     return () => {
-      isMounted = false;
+      loadData();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.avatar}>
-          <Image
-            // @ts-ignore: Object is possibly 'null'.
-            source={{
-              uri: user.avatar,
-            }}
-            style={styles.avatar}
-          />
-          <TouchableOpacity
-            style={styles.iconBack}
-            activeOpacity={0.9}
-            onPress={() => {
-              if (route.params.flag) {
-                navigation.replace('StaplerScreen');
-              } else {
-                navigation.goBack();
-              }
-            }}>
-            <CustomIcon name="back" color="#FFFFFF" size={30} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.container}>
-          <View style={styles.informationContainer}>
-            <View style={styles.firstContainer}>
-              <Text style={styles.font26}>{user.name}</Text>
-              <Text style={styles.font26}>, {computeAge(user.birthday)}</Text>
-            </View>
-            <Text style={styles.font17}>{user.intro}</Text>
-            <ProfileInformation iconName="gender" content={user.gender} />
-            {user.lookingFor ? (
-              <ProfileInformation
-                iconName="lookingfor"
-                content={user.lookingFor}
-              />
-            ) : null}
-            <ProfileInformation
-              iconName="location"
-              content="Located in Ho Chi Minh City, Viet Nam"
-            />
-            <ProfileInformation
-              iconName="scope"
-              content={
-                `${calculateDistance(user.coordinates, coordinate)
-                  .toFixed(1)
-                  .toString()}` + ' km'
-              }
-            />
-            {user.height ? (
-              <ProfileInformation
-                iconName="height"
-                content={user.height + ' cm'}
-              />
-            ) : null}
-            {user.university ? (
-              <ProfileInformation
-                iconName="university"
-                content={user.university}
-              />
-            ) : null}
-            {user.province ? (
-              <ProfileInformation iconName="province" content={user.province} />
-            ) : null}
-            {user.drinking ? (
-              <ProfileInformation iconName="drinking" content={user.drinking} />
-            ) : null}
-            {user.smoking ? (
-              <ProfileInformation iconName="smoking" content={user.smoking} />
-            ) : null}
-            {user.kids ? (
-              <ProfileInformation iconName="child" content={user.kids} />
-            ) : null}
-          </View>
-          {user.images[0] ? <ImageUser urlImage={user.images[0]} /> : null}
-          {user.images[1] ? <ImageUser urlImage={user.images[1]} /> : null}
-          {user.images[2] ? <ImageUser urlImage={user.images[2]} /> : null}
-          {user.images[3] ? <ImageUser urlImage={user.images[3]} /> : null}
-          {user.images[4] ? <ImageUser urlImage={user.images[4]} /> : null}
-          {user.images[5] ? <ImageUser urlImage={user.images[5]} /> : null}
-          {user.images[6] ? <ImageUser urlImage={user.images[6]} /> : null}
-          {user.images[7] ? <ImageUser urlImage={user.images[7]} /> : null}
-        </View>
-        <View style={{height: 70}} />
-      </ScrollView>
-      {isMatched === -1 ? null : (
-        <View style={styles.interactiveContainer}>
-          <ButtonIcon
-            name="dislike"
-            size={30}
-            color="#745300"
-            onPress={async () => {
-              await ignoreUser(route.params.userId);
-              if (route.params.flag) {
-                navigation.replace('StaplerScreen');
-              } else {
-                navigation.goBack();
-              }
-            }}
-          />
-          <ButtonIcon
-            name="star"
-            size={40}
-            color="#0078D4"
-            onPress={async () => {
-              await superLikeUser(route.params.userId);
-              if (route.params.flag) {
-                navigation.replace('StaplerScreen');
-              } else {
-                navigation.goBack();
-              }
-            }}
-          />
-          <ButtonIcon
-            name="lookingfor"
-            size={30}
-            color="#6A1616"
-            onPress={async () => {
-              await likeUser(route.params.userId);
-              // @ts-ignore: Object is possibly 'null'.
-              sendNotification(route.params.userId, auth().currentUser?.uid);
-              if (route.params.flag) {
-                navigation.replace('StaplerScreen');
-              } else {
-                navigation.goBack();
-              }
-            }}
-          />
-        </View>
-      )}
 
-      <Modal
-        isVisible={isModalVisibleLoading}
-        style={styles.modalLoading}
-        backdropOpacity={0.5}>
-        <ActivityIndicator size="large" color="#6A1616" />
-      </Modal>
+  return (
+    <View style={styles.wrap}>
+      {load && <Loading />}
+      {user?.name && !load ? (
+        <View>
+          <ScrollView
+            style={{width: WIDTH, height: HEIGHT}}
+            contentContainerStyle={{
+              paddingBottom: showInfo ? (isMatched > -1 ? 70 : spacing[4]) : 0,
+            }}>
+            <ImageBackground
+              source={{uri: user.avatar || undefined}}
+              style={styles.containerAll}
+              resizeMode="cover">
+              <HeaderCustom
+                backgroundStatusBar={color.transparent}
+                removeBorderWidth
+                barStyle="light-content"
+              />
+              <TouchableOpacity
+                style={styles.back}
+                activeOpacity={0.7}
+                onPress={() => {
+                  if (route.params.flag) {
+                    navigation.replace('StaplerScreen');
+                  } else {
+                    navigation.goBack();
+                  }
+                }}>
+                <Back color={color.bgWhite} />
+              </TouchableOpacity>
+              <LinearGradient
+                colors={['rgba(255, 255, 255, 0)', '#000000']}
+                locations={[0.5323, 0.993]}
+                style={[
+                  styles.image,
+                  {paddingBottom: isMatched > -1 ? 70 : spacing[4]},
+                ]}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.name}>
+                    {`${user.name}  ${computeAge(user.birthday)}`}
+                  </Text>
+                  <TouchableOpacity onPress={() => setShowInfo(!showInfo)}>
+                    <Info />
+                  </TouchableOpacity>
+                </View>
+                <Hobbies data={user.hobbies} />
+              </LinearGradient>
+            </ImageBackground>
+            {showInfo && (
+              <View>
+                <ProfileContainer user={user} coordinate={coordinate} />
+                <ImagesContainer images={user.images} />
+              </View>
+            )}
+          </ScrollView>
+          {isMatched > -1 && (
+            <OptionsGroup
+              onPressIgnore={async () => {
+                await ignoreUser(route.params.userId);
+                if (route.params.flag) {
+                  navigation.replace('StaplerScreen');
+                } else {
+                  navigation.goBack();
+                }
+              }}
+              onPressSupperLike={async () => {
+                await superLikeUser(route.params.userId);
+                if (route.params.flag) {
+                  navigation.replace('StaplerScreen');
+                } else {
+                  navigation.goBack();
+                }
+              }}
+              onPressLike={async () => {
+                await likeUser(route.params.userId);
+                // @ts-ignore: Object is possibly 'null'.
+                sendNotification(route.params.userId, auth().currentUser?.uid);
+                if (route.params.flag) {
+                  navigation.replace('StaplerScreen');
+                } else {
+                  navigation.goBack();
+                }
+              }}
+            />
+          )}
+        </View>
+      ) : null}
+      {!user?.name && !load && <NotUser />}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wrap: {
+    flex: 1,
+  },
   containerAll: {
-    flex: 1,
-    backgroundColor: '#F8F8F8',
+    width: '100%',
+    height: HEIGHT,
   },
-  modalFilter: {
-    flex: 1,
-    margin: 0,
-  },
-  modalMenu: {
+  image: {
     flex: 1,
     justifyContent: 'flex-end',
+    paddingHorizontal: spacing[4],
   },
-  interactiveContainer: {
-    width: '100%',
-    height: 50,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 5,
-    position: 'absolute',
-    bottom: 0,
+  name: {
+    marginBottom: spacing[4],
+    marginRight: spacing[2],
+    color: color.bgWhite,
+    lineHeight: 27,
+    fontWeight: '700',
+    fontSize: 25,
   },
-  scrollView: {
-    flex: 1,
-  },
-  container: {
-    paddingHorizontal: 16,
-  },
-  buttonIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0.2,
-  },
-  headerContainer: {
-    width: '100%',
-    height: 45,
-    backgroundColor: '#F8F8F8',
-  },
-  header: {
-    width: '100%',
-    height: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-  },
-  divider: {
-    width: '100%',
-    height: 1,
-    backgroundColor: '#C8C8C8',
-  },
-  avatar: {
-    height: 400,
-    width: '100%',
-    resizeMode: 'cover',
-  },
-  informationContainer: {
-    flex: 1,
-    marginTop: 16,
-    paddingBottom: 16,
+  back: {
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-  },
-  firstContainer: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  font26: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-  },
-  font17: {
-    fontSize: 17,
-    fontWeight: '600',
-    fontStyle: 'normal',
-  },
-  buttonModal: {
-    backgroundColor: '#F8F8F8',
-    height: 50,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    paddingHorizontal: 40,
-  },
-  textButtonModal: {
-    flex: 2,
-    fontSize: 17,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-    color: '#000000',
-  },
-  modalLoading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  iconBack: {
-    position: 'absolute',
-    top: 20,
-    left: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
     width: 30,
+    height: 30,
+    position: 'absolute',
+    top: 30,
+    left: 16,
   },
 });
