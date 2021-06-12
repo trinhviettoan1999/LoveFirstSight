@@ -28,13 +28,12 @@ interface ProfileProps {
     lat: number;
     long: number;
   };
-  onPress?: () => void;
 }
 
-export const ProfileContainer = ({user, coordinate, onPress}: ProfileProps) => {
+export const ProfileContainer = ({user, coordinate}: ProfileProps) => {
   return (
     <View style={styles.infoContainer}>
-      <ProfileInformation iconName="gender" content={user.gender} onPress />
+      <ProfileInformation iconName="gender" content={user.gender} />
       {user.lookingFor ? (
         <ProfileInformation iconName="lookingfor" content={user.lookingFor} />
       ) : null}

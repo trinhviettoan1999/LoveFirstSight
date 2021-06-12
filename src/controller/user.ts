@@ -1,5 +1,6 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import GetLocation from 'react-native-get-location';
 
 export const checkAccount = async (userId: string) => {
   const check = await firestore()
@@ -299,4 +300,27 @@ export const addImageUser = (urlImage: any) => {
       body: JSON.stringify({urlImage: urlImage}),
     },
   );
+};
+
+export const uploadCoordinates = (setCoordinate: any) => {
+  GetLocation.getCurrentPosition({
+    enableHighAccuracy: true,
+    timeout: 60000,
+  })
+    .then((location) => {
+      setCoordinate({
+        lat: location.latitude,
+        long: location.longitude,
+      });
+      updateUser({
+        coordinates: {
+          lat: location.latitude,
+          long: location.longitude,
+        },
+      });
+    })
+    .catch((error) => {
+      const {code, message} = error;
+      console.log(code, message);
+    });
 };

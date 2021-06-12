@@ -40,9 +40,8 @@ import {
   blockUser,
   sendMessageRequest,
   updateUser,
-  calculateDistance,
-  getHobbiesUser,
   sendNotification,
+  uploadCoordinates,
 } from '../../controller';
 import {HeaderCustom} from '../../components';
 import messaging from '@react-native-firebase/messaging';
@@ -170,26 +169,7 @@ export const StaplerScreen = () => {
   }, []);
 
   useEffect(() => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 60000,
-    })
-      .then((location) => {
-        setCoordinate({
-          lat: location.latitude,
-          long: location.longitude,
-        });
-        updateUser({
-          coordinates: {
-            lat: location.latitude,
-            long: location.longitude,
-          },
-        });
-      })
-      .catch((error) => {
-        const {code, message} = error;
-        console.log(code, message);
-      });
+    uploadCoordinates(setCoordinate);
   }, []);
 
   useEffect(() => {
@@ -278,7 +258,6 @@ export const StaplerScreen = () => {
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
-    backgroundColor: color.bgWhite,
   },
   containerAll: {
     width: '100%',

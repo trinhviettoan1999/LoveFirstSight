@@ -6,7 +6,19 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import * as screen from '../screens';
-import {CustomIcon} from '../components';
+import {
+  CustomIcon,
+  Home,
+  HomeFill,
+  SupperLike,
+  SupperLikeFill,
+  Conversation,
+  ConversationFill,
+  Account,
+  AccountFill,
+  NewFill,
+  New,
+} from '../components';
 import messaging from '@react-native-firebase/messaging';
 import FlashMessage from 'react-native-flash-message';
 import {ROUTER} from '../constants';
@@ -18,20 +30,18 @@ const AppTab = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName = 'stapler-fill';
+        tabBarIcon: ({focused}) => {
           if (route.name === 'StaplerScreen') {
-            iconName = focused ? 'stapler-fill' : 'stapler-outline';
+            return focused ? <HomeFill /> : <Home />;
           } else if (route.name === 'LikedYou') {
-            iconName = focused ? 'superlike' : 'superlike-outline';
+            return focused ? <SupperLikeFill /> : <SupperLike />;
           } else if (route.name === 'Conversation') {
-            iconName = focused ? 'conversation' : 'conversation-outline';
+            return focused ? <ConversationFill /> : <Conversation />;
           } else if (route.name === 'AccountScreen') {
-            iconName = focused ? 'account' : 'account-outline';
+            return focused ? <AccountFill /> : <Account />;
           } else if (route.name === 'NewsScreen') {
-            iconName = focused ? 'posts' : 'posts';
+            return focused ? <NewFill /> : <New />;
           }
-          return <CustomIcon name={iconName} color={color} size={size} />;
         },
       })}
       tabBarOptions={{
