@@ -5,28 +5,27 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TouchableHighlight,
   ActivityIndicator,
-  FlatList,
+  Dimensions,
 } from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {
   CustomIcon,
   ProfileInformation,
   ImageUser,
-  RouteStackParamList,
   StatusBarCustom,
+  ButtonCustom,
+  ModalPicture,
 } from '../../components';
 import auth from '@react-native-firebase/auth';
-import {getUrl, upload} from '../../firebase/storage';
 import {signOutAccount} from '../../firebase/firebase';
-import Modal from 'react-native-modal';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {updateUser} from '../../controller';
 import 'react-native-console-time-polyfill';
 import FastImage from 'react-native-fast-image';
-import {checkPermissionPhoto, checkPermissionCamera} from '../../controller';
 import messaging from '@react-native-firebase/messaging';
 import firestore from '@react-native-firebase/firestore';
+import {color, spacing} from '../../theme';
+import {ROUTER} from '../../constants/router';
 
 const Header = ({navigation}: any) => {
   return (
@@ -57,166 +56,6 @@ const Header = ({navigation}: any) => {
     </View>
   );
 };
-//get image from camera
-async function cameraLaunch(
-  uid: string,
-  fileFolder: string,
-  fileName: string,
-  images?: any,
-  edit?: boolean,
-  setLoadAvatar?: any,
-  loadAvatar?: boolean,
-) {
-  let options = {
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
-  };
-  checkPermissionCamera().then((result) => {
-    if (!result) {
-      return;
-    }
-    launchCamera(options, async (res: any) => {
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.error) {
-        console.log('ImagePicker Error: ', res.error);
-      } else {
-        if (edit) {
-          await upload(uid, fileFolder, fileName, res.assets[0].uri, () => {
-            getUrl(uid, 'images', fileName).then((result) => {
-              switch (fileName) {
-                case 'image1.png':
-                  images[0] = result;
-                  break;
-                case 'image2.png':
-                  images[1] = result;
-                  break;
-                case 'image3.png':
-                  images[2] = result;
-                  break;
-                case 'image4.png':
-                  images[3] = result;
-                  break;
-                case 'image5.png':
-                  images[4] = result;
-                  break;
-                case 'image6.png':
-                  images[5] = result;
-                  break;
-                case 'image7.png':
-                  images[6] = result;
-                  break;
-                case 'image8.png':
-                  images[7] = result;
-                  break;
-              }
-              updateUser({images: images}).then(() => {
-                setLoadAvatar(!loadAvatar);
-              });
-            });
-          });
-        } else {
-          await upload(uid, fileFolder, fileName, res.assets[0].uri, () => {
-            getUrl(uid, 'images', fileName).then((result) => {
-              if (fileName === 'avatar.png') {
-                updateUser({avatar: result}).then(() => {
-                  setLoadAvatar(!loadAvatar);
-                });
-              } else {
-                images[images.indexOf(null)] = result;
-                updateUser({images: images}).then(() => {
-                  setLoadAvatar(!loadAvatar);
-                });
-              }
-            });
-          });
-        }
-      }
-    });
-  });
-}
-//get image from gallery
-function imageGalleryLaunch(
-  uid: string,
-  fileFolder: string,
-  fileName: string,
-  setLoadAvatar?: any,
-  loadAvatar?: boolean,
-  images?: any,
-  edit?: boolean,
-) {
-  checkPermissionPhoto().then((result) => {
-    if (!result) {
-      return;
-    }
-    let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    launchImageLibrary(options, async (res: any) => {
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.error) {
-        console.log('ImagePicker Error: ', res.error);
-      } else {
-        if (edit) {
-          await upload(uid, fileFolder, fileName, res.assets[0].uri, () => {
-            getUrl(uid, 'images', fileName).then((result) => {
-              switch (fileName) {
-                case 'image1.png':
-                  images[0] = result;
-                  break;
-                case 'image2.png':
-                  images[1] = result;
-                  break;
-                case 'image3.png':
-                  images[2] = result;
-                  break;
-                case 'image4.png':
-                  images[3] = result;
-                  break;
-                case 'image5.png':
-                  images[4] = result;
-                  break;
-                case 'image6.png':
-                  images[5] = result;
-                  break;
-                case 'image7.png':
-                  images[6] = result;
-                  break;
-                case 'image8.png':
-                  images[7] = result;
-                  break;
-              }
-              updateUser({images: images}).then(() => {
-                setLoadAvatar(!loadAvatar);
-              });
-            });
-          });
-        } else {
-          await upload(uid, fileFolder, fileName, res.assets[0].uri, () => {
-            getUrl(uid, 'images', fileName).then((result) => {
-              if (fileName === 'avatar.png') {
-                updateUser({avatar: result}).then(() => {
-                  setLoadAvatar(!loadAvatar);
-                });
-              } else {
-                images[images.indexOf(null)] = result;
-                updateUser({images: images}).then(() => {
-                  setLoadAvatar(!loadAvatar);
-                });
-              }
-            });
-          });
-        }
-      }
-    });
-  });
-}
 
 const deleteTokenToDatabase = async (token: string) => {
   const userId = auth().currentUser?.uid;
@@ -234,145 +73,11 @@ function computeAge(birthday: string) {
   const ageDate = new Date(diff);
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
+const WIDTH = Dimensions.get('window').width;
 
-//delete image
-function deleteImage(fileName: string, images?: any) {
-  switch (fileName) {
-    case 'image1.png':
-      images[0] = null;
-      break;
-    case 'image2.png':
-      images[1] = null;
-      break;
-    case 'image3.png':
-      images[2] = null;
-      break;
-    case 'image4.png':
-      images[3] = null;
-      break;
-    case 'image5.png':
-      images[4] = null;
-      break;
-    case 'image6.png':
-      images[5] = null;
-      break;
-    case 'image7.png':
-      images[6] = null;
-      break;
-    case 'image8.png':
-      images[7] = null;
-      break;
-  }
-  updateUser({images: images});
-}
-
-type propsModal = {
-  isModalVisible: boolean;
-  setIsModalVisible: any;
-  fileName: string;
-  images?: any;
-  edit?: boolean;
-  setLoadAvatar?: any;
-  loadAvatar?: boolean;
-};
-
-//Modal image
-const ModalPicture = ({
-  isModalVisible,
-  setIsModalVisible,
-  fileName,
-  setLoadAvatar,
-  loadAvatar,
-  images,
-  edit,
-}: propsModal) => {
-  return (
-    <Modal
-      swipeDirection="down"
-      onSwipeComplete={() => setIsModalVisible(false)}
-      hideModalContentWhileAnimating
-      isVisible={isModalVisible}
-      style={styles.modal}
-      onBackdropPress={() => setIsModalVisible(false)}
-      backdropOpacity={0.5}>
-      <View style={styles.buttonModal}>
-        <CustomIcon
-          name="addcamera"
-          size={30}
-          color="#6A1616"
-          style={{flex: 0.5}}
-        />
-        <Text
-          style={styles.textButtonModal}
-          onPress={() => {
-            setIsModalVisible(false);
-            cameraLaunch(
-              // @ts-ignore: Object is possibly 'null'.
-              auth().currentUser.uid,
-              'images',
-              fileName,
-              images,
-              edit,
-              setLoadAvatar,
-              loadAvatar,
-            );
-          }}>
-          Open Camera
-        </Text>
-      </View>
-      <View style={styles.buttonModal}>
-        <CustomIcon
-          name="addpicture"
-          size={30}
-          color="#6A1616"
-          style={{flex: 0.5}}
-        />
-        <Text
-          style={styles.textButtonModal}
-          onPress={() => {
-            setIsModalVisible(false);
-            imageGalleryLaunch(
-              // @ts-ignore: Object is possibly 'null'.
-              auth().currentUser.uid,
-              'images',
-              fileName,
-              setLoadAvatar,
-              loadAvatar,
-              images,
-              edit,
-            );
-          }}>
-          Upload From Gallery
-        </Text>
-      </View>
-      {!edit ? null : (
-        <View style={styles.buttonModal}>
-          <CustomIcon
-            name="bin"
-            size={30}
-            color="#6A1616"
-            style={{flex: 0.5}}
-          />
-          <Text
-            style={styles.textButtonModal}
-            onPress={() => {
-              deleteImage(fileName, images);
-              setIsModalVisible(false);
-            }}>
-            Delete Image
-          </Text>
-        </View>
-      )}
-    </Modal>
-  );
-};
-
-const add_image_default = require('../../../assets/images/add_image_default.png');
-
-export const AccountScreen = ({
-  route,
-  navigation,
-}: RouteStackParamList<'AccountScreen'>) => {
+export const AccountScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const User = {
     name: '',
     birthday: '',
@@ -400,6 +105,7 @@ export const AccountScreen = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loadAvatar, setLoadAvatar] = useState(false);
   const [load, setLoad] = useState(false);
+  const [loadLogout, setLoadLogout] = useState(false);
   const loadUser = async () => {
     const res = await fetch(
       'https://still-brushlands-96770.herokuapp.com/profile/get/' +
@@ -461,7 +167,7 @@ export const AccountScreen = ({
               <Text
                 style={styles.font26}
                 onPress={() =>
-                  navigation.navigate('EditNameScreen', {
+                  navigation.navigate(ROUTER.editName, {
                     name: user.name,
                   })
                 }>
@@ -469,7 +175,7 @@ export const AccountScreen = ({
               </Text>
               <Text
                 style={styles.font26}
-                onPress={() => navigation.navigate('EditAgeScreen')}>
+                onPress={() => navigation.navigate(ROUTER.editAge)}>
                 , {computeAge(user.birthday)}
               </Text>
             </View>
@@ -478,7 +184,7 @@ export const AccountScreen = ({
               iconName="gender"
               content={user.gender}
               onPress={() => {
-                navigation.navigate('EditGenderScreen', {
+                navigation.navigate(ROUTER.editGender, {
                   gender: user.gender,
                 });
               }}
@@ -487,7 +193,7 @@ export const AccountScreen = ({
               iconName="lookingfor"
               content={user.lookingFor}
               onPress={() => {
-                navigation.navigate('EditLookingForScreen', {
+                navigation.navigate(ROUTER.editLookingFor, {
                   lookingFor: user.lookingFor,
                 });
               }}
@@ -495,13 +201,13 @@ export const AccountScreen = ({
             <ProfileInformation
               iconName="location"
               content={user.location}
-              onPress={() => navigation.navigate('EditLivingScreen')}
+              onPress={() => navigation.navigate(ROUTER.editLiving)}
             />
             <ProfileInformation
               iconName="height"
               content={user.height ? user.height + ' cm' : user.height}
               onPress={() =>
-                navigation.navigate('EditHeightScreen', {
+                navigation.navigate(ROUTER.editHeight, {
                   height: user.height,
                 })
               }
@@ -509,13 +215,13 @@ export const AccountScreen = ({
             <ProfileInformation
               iconName="university"
               content={user.university}
-              onPress={() => navigation.navigate('EditUniversityScreen')}
+              onPress={() => navigation.navigate(ROUTER.editUniversity)}
             />
             <ProfileInformation
               iconName="province"
               content={user.province}
               onPress={() =>
-                navigation.navigate('EditHomeTownScreen', {
+                navigation.navigate(ROUTER.editHomeTown, {
                   province: user.province,
                 })
               }
@@ -524,7 +230,7 @@ export const AccountScreen = ({
               iconName="drinking"
               content={user.drinking}
               onPress={() =>
-                navigation.navigate('EditDrinkingScreen', {
+                navigation.navigate(ROUTER.editDrinking, {
                   drinking: user.drinking,
                 })
               }
@@ -533,7 +239,7 @@ export const AccountScreen = ({
               iconName="smoking"
               content={user.smoking}
               onPress={() =>
-                navigation.navigate('EditSmokingScreen', {
+                navigation.navigate(ROUTER.editSmoking, {
                   smoking: user.smoking,
                 })
               }
@@ -542,7 +248,7 @@ export const AccountScreen = ({
               iconName="child"
               content={user.kids}
               onPress={() =>
-                navigation.navigate('EditYourKidScreen', {
+                navigation.navigate(ROUTER.editYourKid, {
                   kids: user.kids,
                 })
               }
@@ -556,7 +262,7 @@ export const AccountScreen = ({
                 setEdit(true);
               }}
               activeOpacity={0.9}>
-              <ImageUser urlImage={user.images[0]} />
+              <ImageUser urlImage={user.images[0] || undefined} />
             </TouchableOpacity>
           ) : null}
           {user.images[1] ? (
@@ -567,7 +273,7 @@ export const AccountScreen = ({
                 setEdit(true);
               }}
               activeOpacity={0.9}>
-              <ImageUser urlImage={user.images[1]} />
+              <ImageUser urlImage={user.images[1] || undefined} />
             </TouchableOpacity>
           ) : null}
           {user.images[2] ? (
@@ -578,7 +284,7 @@ export const AccountScreen = ({
                 setEdit(true);
               }}
               activeOpacity={0.9}>
-              <ImageUser urlImage={user.images[2]} />
+              <ImageUser urlImage={user.images[2] || undefined} />
             </TouchableOpacity>
           ) : null}
           {user.images[3] ? (
@@ -589,7 +295,7 @@ export const AccountScreen = ({
                 setEdit(true);
               }}
               activeOpacity={0.9}>
-              <ImageUser urlImage={user.images[3]} />
+              <ImageUser urlImage={user.images[3] || undefined} />
             </TouchableOpacity>
           ) : null}
           {user.images[4] ? (
@@ -600,7 +306,7 @@ export const AccountScreen = ({
                 setEdit(true);
               }}
               activeOpacity={0.9}>
-              <ImageUser urlImage={user.images[4]} />
+              <ImageUser urlImage={user.images[4] || undefined} />
             </TouchableOpacity>
           ) : null}
           {user.images[5] ? (
@@ -611,7 +317,7 @@ export const AccountScreen = ({
                 setEdit(true);
               }}
               activeOpacity={0.9}>
-              <ImageUser urlImage={user.images[5]} />
+              <ImageUser urlImage={user.images[5] || undefined} />
             </TouchableOpacity>
           ) : null}
           {user.images[6] ? (
@@ -622,7 +328,7 @@ export const AccountScreen = ({
                 setEdit(true);
               }}
               activeOpacity={0.9}>
-              <ImageUser urlImage={user.images[6]} />
+              <ImageUser urlImage={user.images[6] || undefined} />
             </TouchableOpacity>
           ) : null}
           {user.images[7] ? (
@@ -633,53 +339,51 @@ export const AccountScreen = ({
                 setEdit(true);
               }}
               activeOpacity={0.9}>
-              <ImageUser urlImage={user.images[7]} />
+              <ImageUser urlImage={user.images[7] || undefined} />
             </TouchableOpacity>
           ) : null}
           <View style={styles.buttonContainer}>
             {user.images.indexOf(null) === -1 ? null : (
-              <TouchableHighlight
-                style={styles.button}
+              <ButtonCustom
+                title="Add a Photo"
+                buttonStyle={styles.button}
                 onPress={() => {
                   const index = user.images.indexOf(null);
                   setIsModalVisible(true);
                   setFileName(`image${index + 1}.png`);
                   setEdit(false);
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+                }}
+                icon={
                   <CustomIcon
                     name="addcamera"
                     size={20}
                     color="#FFFFFF"
                     style={{marginRight: 5}}
                   />
-                  <Text style={styles.textButton}>Add a Photo</Text>
-                </View>
-              </TouchableHighlight>
+                }
+              />
             )}
             {/* <TouchableHighlight style={styles.button}>
               <Text style={styles.textButton}>Connect Instagram</Text>
             </TouchableHighlight> */}
-            <TouchableHighlight
-              style={styles.button}
+            <ButtonCustom
+              loading={loadLogout}
+              title="Log out"
+              buttonStyle={styles.button}
               onPress={() => {
+                setLoadLogout(true);
                 messaging()
                   .getToken()
                   .then((token) => {
                     deleteTokenToDatabase(token).then(() => {
                       signOutAccount(() => {
-                        navigation.replace('LoadingScreen');
+                        navigation.replace(ROUTER.loading);
                       });
                     });
                   });
-              }}>
-              <Text style={styles.textButton}>Log out</Text>
-            </TouchableHighlight>
+                setLoadLogout(false);
+              }}
+            />
           </View>
         </View>
       </ScrollView>
@@ -738,13 +442,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   button: {
-    width: '90%',
-    height: 45,
-    borderRadius: 10,
-    marginTop: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#6A1616',
+    minHeight: 50,
+    borderRadius: spacing[2],
+    width: WIDTH - 32,
+    backgroundColor: color.primary,
+    marginTop: spacing[4],
   },
   textButton: {
     fontSize: 17,

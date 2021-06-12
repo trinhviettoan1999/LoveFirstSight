@@ -5,3 +5,4 @@ export * from './permission';
 export * from './chat';
 export * from './functions';
 export * from './notification';
+export * from './image';

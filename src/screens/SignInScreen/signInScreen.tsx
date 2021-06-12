@@ -132,7 +132,6 @@ export const SignInScreen = ({navigation}) => {
         />
         <Text style={styles.textWelcome}>Welcome</Text>
         <ButtonCustom
-          loading={load}
           title="CONTINUE WITH FACEBOOK"
           titleStyle={styles.textFacebook}
           containerStyle={styles.containerButton}
@@ -141,7 +140,6 @@ export const SignInScreen = ({navigation}) => {
           onPress={onFacebookButtonPress}
         />
         <ButtonCustom
-          loading={load}
           title="CONTINUE WITH GOOGLE"
           titleStyle={styles.textGoogle}
           containerStyle={styles.containerButton}
