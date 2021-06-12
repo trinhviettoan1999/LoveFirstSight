@@ -13,9 +13,10 @@ import {
   CustomIcon,
   ProfileInformation,
   ImageUser,
-  StatusBarCustom,
   ButtonCustom,
   ModalPicture,
+  HeaderCustom,
+  Setting,
 } from '../../components';
 import auth from '@react-native-firebase/auth';
 import {signOutAccount} from '../../firebase/firebase';
@@ -25,36 +26,6 @@ import messaging from '@react-native-firebase/messaging';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
 import {getUser, deleteTokenToDatabase} from '../../controller';
-
-const Header = ({navigation}: any) => {
-  return (
-    <View style={styles.headerContainer}>
-      <View style={styles.header}>
-        <Text
-          style={{
-            flex: 5,
-            fontSize: 26,
-            fontWeight: 'bold',
-            fontStyle: 'normal',
-            color: '#6A1616',
-          }}>
-          Account
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => navigation.navigate('SettingsScreen')}
-          style={{
-            flex: 1,
-            alignContent: 'flex-end',
-            alignItems: 'flex-end',
-          }}>
-          <CustomIcon name="setting" color="#212121" size={20} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.divider} />
-    </View>
-  );
-};
 
 //calculate age
 function computeAge(birthday: string) {
@@ -116,9 +87,16 @@ export const AccountScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
+      <HeaderCustom
+        barStyle="dark-content"
+        leftComponent={<Text style={styles.textHeader}>Account</Text>}
+        rightComponent={
+          <TouchableOpacity onPress={() => navigation.navigate(ROUTER.setting)}>
+            <Setting />
+          </TouchableOpacity>
+        }
+      />
       <ScrollView>
-        <Header navigation={navigation} />
         <TouchableOpacity
           onPress={() => {
             setIsModalVisible(true);
@@ -394,6 +372,12 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     paddingHorizontal: 16,
+  },
+  textHeader: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    fontStyle: 'normal',
+    color: color.primary,
   },
   firstContainer: {
     width: '100%',
