@@ -34,7 +34,7 @@ export const HeaderCustom = ({
         style: {
           fontWeight: 'bold',
           color: textColor,
-          fontSize: 25,
+          fontSize: 20,
           fontStyle: 'normal',
         },
       }}

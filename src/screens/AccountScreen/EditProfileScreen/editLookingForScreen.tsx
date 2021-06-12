@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {
-  Header,
-  SelectionButtonGroup,
-  RouteStackParamList,
-  StatusBarCustom,
-} from '../../../components';
+import {StyleSheet, View, Text} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {HeaderCustom, SelectionButtonGroup} from '../../../components';
 import {updateUser} from '../../../controller';
+import {ROUTER} from '../../../constants';
+import {color} from '../../../theme';
 
 const sampleAnswer = {
   options: [
@@ -62,27 +60,42 @@ const checkLookingFor = (lookingFor: string) => {
   }
 };
 
-export const EditLookingForScreen = ({
-  route,
-  navigation,
-}: RouteStackParamList<'AccountScreen'>) => {
+export const EditLookingForScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+
   const [selectedItems, setItemSelected] = useState(
     checkLookingFor(route.params.lookingFor),
   );
+
+  const handleCancel = () => {
+    navigation.goBack();
+  };
+
+  const handleDone = () => {
+    updateUser({lookingFor: selectedItems.value});
+    navigation.navigate(ROUTER.account, {flag: true});
+  };
+
   return (
     <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         title="Looking For"
-        showTextLeft={true}
-        textLeft="Cancel"
-        showTextRight={true}
-        textRight="Done"
-        onPressLeft={() => navigation.goBack()}
-        onPressRight={() => {
-          updateUser({lookingFor: selectedItems.value});
-          navigation.navigate('AccountScreen', {flag: true});
-        }}
+        leftComponent={
+          <Text
+            onPress={handleCancel}
+            style={[styles.title, {color: color.text}]}>
+            Cancel
+          </Text>
+        }
+        rightComponent={
+          <Text
+            onPress={handleDone}
+            style={[styles.title, {color: color.blue}]}>
+            Done
+          </Text>
+        }
       />
       <View style={styles.container}>
         <SelectionButtonGroup
@@ -104,5 +117,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '400',
   },
 });

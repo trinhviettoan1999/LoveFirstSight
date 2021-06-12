@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import SelectionGroup from 'react-native-selection-group';
 import {SelectionHandler} from 'react-native-selection-group';
+import {color} from '../../theme';
+
 const renderButton = (
   data: any,
   index: number,
@@ -14,9 +16,13 @@ const renderButton = (
       key={index}
       style={[
         styles.button,
-        {backgroundColor: isSelected ? '#6A1616' : '#FFEBEB'},
+        {backgroundColor: isSelected ? color.primary : color.light},
       ]}>
-      <Text style={[styles.text, {color: isSelected ? '#FFFFFF' : '#BB2424'}]}>
+      <Text
+        style={[
+          styles.text,
+          {color: isSelected ? color.bgWhite : color.primary},
+        ]}>
         {data.value}
       </Text>
     </TouchableOpacity>
@@ -44,6 +50,7 @@ export const SelectionButtonGroup = ({
       defaultSelection: defaultSelection,
     }),
   );
+
   useEffect(() => {
     setSelectionHandler(
       new SelectionHandler({
@@ -53,6 +60,7 @@ export const SelectionButtonGroup = ({
       }),
     );
   }, [maxMultiSelect, defaultSelection]);
+
   return maxMultiSelect === 1 ? (
     <SelectionGroup
       renderContent={renderButton}
@@ -91,6 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 16,
+    paddingVertical: 16,
   },
   button: {
     height: 30,
