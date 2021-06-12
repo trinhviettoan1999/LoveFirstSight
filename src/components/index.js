@@ -22,3 +22,4 @@ export * from './NotUser/NotUser';
 export * from './Loading/Loading';
 export * from './ProfileContainer/ProfileContainer';
 export * from './ImagesContainer/ImagesContainer';
+export * from './OptionsGroup/OptionsGroup';

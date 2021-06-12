@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {CustomIcon, RouteStackParamList} from '../../components';
 import {computeAge, getLikedUsers, getTopPick} from '../../controller';
+import {color} from '../../theme/color';
 const Tab = createMaterialTopTabNavigator();
 
 const Item = ({item, onPress, iconName}: any) => {
@@ -31,7 +33,7 @@ const Item = ({item, onPress, iconName}: any) => {
         <CustomIcon
           name={iconName}
           size={15}
-          color={iconName === 'lookingfor' ? '#6A1616' : '#0078D4'}
+          color={iconName === 'lookingfor' ? 'red' : '#0078D4'}
           style={{marginLeft: 5}}
         />
       </View>
@@ -62,7 +64,8 @@ const ListItem = ({data, navigation, iconName}: any) => {
   );
 };
 
-const LikedYou = ({navigation}: RouteStackParamList<'InitScreen'>) => {
+const LikedYou = () => {
+  const navigation = useNavigation();
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(0);
 
@@ -94,7 +97,8 @@ const LikedYou = ({navigation}: RouteStackParamList<'InitScreen'>) => {
   );
 };
 
-const TopPick = ({navigation}: RouteStackParamList<'InitScreen'>) => {
+const TopPick = () => {
+  const navigation = useNavigation();
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(0);
 
@@ -131,11 +135,11 @@ export const LikedYouScreen = () => {
     <Tab.Navigator
       lazy={false}
       tabBarOptions={{
-        activeTintColor: '#6A1616',
-        inactiveTintColor: '#000000',
+        activeTintColor: color.primary,
+        inactiveTintColor: color.text,
         labelStyle: {fontSize: 14, marginTop: 20, fontWeight: 'bold'},
         tabStyle: {height: 60},
-        indicatorStyle: {backgroundColor: '#6A1616'},
+        indicatorStyle: {backgroundColor: color.primary},
         style: {
           backgroundColor: '#F8F8F8',
         },

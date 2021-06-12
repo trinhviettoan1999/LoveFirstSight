@@ -38,12 +38,10 @@ export const ProfileContainer = ({user, coordinate}: ProfileProps) => {
         <ProfileInformation iconName="lookingfor" content={user.lookingFor} />
       ) : null}
       <ProfileInformation
-        onPress
         iconName="location"
         content="Located in Ho Chi Minh City, Viet Nam"
       />
       <ProfileInformation
-        onPress
         iconName="scope"
         content={
           `${calculateDistance(user.coordinates, coordinate)
@@ -52,38 +50,22 @@ export const ProfileContainer = ({user, coordinate}: ProfileProps) => {
         }
       />
       {user.height ? (
-        <ProfileInformation
-          onPress
-          iconName="height"
-          content={user.height + ' cm'}
-        />
+        <ProfileInformation iconName="height" content={user.height + ' cm'} />
       ) : null}
       {user.university ? (
-        <ProfileInformation
-          onPress
-          iconName="university"
-          content={user.university}
-        />
+        <ProfileInformation iconName="university" content={user.university} />
       ) : null}
       {user.province ? (
-        <ProfileInformation
-          onPress
-          iconName="province"
-          content={user.province}
-        />
+        <ProfileInformation iconName="province" content={user.province} />
       ) : null}
       {user.drinking ? (
-        <ProfileInformation
-          onPress
-          iconName="drinking"
-          content={user.drinking}
-        />
+        <ProfileInformation iconName="drinking" content={user.drinking} />
       ) : null}
       {user.smoking ? (
-        <ProfileInformation onPress iconName="smoking" content={user.smoking} />
+        <ProfileInformation iconName="smoking" content={user.smoking} />
       ) : null}
       {user.kids ? (
-        <ProfileInformation onPress iconName="child" content={user.kids} />
+        <ProfileInformation iconName="child" content={user.kids} />
       ) : null}
     </View>
   );

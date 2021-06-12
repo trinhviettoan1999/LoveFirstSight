@@ -5,28 +5,21 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  ActivityIndicator,
   Alert,
-  Image,
   ImageBackground,
   Dimensions,
 } from 'react-native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {
   CustomIcon,
-  ProfileInformation,
-  ImageUser,
   Filter,
-  Options,
-  DisLike,
-  Star,
-  Like,
   Hobbies,
   Info,
   NotUser,
   Loading,
   ProfileContainer,
   ImagesContainer,
+  OptionsGroup,
 } from '../../components';
 import Modal from 'react-native-modal';
 import {
@@ -39,7 +32,6 @@ import {
   getUserRandom,
   blockUser,
   sendMessageRequest,
-  updateUser,
   sendNotification,
   uploadCoordinates,
 } from '../../controller';
@@ -47,8 +39,6 @@ import {HeaderCustom} from '../../components';
 import messaging from '@react-native-firebase/messaging';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import FastImage from 'react-native-fast-image';
-import GetLocation from 'react-native-get-location';
 import {useNavigation} from '@react-navigation/native';
 import {spacing, color} from '../../theme';
 import {ROUTER} from '../../constants/router';
@@ -220,34 +210,22 @@ export const StaplerScreen = () => {
               </View>
             )}
           </ScrollView>
-          <View style={styles.containerButton}>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={async () => {
-                await ignoreUser(user.userId);
-                setLoad(!load);
-              }}>
-              <DisLike />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={async () => {
-                await superLikeUser(user.userId);
-                setLoad(!load);
-              }}>
-              <Star />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={async () => {
-                await likeUser(user.userId);
-                // @ts-ignore: Object is possibly 'null'.
-                sendNotification(user.userId, auth().currentUser?.uid);
-                setLoad(!load);
-              }}>
-              <Like />
-            </TouchableOpacity>
-          </View>
+          <OptionsGroup
+            onPressIgnore={async () => {
+              await ignoreUser(user.userId);
+              setLoad(!load);
+            }}
+            onPressSupperLike={async () => {
+              await superLikeUser(user.userId);
+              setLoad(!load);
+            }}
+            onPressLike={async () => {
+              await likeUser(user.userId);
+              // @ts-ignore: Object is possibly 'null'.
+              sendNotification(user.userId, auth().currentUser?.uid);
+              setLoad(!load);
+            }}
+          />
         </View>
       ) : null}
       {!user?.name && !load && <NotUser />}
