@@ -41,13 +41,13 @@ const styles = StyleSheet.create({
     borderColor: color.primary,
   },
   label: {
-    color: color.primary,
+    color: color.text,
     lineHeight: 22,
     fontSize: 18,
     fontWeight: '500',
   },
   textInput: {
-    fontSize: 14,
+    fontSize: 16,
     color: color.primary,
   },
   containerInput: {

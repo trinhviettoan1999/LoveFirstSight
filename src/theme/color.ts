@@ -7,4 +7,5 @@ export const color = {
   bgWhiteLight: '#F1F1F1',
   text: '#3F414E',
   textGray: '#BDBDBD',
+  blue: '#0078D4',
 };

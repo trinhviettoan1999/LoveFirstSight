@@ -38,4 +38,7 @@ export const ROUTER = {
   video: 'VideoScreen',
   incomingCall: 'IncomingCallScreen',
   filter: 'FilterScreen',
+  account: 'AccountScreen',
+  likedYou: 'LikedYouScreen',
+  news: 'NewsScreen',
 };

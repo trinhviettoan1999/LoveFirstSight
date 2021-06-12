@@ -1,39 +1,51 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {
-  Header,
-  InputView,
-  RouteStackParamList,
-  StatusBarCustom,
-} from '../../../components';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {HeaderCustom, InputCustom} from '../../../components';
 import {updateUser} from '../../../controller';
+import {color, spacing} from '../../../theme';
+import {ROUTER} from '../../../constants/router';
 
-export const EditNameScreen = ({
-  navigation,
-  route,
-}: RouteStackParamList<'AccountScreen'>) => {
+export const EditNameScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const [value, onchangeText] = useState(route.params.name);
+
+  const handleCancel = () => {
+    navigation.goBack();
+  };
+
+  const handleDone = () => {
+    updateUser({name: value});
+    navigation.navigate(ROUTER.account, {flag: true});
+  };
+
   return (
     <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         title="Name"
-        showTextLeft={true}
-        textLeft="Cancel"
-        showTextRight={true}
-        textRight="Done"
-        onPressLeft={() => navigation.goBack()}
-        onPressRight={() => {
-          updateUser({name: value});
-          navigation.navigate('AccountScreen', {flag: true});
-        }}
+        leftComponent={
+          <Text
+            onPress={handleCancel}
+            style={[styles.title, {color: color.text}]}>
+            Cancel
+          </Text>
+        }
+        rightComponent={
+          <Text
+            onPress={handleDone}
+            style={[styles.title, {color: color.blue}]}>
+            Done
+          </Text>
+        }
       />
       <View style={styles.container}>
-        <View style={styles.containerName}>
-          <Text style={styles.title}>Name</Text>
-          <InputView
+        <View style={{marginTop: spacing[4]}}>
+          <InputCustom
+            autoFocus
+            label="Name"
             value={value}
-            autoFocus={true}
             onChangeText={onchangeText}
           />
         </View>
@@ -45,26 +57,14 @@ export const EditNameScreen = ({
 const styles = StyleSheet.create({
   containerAll: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: color.bgWhite,
   },
   container: {
     flex: 1,
     paddingHorizontal: 16,
   },
-  containerName: {
-    height: 65,
-    width: '100%',
-    borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    marginTop: 16,
-    justifyContent: 'center',
-    paddingTop: 5,
-  },
   title: {
-    fontSize: 13,
-    fontStyle: 'normal',
-    fontWeight: '500',
-    color: '#ACACAC',
+    fontSize: 18,
+    fontWeight: '400',
   },
 });

@@ -7,7 +7,6 @@ import {
 } from '@react-navigation/stack';
 import * as screen from '../screens';
 import {
-  CustomIcon,
   Home,
   HomeFill,
   SupperLike,
@@ -31,15 +30,15 @@ const AppTab = () => {
     <Tab.Navigator
       screenOptions={({route}) => ({
         tabBarIcon: ({focused}) => {
-          if (route.name === 'StaplerScreen') {
+          if (route.name === ROUTER.home) {
             return focused ? <HomeFill /> : <Home />;
-          } else if (route.name === 'LikedYou') {
+          } else if (route.name === ROUTER.likedYou) {
             return focused ? <SupperLikeFill /> : <SupperLike />;
-          } else if (route.name === 'Conversation') {
+          } else if (route.name === ROUTER.conversation) {
             return focused ? <ConversationFill /> : <Conversation />;
-          } else if (route.name === 'AccountScreen') {
+          } else if (route.name === ROUTER.account) {
             return focused ? <AccountFill /> : <Account />;
-          } else if (route.name === 'NewsScreen') {
+          } else if (route.name === ROUTER.news) {
             return focused ? <NewFill /> : <New />;
           }
         },
@@ -54,11 +53,14 @@ const AppTab = () => {
         },
       }}
       lazy={false}>
-      <Tab.Screen name="StaplerScreen" component={screen.StaplerScreen} />
-      <Tab.Screen name="NewsScreen" component={screen.NewsScreen} />
-      <Tab.Screen name="LikedYou" component={screen.LikedYouScreen} />
-      <Tab.Screen name="Conversation" component={screen.ConversationScreen} />
-      <Tab.Screen name="AccountScreen" component={screen.AccountScreen} />
+      <Tab.Screen name={ROUTER.home} component={screen.StaplerScreen} />
+      <Tab.Screen name={ROUTER.news} component={screen.NewsScreen} />
+      <Tab.Screen name={ROUTER.likedYou} component={screen.LikedYouScreen} />
+      <Tab.Screen
+        name={ROUTER.conversation}
+        component={screen.ConversationScreen}
+      />
+      <Tab.Screen name={ROUTER.account} component={screen.AccountScreen} />
     </Tab.Navigator>
   );
 };

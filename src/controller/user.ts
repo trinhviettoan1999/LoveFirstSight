@@ -324,3 +324,13 @@ export const uploadCoordinates = (setCoordinate: any) => {
       console.log(code, message);
     });
 };
+
+export const deleteTokenToDatabase = async (token: string) => {
+  const userId = auth().currentUser?.uid;
+  await firestore()
+    .collection('users')
+    .doc(userId)
+    .update({
+      tokens: firestore.FieldValue.arrayRemove(token),
+    });
+};

@@ -71,7 +71,6 @@ export const ModalPicture = ({
           });
         }}
       />
-
       {!edit ? null : (
         <ButtonCustom
           buttonStyle={styles.buttonModal}

@@ -19,13 +19,12 @@ import {
 } from '../../components';
 import auth from '@react-native-firebase/auth';
 import {signOutAccount} from '../../firebase/firebase';
-import {updateUser} from '../../controller';
 import 'react-native-console-time-polyfill';
 import FastImage from 'react-native-fast-image';
 import messaging from '@react-native-firebase/messaging';
-import firestore from '@react-native-firebase/firestore';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
+import {getUser, deleteTokenToDatabase} from '../../controller';
 
 const Header = ({navigation}: any) => {
   return (
@@ -55,16 +54,6 @@ const Header = ({navigation}: any) => {
       <View style={styles.divider} />
     </View>
   );
-};
-
-const deleteTokenToDatabase = async (token: string) => {
-  const userId = auth().currentUser?.uid;
-  await firestore()
-    .collection('users')
-    .doc(userId)
-    .update({
-      tokens: firestore.FieldValue.arrayRemove(token),
-    });
 };
 
 //calculate age
@@ -106,14 +95,12 @@ export const AccountScreen = () => {
   const [loadAvatar, setLoadAvatar] = useState(false);
   const [load, setLoad] = useState(false);
   const [loadLogout, setLoadLogout] = useState(false);
+
   const loadUser = async () => {
-    const res = await fetch(
-      'https://still-brushlands-96770.herokuapp.com/profile/get/' +
-        // @ts-ignore: Object is possibly 'null'.
-        auth().currentUser.uid,
-    );
-    await setUser(await res.json());
+    const user = await getUser(auth().currentUser?.uid || '');
+    setUser(user);
   };
+
   // console.log(user);
   useEffect(() => {
     // @ts-ignore: Object is possibly 'null'.
@@ -470,26 +457,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     backgroundColor: '#C8C8C8',
-  },
-  modal: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  buttonModal: {
-    backgroundColor: '#F8F8F8',
-    height: 50,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    paddingHorizontal: 40,
-  },
-  textButtonModal: {
-    flex: 2,
-    fontSize: 17,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-    color: '#000000',
   },
   activityIndicator: {
     bottom: 200,

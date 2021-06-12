@@ -1,9 +1,8 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import {StatusBarStyle} from 'react-native';
-import {Header} from 'react-native-elements';
+import {Header, HeaderProps} from 'react-native-elements';
 import {color, spacing} from '../../theme';
-import {typography} from '../../theme/typography';
 
 type propsHeader = {
   title?: string;
@@ -35,7 +34,7 @@ export const HeaderCustom = ({
         style: {
           fontWeight: 'bold',
           color: textColor,
-          fontSize: 28,
+          fontSize: 25,
           fontStyle: 'normal',
         },
       }}
