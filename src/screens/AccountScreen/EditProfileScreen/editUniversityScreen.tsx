@@ -1,13 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, FlatList, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {
-  CustomIcon,
-  HeaderCustom,
-  InputCustom,
-  Search,
-  Tick,
-} from '../../../components';
+import {HeaderCustom, InputCustom, Search, Tick} from '../../../components';
 import {updateUser} from '../../../controller';
 import {color, spacing} from '../../../theme';
 import {ROUTER} from '../../../constants';
