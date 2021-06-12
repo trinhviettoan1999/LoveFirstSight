@@ -1,6 +1,7 @@
 import React from 'react';
 import {RadioButton} from 'react-native-paper';
 import {StyleSheet, View, Text} from 'react-native';
+import {color} from '../../theme';
 
 export const SelectionRadioGroup = ({Data, value, setValue}: any) => {
   return (
@@ -11,7 +12,7 @@ export const SelectionRadioGroup = ({Data, value, setValue}: any) => {
         {Data.Options.map((item: any, i: any) => (
           <View style={styles.container} key={i}>
             <Text style={styles.text}>{item.value}</Text>
-            <RadioButton value={item.value} color="#6A1616" />
+            <RadioButton value={item.value} color={color.primary} />
           </View>
         ))}
       </RadioButton.Group>
@@ -38,6 +39,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 17,
     fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
 });

@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {
-  Header,
-  SelectionRadioGroup,
-  RouteStackParamList,
-  StatusBarCustom,
-} from '../../../components';
+import {StyleSheet, View, Text} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {SelectionRadioGroup, HeaderCustom} from '../../../components';
+import {ROUTER} from '../../../constants';
 import {updateUser} from '../../../controller';
+import {color} from '../../../theme';
 
 const Data = {
   Options: [
@@ -35,27 +33,39 @@ const checkValue = (gender: string) => {
   }
 };
 
-export const EditGenderScreen = ({
-  route,
-  navigation,
-}: RouteStackParamList<'AccountScreen'>) => {
+export const EditGenderScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const [value, setValue] = useState(checkValue(route.params.gender));
+
+  const handleCancel = () => {
+    navigation.goBack();
+  };
+
+  const handleDone = () => {
+    updateUser({gender: value});
+    navigation.navigate(ROUTER.account, {flag: true});
+  };
+
   return (
     <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         title="Gender"
-        showTextLeft={true}
-        textLeft="Cancel"
-        showTextRight={true}
-        textRight="Done"
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
-        onPressRight={() => {
-          updateUser({gender: value});
-          navigation.navigate('AccountScreen', {flag: true});
-        }}
+        leftComponent={
+          <Text
+            onPress={handleCancel}
+            style={[styles.title, {color: color.text}]}>
+            Cancel
+          </Text>
+        }
+        rightComponent={
+          <Text
+            onPress={handleDone}
+            style={[styles.title, {color: color.blue}]}>
+            Done
+          </Text>
+        }
       />
       <View style={styles.container}>
         <SelectionRadioGroup Data={Data} value={value} setValue={setValue} />
@@ -72,5 +82,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '400',
   },
 });
