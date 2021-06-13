@@ -16,6 +16,7 @@ import RtcEngine, {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Sound from 'react-native-sound';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const requestCameraAndAudioPermission = async () => {
   try {
@@ -41,12 +42,13 @@ const requestCameraAndAudioPermission = async () => {
 var engine: RtcEngine;
 let sound: Sound;
 const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
 export const VideoScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const {appId, channelName, token, avatar, name, userId} = route.params;
-  console.log(typeof userId);
   const [props, setProps] = useState({
     peerIds: [],
     vidMute: false,
@@ -112,8 +114,6 @@ export const VideoScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(props.peerIds.length);
-
   return (
     <View style={styles.full}>
       {props.peerIds.length === 0 && (
@@ -125,11 +125,15 @@ export const VideoScreen = () => {
         </ImageBackground>
       )}
       {props.peerIds.length > 0 && (
-        <View>
+        <View
+          style={{
+            width: WIDTH,
+            height: HEIGHT,
+          }}>
           <RtcRemoteView.SurfaceView
             style={{
-              width: dimensions.width,
-              height: dimensions.height,
+              width: 300,
+              height: 300,
             }}
             uid={props.peerIds[0]}
             channelId={channelName}
@@ -141,6 +145,7 @@ export const VideoScreen = () => {
               style={styles.localVideo}
               channelId={channelName}
               renderMode={VideoRenderMode.Hidden}
+              key={auth().currentUser?.uid}
             />
           )}
         </View>
@@ -169,17 +174,10 @@ export const VideoScreen = () => {
   );
 };
 
-let dimensions = {
-  //get dimensions of the device to use in view styles
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-};
-
 const styles = StyleSheet.create({
   buttonBar: {
     height: 50,
     backgroundColor: '#6A1616',
-    display: 'flex',
     width: '100%',
     position: 'absolute',
     bottom: 0,
