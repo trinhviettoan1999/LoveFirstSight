@@ -111,6 +111,10 @@ export const VideoScreen = () => {
   useEffect(() => {
     requestCameraAndAudioPermission();
     init();
+    return () => {
+      requestCameraAndAudioPermission();
+      init();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -130,16 +134,6 @@ export const VideoScreen = () => {
             width: WIDTH,
             height: HEIGHT,
           }}>
-          <RtcRemoteView.SurfaceView
-            style={{
-              width: 300,
-              height: 300,
-            }}
-            uid={props.peerIds[0]}
-            channelId={channelName}
-            renderMode={VideoRenderMode.Hidden}
-            key={props.peerIds[0]}
-          />
           {!props.vidMute && (
             <RtcLocalView.SurfaceView
               style={styles.localVideo}
@@ -148,6 +142,16 @@ export const VideoScreen = () => {
               key={auth().currentUser?.uid}
             />
           )}
+          <RtcRemoteView.SurfaceView
+            style={{
+              width: WIDTH,
+              height: HEIGHT,
+            }}
+            uid={props.peerIds[0]}
+            channelId={channelName}
+            renderMode={VideoRenderMode.Hidden}
+            key={props.peerIds[0]}
+          />
         </View>
       )}
       <View style={styles.buttonBar}>
