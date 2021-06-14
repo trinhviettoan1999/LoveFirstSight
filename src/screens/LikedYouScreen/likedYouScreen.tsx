@@ -15,6 +15,7 @@ import {CustomIcon} from '../../components';
 import {computeAge, getLikedUsers, getTopPick} from '../../controller';
 import {color} from '../../theme/color';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {ROUTER} from '../../constants/router';
 
 const Tab = createMaterialTopTabNavigator();
 const WIDTH = Dimensions.get('window').width;
@@ -60,7 +61,7 @@ const ListItem = ({data, navigation, iconName}: any) => {
         iconName={iconName}
         item={item}
         onPress={() =>
-          navigation.navigate('ProfileScreen', {userId: item.userId})
+          navigation.navigate(ROUTER.profile, {userId: item.userId})
         }
       />
     );

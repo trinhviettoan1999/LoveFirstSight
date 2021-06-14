@@ -14,7 +14,19 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
-import {Header, StatusBarCustom, CustomIcon} from '../../components';
+import {
+  CustomIcon,
+  HeaderCustom,
+  Back,
+  Video,
+  Mic,
+  MicFill,
+  Camera,
+  CameraFill,
+  Gallery,
+  GalleryFill,
+  BinFill,
+} from '../../components';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
 import Sound from 'react-native-sound';
 import uuid from 'react-native-uuid';
@@ -28,14 +40,19 @@ import {Slider} from 'react-native-elements';
 import {
   checkPermisstionAudio,
   checkPermissionCamera,
-  likeUser,
-  updateStateConversation,
   createKey,
   updateUser,
   callVideo,
+  getAllMessage,
+  getMessageLoadMore,
+  sendImageChat,
 } from '../../controller';
 import 'react-native-console-time-polyfill';
 import {ROUTER} from './../../constants/router';
+import {color} from '../../theme';
+import {Send} from '../../components/AllSvgIcon/AllSvgIcon';
+import {sendMessage} from '../../controller/chat';
+
 const messagesRef = firestore().collection('conversations');
 
 const checkPermissionPhoto = () => {
@@ -63,31 +80,6 @@ const getPhotos = (setPhotos: any) => {
     .catch((error) => {
       console.log(error);
     });
-};
-
-const sendNotification = async (
-  ownerId: string,
-  userId: string,
-  message: string,
-  conversationId: string,
-) => {
-  return await fetch(
-    'https://still-brushlands-96770.herokuapp.com/notification/message/' +
-      ownerId +
-      '/' +
-      userId +
-      '/' +
-      message +
-      '/' +
-      conversationId,
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json());
 };
 
 const getAudioTimeString = (seconds: any) => {
@@ -171,125 +163,28 @@ export const Chat = () => {
       if (temp > 17000) {
         decibels.push({id: uuid.v4(), height: 19});
       }
-      // decibels.push({id: uuid.v4(), value: temp});
-      console.log(temp);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startAudio]);
 
-  // useEffect(() => {
-  //   console.log('OK');
-  //   valueChangeInterval = setInterval(() => {
-  //     if (audio) {
-  //       audio.getCurrentTime((seconds) => {
-  //         console.log(seconds);
-  //         setValueSlider(seconds);
-  //       });
-  //     }
-  //   }, 100);
-  // }, []);
-  // useEffect(() => {
-  //   console.log('Vô');
-  //   if (valueSlider > 6) {
-  //     clearInterval(valueChangeInterval);
-  //   }
-  // }, [valueSlider]);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   if (audio) {
-  //     audio.getCurrentTime((seconds) => {
-  //       if (isMounted) {
-  //         console.log(seconds);
-  //         setValueSlider(seconds);
-  //       }
-  //     });
-  //   }
-  //   if (!playAudio) {
-  //     isMounted = false;
-  //     console.log('OK');
-  //     setValueSlider(0);
-  //   }
-  //   console.log('re-render because x changed:', valueSlider);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [valueSlider]);
-
   useEffect(() => {
-    const unsubscribe = messagesRef
-      .doc(conversationId)
-      .collection('messages')
-      .orderBy('createdAt', 'desc')
-      .limit(20)
-      .onSnapshot((querySnapshot) => {
-        const threads = querySnapshot.docs.map((documentSnapshot) => {
-          return {
-            _id: documentSnapshot.id,
-            ...documentSnapshot.data(),
-          };
-        }) as any;
-        setLengthMessage(threads.length);
-        setMessages(threads);
-        if (threads.length > 0) {
-          setCreatedAt(threads[threads.length - 1].createdAt);
-        }
-        setIsLoadingEarlier(false);
-      });
-    return () => unsubscribe();
+    getAllMessage(
+      conversationId,
+      setLengthMessage,
+      setMessages,
+      setCreatedAt,
+      setIsLoadingEarlier,
+    );
+    return () =>
+      getAllMessage(
+        conversationId,
+        setLengthMessage,
+        setMessages,
+        setCreatedAt,
+        setIsLoadingEarlier,
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const getMesssages = () => {
-    messagesRef
-      .doc(conversationId)
-      .collection('messages')
-      .orderBy('createdAt', 'desc')
-      .where('createdAt', '<', createdAt)
-      .limit(20)
-      .onSnapshot((querySnapshot) => {
-        const threads = querySnapshot.docs.map((documentSnapshot) => {
-          return {
-            _id: documentSnapshot.id,
-            ...documentSnapshot.data(),
-          };
-        }) as any;
-        setLengthMessage(threads.length);
-        if (threads.length > 0) {
-          setCreatedAt(threads[threads.length - 1].createdAt);
-          setMessages(GiftedChat.prepend(messages, threads));
-          setIsLoadingEarlier(false);
-        }
-      });
-  };
-
-  async function onSendMessage(message: any) {
-    await messagesRef
-      .doc(conversationId)
-      .collection('messages')
-      .add({
-        messageType: 'text',
-        text: message,
-        createdAt: new Date().getTime(),
-        user: {
-          _id: userId,
-          avatar: user.avatar,
-        },
-      })
-      .then(async () => {
-        sendNotification(ownerId, userId, message, conversationId);
-        // @ts-ignore: Object is possibly 'null'.
-        if (state && messages[0].user._id !== auth().currentUser?.uid) {
-          await likeUser(ownerId);
-          await updateStateConversation(conversationId).then((res) =>
-            console.log(res),
-          );
-        }
-      });
-  }
-
-  const onLoadEarlier = () => {
-    setIsLoadingEarlier(true);
-    getMesssages();
-  };
 
   const getCamera = () => {
     checkPermissionCamera().then((result) => {
@@ -308,47 +203,9 @@ export const Chat = () => {
         } else if (res.error) {
           console.log('ImagePicker Error: ', res.error);
         } else {
-          var fileName = `${uuid.v4()}.png`;
-          upload(userId, 'imagesMessages', fileName, res.uri, () => {
-            getUrl(userId, 'imagesMessages', fileName).then((result) => {
-              messagesRef
-                .doc(conversationId)
-                .collection('messages')
-                .add({
-                  messageType: 'image',
-                  image: result,
-                  text: '',
-                  createdAt: new Date().getTime(),
-                  user: {
-                    _id: userId,
-                    avatar: user.avatar,
-                  },
-                });
-            });
-          });
+          // @ts-ignore: Object is possibly 'null'.
+          sendImageChat(conversationId, userId, res.assets[0].uri, user.avatar);
         }
-      });
-    });
-  };
-
-  const sendImage = async () => {
-    var fileName = `${uuid.v4()}.png`;
-    // @ts-ignore: Object is possibly 'null'.
-    await upload(userId, 'imagesMessages', fileName, image, () => {
-      getUrl(userId, 'imagesMessages', fileName).then((result) => {
-        messagesRef
-          .doc(conversationId)
-          .collection('messages')
-          .add({
-            messageType: 'image',
-            image: result,
-            text: '',
-            createdAt: new Date().getTime(),
-            user: {
-              _id: userId,
-              avatar: user.avatar,
-            },
-          });
       });
     });
   };
@@ -380,7 +237,7 @@ export const Chat = () => {
               styles.containerAudio,
               {
                 backgroundColor:
-                  props.position === 'left' ? '#E1E1E1' : '#6A1616',
+                  props.position === 'left' ? color.bgWhite : color.primary,
               },
             ]}>
             <CustomIcon
@@ -468,31 +325,6 @@ export const Chat = () => {
     );
   };
 
-  const renderBubble = (props: any) => {
-    return (
-      <View>
-        {renderAudio(props)}
-        <Bubble
-          {...props}
-          wrapperStyle={{
-            right: {
-              backgroundColor: '#6A1616',
-            },
-            left: {
-              backgroundColor: '#E1E1E1',
-            },
-          }}
-        />
-      </View>
-    );
-  };
-
-  const renderLoadEarlier = () => {
-    return lengthMessage > 0 && isLoadingEarlier ? (
-      <ActivityIndicator size="small" color="#6a1616" />
-    ) : null;
-  };
-
   const renderInputToolBar = () => {
     return (
       <View style={styles.inputToolbar}>
@@ -505,11 +337,7 @@ export const Chat = () => {
               setPressPhotos(false);
               setPressCamera(false);
             }}>
-            <CustomIcon
-              name="mic"
-              size={23}
-              color={pressCamera || pressPhotos ? '#919191' : '#6A1616'}
-            />
+            {startAudio ? <MicFill /> : <Mic />}
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
@@ -520,14 +348,10 @@ export const Chat = () => {
               setPressPhotos(false);
               setPressCamera(false);
             }}>
-            <CustomIcon
-              name="bin"
-              size={25}
-              color={pressCamera || pressPhotos ? '#919191' : '#6A1616'}
-            />
+            <BinFill />
           </TouchableOpacity>
         )}
-        {!startAudio ? (
+        {!startAudio && (
           <TouchableOpacity
             style={styles.icon}
             activeOpacity={0.9}
@@ -536,14 +360,10 @@ export const Chat = () => {
               setStartAudio(false);
               setPressPhotos(false);
             }}>
-            <CustomIcon
-              name="camera"
-              size={22}
-              color={startAudio || pressPhotos ? '#919191' : '#6A1616'}
-            />
+            {pressCamera ? <CameraFill /> : <Camera />}
           </TouchableOpacity>
-        ) : null}
-        {!startAudio ? (
+        )}
+        {!startAudio && (
           <TouchableOpacity
             style={styles.icon}
             activeOpacity={0.9}
@@ -552,13 +372,9 @@ export const Chat = () => {
               setPressPhotos(!pressPhotos);
               setPressCamera(false);
             }}>
-            <CustomIcon
-              name="gallerry"
-              size={21}
-              color={startAudio || pressCamera ? '#919191' : '#6A1616'}
-            />
+            {pressPhotos ? <GalleryFill /> : <Gallery />}
           </TouchableOpacity>
-        ) : null}
+        )}
         {!startAudio ? (
           <TextInput
             style={styles.textInput}
@@ -610,10 +426,10 @@ export const Chat = () => {
               onSendMessage(valueText);
               setValueText('');
             }}>
-            <CustomIcon name="send" size={20} color="#6A1616" />
+            <Send />
           </TouchableOpacity>
         ) : null}
-        {startAudio ? (
+        {startAudio && (
           <TouchableOpacity
             style={[styles.icon, {marginRight: 16}]}
             activeOpacity={0.9}
@@ -644,63 +460,134 @@ export const Chat = () => {
                 },
               );
             }}>
-            <CustomIcon name="send-message" size={25} color="#6A1616" />
+            <Send />
           </TouchableOpacity>
-        ) : null}
+        )}
       </View>
     );
   };
-  return (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <View style={styles.containerGiftChat}>
-        <Header
-          showAvatar={true}
-          avatarUri={avatar}
-          onPressAvatar={() => {
-            navigation.navigate('ProfileScreen', {userId: ownerId});
-          }}
-          title={name}
-          showIconLeft={true}
-          iconNameLeft="back"
-          onPressLeft={() => {
-            if (flag) {
-              navigation.replace('StaplerScreen');
-            } else {
-              navigation.goBack();
-            }
-          }}
-          showIconRight={true}
-          iconNameRight="video"
-          onPressRight={() => {
-            createKey(
-              '904b6f3ec0bd44ac991b9d0166cb741c',
-              '0a74d4d72dc94bab83c42b611c802c8f',
-              conversationId,
-              uid,
-            )
-              .then((result) => result.json())
-              .then((key) => {
-                // setStateVideoCall(conversationId, true);
-                updateUser({
-                  stateJoinCall: true,
-                });
-                callVideo(
-                  '904b6f3ec0bd44ac991b9d0166cb741c',
-                  conversationId,
-                  ownerId,
-                );
-                navigation.navigate(ROUTER.video, {
-                  name: name,
-                  avatar: avatar,
-                  appId: '904b6f3ec0bd44ac991b9d0166cb741c',
-                  channelName: conversationId,
-                  userId: uid,
-                  token: key,
-                });
-              });
+
+  const handleBack = () => {
+    if (flag) {
+      navigation.replace(ROUTER.home);
+    } else {
+      navigation.goBack();
+    }
+  };
+
+  const handleVideoCall = () => {
+    createKey(
+      '904b6f3ec0bd44ac991b9d0166cb741c',
+      '0a74d4d72dc94bab83c42b611c802c8f',
+      conversationId,
+      uid,
+    )
+      .then((result) => result.json())
+      .then((key) => {
+        // setStateVideoCall(conversationId, true);
+        updateUser({
+          stateJoinCall: true,
+        });
+        callVideo('904b6f3ec0bd44ac991b9d0166cb741c', conversationId, ownerId);
+        navigation.navigate(ROUTER.video, {
+          name: name,
+          avatar: avatar,
+          appId: '904b6f3ec0bd44ac991b9d0166cb741c',
+          channelName: conversationId,
+          userId: uid,
+          token: key,
+        });
+      });
+  };
+
+  const onPressAvatar = () => {
+    navigation.navigate(ROUTER.profile, {userId: ownerId});
+  };
+
+  const onSendMessage = (message: any) => {
+    sendMessage(
+      conversationId,
+      message,
+      userId,
+      // @ts-ignore: Object is possibly 'null'.
+      user.avatar,
+      ownerId,
+      // @ts-ignore: Object is possibly 'null'.
+      messages[0]?.user._id,
+      state,
+    );
+  };
+
+  const handleSendImage = () => {
+    // @ts-ignore: Object is possibly 'null'.
+    sendImageChat(conversationId, userId, image, user.avatar);
+    setImage(null);
+  };
+
+  const renderLoadEarlier = () => {
+    return lengthMessage > 0 && isLoadingEarlier ? (
+      <ActivityIndicator size="small" color="#6a1616" />
+    ) : null;
+  };
+
+  const onLoadEarlier = () => {
+    setIsLoadingEarlier(true);
+    getMessageLoadMore(
+      conversationId,
+      createdAt,
+      setLengthMessage,
+      setCreatedAt,
+      setMessages,
+      setIsLoadingEarlier,
+      messages,
+    );
+  };
+
+  const renderBubble = (props: any) => {
+    return (
+      <View>
+        {renderAudio(props)}
+        <Bubble
+          {...props}
+          wrapperStyle={{
+            right: {
+              backgroundColor: color.primary,
+            },
+            left: {
+              backgroundColor: color.bgWhite,
+            },
           }}
         />
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.containerAll}>
+      <HeaderCustom
+        leftComponent={
+          <TouchableOpacity onPress={handleBack}>
+            <Back />
+          </TouchableOpacity>
+        }
+        rightComponent={
+          <TouchableOpacity onPress={handleVideoCall}>
+            <Video />
+          </TouchableOpacity>
+        }
+        centerComponent={
+          <View style={styles.headerName}>
+            <TouchableOpacity
+              style={styles.avatar}
+              activeOpacity={0.5}
+              onPress={onPressAvatar}>
+              <Image style={styles.avatar} source={{uri: avatar}} />
+            </TouchableOpacity>
+            <Text style={styles.textName}>{name}</Text>
+          </View>
+        }
+      />
+      <View style={styles.containerGiftChat}>
         <GiftedChat
           renderTime={() => {
             return <View style={{height: 0, width: 0}} />;
@@ -719,9 +606,7 @@ export const Chat = () => {
             // @ts-ignore: Object is possibly 'null'.
             avatar: user.avatar,
           }}
-          onPressAvatar={() => {
-            navigation.navigate('ProfileScreen', {userId: ownerId});
-          }}
+          onPressAvatar={onPressAvatar}
         />
       </View>
       {pressPhotos ? (
@@ -747,17 +632,14 @@ export const Chat = () => {
           style={styles.flatlist}
         />
       ) : null}
-      {image ? (
+      {image && (
         <TouchableOpacity
           style={styles.buttonSend}
-          onPress={() => {
-            sendImage();
-            setImage(null);
-          }}
+          onPress={handleSendImage}
           activeOpacity={0.6}>
           <Text style={styles.textButtonSend}>Send</Text>
         </TouchableOpacity>
-      ) : null}
+      )}
     </View>
   );
 };
@@ -765,6 +647,24 @@ export const Chat = () => {
 const styles = StyleSheet.create({
   containerAll: {
     flex: 1,
+  },
+  avatar: {
+    height: 30,
+    width: 30,
+    borderRadius: 30,
+    marginRight: 5,
+  },
+  headerName: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textName: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    fontStyle: 'normal',
+    color: '#000000',
   },
   containerGiftChat: {
     flex: 2,
@@ -786,8 +686,10 @@ const styles = StyleSheet.create({
   inputToolbar: {
     flex: 1,
     flexDirection: 'row',
-    borderTopWidth: 0.2,
-    borderBottomWidth: 0.2,
+    borderTopWidth: 0.3,
+    borderBottomWidth: 0.3,
+    borderColor: color.textGray,
+    backgroundColor: color.bgWhite,
   },
   textInput: {
     marginLeft: 5,
@@ -811,7 +713,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     marginBottom: 10,
-    backgroundColor: '#6A1616',
+    backgroundColor: color.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,

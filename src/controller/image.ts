@@ -1,7 +1,6 @@
 import {checkPermissionCamera, checkPermissionPhoto, updateUser} from '.';
-import {launchCamera} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {getUrl, upload} from '../firebase/storage';
-import {launchImageLibrary} from 'react-native-image-picker';
 
 interface PropsCamera {
   uid: string;

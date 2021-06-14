@@ -8,6 +8,7 @@ type propsHeader = {
   title?: string;
   leftComponent?: JSX.Element;
   rightComponent?: JSX.Element;
+  centerComponent?: JSX.Element;
   backgroundStatusBar?: string;
   barStyle?: StatusBarStyle;
   removeBorderWidth?: boolean;
@@ -19,6 +20,7 @@ export const HeaderCustom = ({
   title,
   leftComponent,
   rightComponent,
+  centerComponent,
   backgroundStatusBar = color.second,
   barStyle = 'dark-content',
   removeBorderWidth = false,
@@ -30,15 +32,17 @@ export const HeaderCustom = ({
         barStyle: barStyle,
         backgroundColor: backgroundStatusBar,
       }}
-      centerComponent={{
-        text: title,
-        style: {
-          fontWeight: 'bold',
-          color: textColor,
-          fontSize: 20,
-          fontStyle: 'normal',
-        },
-      }}
+      centerComponent={
+        centerComponent || {
+          text: title,
+          style: {
+            fontWeight: 'bold',
+            color: textColor,
+            fontSize: 20,
+            fontStyle: 'normal',
+          },
+        }
+      }
       containerStyle={{
         backgroundColor: backgroundStatusBar,
         paddingHorizontal: spacing[4],
@@ -47,8 +51,14 @@ export const HeaderCustom = ({
       leftComponent={leftComponent}
       rightComponent={rightComponent}
       centerContainerStyle={{flex: 1}}
-      rightContainerStyle={{justifyContent: 'center', flex: 1}}
-      leftContainerStyle={{justifyContent: 'center', flex: 1}}
+      rightContainerStyle={{
+        justifyContent: 'center',
+        flex: 1,
+      }}
+      leftContainerStyle={{
+        justifyContent: 'center',
+        flex: 1,
+      }}
     />
   );
 };
