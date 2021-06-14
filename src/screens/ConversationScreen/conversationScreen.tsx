@@ -1,10 +1,25 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 import {RouteStackParamList} from '../../components';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {getConversation, getConversationWait} from '../../controller';
 import FastImage from 'react-native-fast-image';
+import {ROUTER} from '../../constants/router';
+import {color} from '../../theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 const Tab = createMaterialTopTabNavigator();
+
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
 //item Conversation
 const ItemConversation = ({item, onPress}: any) => {
   return (
@@ -39,7 +54,7 @@ const ConversationWait = ({navigation}: RouteStackParamList<'InitScreen'>) => {
         item={item}
         onPress={() => {
           setSelectedId(item.id);
-          navigation.navigate('Chat', {
+          navigation.navigate(ROUTER.chat, {
             name: item.name,
             avatar: item.avatar,
             conversationId: item.conversationId,
@@ -94,7 +109,7 @@ const Conversation = ({navigation}: RouteStackParamList<'InitScreen'>) => {
         item={item}
         onPress={() => {
           setSelectedId(item.id);
-          navigation.navigate('Chat', {
+          navigation.navigate(ROUTER.chat, {
             name: item.name,
             avatar: item.avatar,
             conversationId: item.conversationId,
@@ -143,29 +158,34 @@ const Conversation = ({navigation}: RouteStackParamList<'InitScreen'>) => {
 
 export const ConversationScreen = () => {
   return (
-    <Tab.Navigator
-      lazy
-      tabBarOptions={{
-        activeTintColor: '#6A1616',
-        inactiveTintColor: '#000000',
-        labelStyle: {fontSize: 14, marginTop: 20, fontWeight: 'bold'},
-        tabStyle: {height: 60},
-        indicatorStyle: {backgroundColor: '#6A1616'},
-        style: {
-          backgroundColor: '#F8F8F8',
-        },
-      }}>
-      <Tab.Screen
-        name="Conversations"
-        component={Conversation}
-        options={{tabBarLabel: 'Conversations'}}
-      />
-      <Tab.Screen
-        name="Messages Request"
-        component={ConversationWait}
-        options={{tabBarLabel: 'Messages Request'}}
-      />
-    </Tab.Navigator>
+    <SafeAreaView
+      style={{width: WIDTH, height: HEIGHT, backgroundColor: color.bgWhite}}
+      edges={['top']}>
+      <StatusBar barStyle="dark-content" backgroundColor={color.bgWhite} />
+      <Tab.Navigator
+        lazy
+        tabBarOptions={{
+          activeTintColor: color.primary,
+          inactiveTintColor: color.text,
+          labelStyle: {fontSize: 14, fontWeight: 'bold'},
+          tabStyle: {height: 50},
+          indicatorStyle: {backgroundColor: color.primary},
+          style: {
+            backgroundColor: color.bgWhite,
+          },
+        }}>
+        <Tab.Screen
+          name="Conversations"
+          component={Conversation}
+          options={{tabBarLabel: 'Conversations'}}
+        />
+        <Tab.Screen
+          name="Messages Request"
+          component={ConversationWait}
+          options={{tabBarLabel: 'Messages Request'}}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 };
 

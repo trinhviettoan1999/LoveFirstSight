@@ -12,6 +12,7 @@ type propsHeader = {
   barStyle?: StatusBarStyle;
   removeBorderWidth?: boolean;
   textColor?: string;
+  ViewComponent?: React.Component;
 };
 
 export const HeaderCustom = ({

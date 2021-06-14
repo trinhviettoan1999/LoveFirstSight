@@ -1,12 +1,24 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {CustomIcon, RouteStackParamList} from '../../components';
+import {CustomIcon} from '../../components';
 import {computeAge, getLikedUsers, getTopPick} from '../../controller';
 import {color} from '../../theme/color';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
 const Tab = createMaterialTopTabNavigator();
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
 const Item = ({item, onPress, iconName}: any) => {
   return (
@@ -134,29 +146,34 @@ const TopPick = () => {
 
 export const LikedYouScreen = () => {
   return (
-    <Tab.Navigator
-      lazy={false}
-      tabBarOptions={{
-        activeTintColor: color.primary,
-        inactiveTintColor: color.text,
-        labelStyle: {fontSize: 14, marginTop: 20, fontWeight: 'bold'},
-        tabStyle: {height: 60},
-        indicatorStyle: {backgroundColor: color.primary},
-        style: {
-          backgroundColor: '#F8F8F8',
-        },
-      }}>
-      <Tab.Screen
-        name="LikedYou"
-        component={LikedYou}
-        options={{tabBarLabel: 'Liked You'}}
-      />
-      <Tab.Screen
-        name="TopPick"
-        component={TopPick}
-        options={{tabBarLabel: 'Top Pick'}}
-      />
-    </Tab.Navigator>
+    <SafeAreaView
+      style={{width: WIDTH, height: HEIGHT, backgroundColor: color.bgWhite}}
+      edges={['top']}>
+      <StatusBar barStyle="dark-content" backgroundColor={color.bgWhite} />
+      <Tab.Navigator
+        lazy={false}
+        tabBarOptions={{
+          activeTintColor: color.primary,
+          inactiveTintColor: color.text,
+          labelStyle: {fontSize: 14, fontWeight: 'bold'},
+          tabStyle: {height: 50},
+          indicatorStyle: {backgroundColor: color.primary},
+          style: {
+            backgroundColor: color.bgWhite,
+          },
+        }}>
+        <Tab.Screen
+          name="LikedYou"
+          component={LikedYou}
+          options={{tabBarLabel: 'Liked You'}}
+        />
+        <Tab.Screen
+          name="TopPick"
+          component={TopPick}
+          options={{tabBarLabel: 'Top Pick'}}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 };
 
