@@ -8,13 +8,12 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {updateUser} from '../../controller';
+import {updateUser, setStateVideoCall, endCall} from '../../controller';
 import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Sound from 'react-native-sound';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
@@ -27,6 +26,7 @@ import {
 } from '../../components/AllSvgIcon/AllSvgIcon';
 import {color} from '../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {HeaderCustom} from '../../components';
 
 const requestCameraAndAudioPermission = async () => {
   try {
@@ -58,7 +58,8 @@ const HEIGHT = Dimensions.get('window').height;
 export const VideoScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const {appId, channelName, token, avatar, name, userId} = route.params;
+  const {appId, channelName, token, avatar, name, userId, ownerId} =
+    route.params;
   const [props, setProps] = useState({
     peerIds: [],
     vidMute: false,
@@ -67,7 +68,6 @@ export const VideoScreen = () => {
   });
 
   async function init() {
-    console.log('1');
     sound = new Sound(nhachuong);
     sound.setNumberOfLoops(-1);
     sound.setVolume(1);
@@ -109,17 +109,17 @@ export const VideoScreen = () => {
     setProps({...props, vidMute: !props.vidMute});
   }
 
-  function endCall() {
+  function endCallVideo() {
     sound.stop();
     engine.leaveChannel();
+    setStateVideoCall(channelName, false);
     updateUser({
       stateJoinCall: false,
     });
     setProps({...props, peerIds: [], joinSucceed: false});
+    endCall(ownerId);
     navigation.goBack();
   }
-
-  useEffect(() => {});
 
   useEffect(() => {
     requestCameraAndAudioPermission();
@@ -138,6 +138,11 @@ export const VideoScreen = () => {
           style={styles.image}
           source={{uri: avatar}}
           resizeMode="cover">
+          <HeaderCustom
+            backgroundStatusBar={color.transparent}
+            barStyle="light-content"
+            removeBorderWidth
+          />
           <Text style={styles.textName}>Calling to {name}...</Text>
         </ImageBackground>
       )}
@@ -177,7 +182,7 @@ export const VideoScreen = () => {
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.buttonIcon}
-          onPress={endCall}>
+          onPress={endCallVideo}>
           <CallEnd />
         </TouchableOpacity>
         <TouchableOpacity
@@ -202,7 +207,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.light,
     width: '100%',
     position: 'absolute',
-    bottom: 20,
+    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',

@@ -340,6 +340,7 @@ export const Chat = () => {
           channelName: conversationId,
           userId: uid,
           token: key,
+          ownerId: ownerId,
         });
       });
     setStateVideoCall(conversationId, true);

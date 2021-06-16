@@ -71,9 +71,12 @@ export const AppNavigation = () => {
     // @ts-ignore: Object is possibly 'null'.
     navigationRef.current && navigationRef.current.navigate(name, params);
   }
+  function goBack() {
+    // @ts-ignore: Object is possibly 'null'.
+    navigationRef.current && navigationRef.current.goBack();
+  }
 
   useEffect(() => {
-    console.log('state: ', AppState.currentState);
     const unsubscribe = messaging().setBackgroundMessageHandler(
       async (remoteMessage) => {
         console.log(remoteMessage);
@@ -101,13 +104,20 @@ export const AppNavigation = () => {
           appId: JSON.parse(remoteMessage.data.infoChannel).appId,
           channelName: JSON.parse(remoteMessage.data.infoChannel).channelName,
           userId: parseInt(remoteMessage.data?.userId),
+          ownerId: remoteMessage.data?.ownerId,
         });
         return;
       }
-      Alert.alert(
-        'A new FCM message arrived!',
-        JSON.stringify(remoteMessage.notification),
-      );
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (remoteMessage.data?.type === 'EndCall') {
+        goBack();
+        return;
+      }
     });
     return unsubscribe;
   }, []);

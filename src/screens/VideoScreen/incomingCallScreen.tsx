@@ -7,19 +7,22 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {RouteStackParamList, CustomIcon} from '../../components';
-import {setStateVideoCall, createKey} from '../../controller';
+import {setStateVideoCall, createKey, endCall} from '../../controller';
 import {ROUTER} from '../../constants/router';
 
 export const IncomingCallScreen = ({
   navigation,
   route,
 }: RouteStackParamList<'InitScreen'>) => {
-  const {name, avatar, appId, channelName, userId} = route.params;
-  function handleCancel() {
-    setStateVideoCall(channelName, false).then(() => navigation.goBack());
-  }
-  console.log('2');
-  function handleAccept() {
+  const {name, avatar, appId, channelName, userId, ownerId} = route.params;
+  console.log('ownerId: ', ownerId);
+
+  const handleCancel = () => {
+    endCall(ownerId).then(() => navigation.goBack());
+    setStateVideoCall(channelName, false);
+  };
+
+  const handleAccept = () => {
     createKey(appId, '0a74d4d72dc94bab83c42b611c802c8f', channelName, userId)
       .then((result) => result.json())
       .then((key) => {
@@ -32,7 +35,8 @@ export const IncomingCallScreen = ({
           token: key,
         });
       });
-  }
+  };
+
   return (
     <ImageBackground source={{uri: avatar}} style={styles.imageBackground}>
       <Text style={styles.text}>{name} is calling...</Text>

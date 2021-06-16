@@ -50,6 +50,22 @@ export const setStateVideoCall = async (
   });
 };
 
+export async function endCall(ownerId: string) {
+  return await fetch(
+    'https://still-brushlands-96770.herokuapp.com/notification/end-call',
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ownerId: ownerId,
+      }),
+    },
+  ).then((res) => res.json());
+}
+
 export async function callVideo(
   appId: string,
   channelName: string,
