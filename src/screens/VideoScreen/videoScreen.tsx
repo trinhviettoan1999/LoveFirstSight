@@ -152,6 +152,11 @@ export const VideoScreen = () => {
             width: WIDTH,
             height: HEIGHT,
           }}>
+          <HeaderCustom
+            backgroundStatusBar={color.transparent}
+            barStyle="light-content"
+            removeBorderWidth
+          />
           {!props.vidMute && (
             <RtcLocalView.SurfaceView
               style={styles.localVideo}

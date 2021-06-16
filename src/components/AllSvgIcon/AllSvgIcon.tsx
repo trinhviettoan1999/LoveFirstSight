@@ -282,6 +282,18 @@ export const Video = () => (
   />
 );
 
+export const VideoFull = () => (
+  <SvgXml
+    xml={`
+    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="25" cy="25" r="25" fill="#E0694E"/>
+    <path d="M16.25 16.5C14.4551 16.5 13 17.9551 13 19.75V30.25C13 32.0449 14.4551 33.5 16.25 33.5H25.75C27.5449 33.5 29 32.0449 29 30.25V19.75C29 17.9551 27.5449 16.5 25.75 16.5H16.25Z" fill="white"/>
+    <path d="M34.1232 31.6431L30.5 28.0935V21.9989L34.1121 18.3706C34.8988 17.5804 36.248 18.1375 36.248 19.2525V30.7502C36.248 31.8577 34.9143 32.4181 34.1232 31.6431Z" fill="white"/>
+    </svg>
+    `}
+  />
+);
+
 export const VideoOn = () => (
   <SvgXml
     xml={`

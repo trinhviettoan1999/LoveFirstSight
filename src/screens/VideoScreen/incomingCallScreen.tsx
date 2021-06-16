@@ -6,16 +6,16 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {RouteStackParamList, CustomIcon} from '../../components';
+import {RouteStackParamList, DisLike} from '../../components';
 import {setStateVideoCall, createKey, endCall} from '../../controller';
 import {ROUTER} from '../../constants/router';
+import {VideoFull} from '../../components/AllSvgIcon/AllSvgIcon';
 
 export const IncomingCallScreen = ({
   navigation,
   route,
 }: RouteStackParamList<'InitScreen'>) => {
   const {name, avatar, appId, channelName, userId, ownerId} = route.params;
-  console.log('ownerId: ', ownerId);
 
   const handleCancel = () => {
     endCall(ownerId).then(() => navigation.goBack());
@@ -42,16 +42,16 @@ export const IncomingCallScreen = ({
       <Text style={styles.text}>{name} is calling...</Text>
       <View style={styles.containerButton}>
         <TouchableOpacity
-          style={[styles.button, {backgroundColor: '#FFFFFF'}]}
-          activeOpacity={0.6}
+          style={styles.button}
+          activeOpacity={0.7}
           onPress={handleCancel}>
-          <CustomIcon name="cancel" size={25} color="#6A1616" />
+          <DisLike />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, {backgroundColor: '#6A1616'}]}
-          activeOpacity={0.6}
+          style={styles.button}
+          activeOpacity={0.7}
           onPress={handleAccept}>
-          <CustomIcon name="video" size={25} color="#FFFFFF" />
+          <VideoFull />
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -71,16 +71,16 @@ const styles = StyleSheet.create({
   },
   containerButton: {
     position: 'absolute',
-    bottom: 120,
+    bottom: 50,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
   button: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // width: 60,
+    // height: 60,
+    // borderRadius: 30,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
 });
