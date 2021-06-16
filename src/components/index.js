@@ -24,3 +24,4 @@ export * from './ProfileContainer/ProfileContainer';
 export * from './ImagesContainer/ImagesContainer';
 export * from './OptionsGroup/OptionsGroup';
 export * from './ModalPicture/ModalPicture';
+export * from './InputToolBar/InputToolBar';

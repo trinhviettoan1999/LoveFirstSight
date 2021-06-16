@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   PermissionsAndroid,
@@ -9,7 +9,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-  TextInput,
   ActivityIndicator,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -19,13 +18,7 @@ import {
   HeaderCustom,
   Back,
   Video,
-  Mic,
-  MicFill,
-  Camera,
-  CameraFill,
-  Gallery,
-  GalleryFill,
-  BinFill,
+  InputToolBar,
 } from '../../components';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
 import Sound from 'react-native-sound';
@@ -50,7 +43,6 @@ import {
 import 'react-native-console-time-polyfill';
 import {ROUTER} from './../../constants/router';
 import {color} from '../../theme';
-import {Send} from '../../components/AllSvgIcon/AllSvgIcon';
 import {sendMessage} from '../../controller/chat';
 
 const messagesRef = firestore().collection('conversations');
@@ -80,12 +72,6 @@ const getPhotos = (setPhotos: any) => {
     .catch((error) => {
       console.log(error);
     });
-};
-
-const getAudioTimeString = (seconds: any) => {
-  const m = parseInt(((seconds % (60 * 60)) / 60).toString());
-  const s = parseInt((seconds % 60).toString());
-  return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
 };
 
 let audio: Sound;
@@ -121,7 +107,6 @@ export const Chat = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [playAudio, setPlayAudio] = useState(false);
   const [decibels, setDecibels] = useState([{id: '1', height: 0}]);
-  const flatListWave = useRef(null);
   const [audioSettings] = useState({
     SampleRate: 22050,
     Channels: 1,
@@ -325,148 +310,6 @@ export const Chat = () => {
     );
   };
 
-  const renderInputToolBar = () => {
-    return (
-      <View style={styles.inputToolbar}>
-        {!startAudio ? (
-          <TouchableOpacity
-            style={styles.icon}
-            activeOpacity={0.9}
-            onPress={() => {
-              handleAudio();
-              setPressPhotos(false);
-              setPressCamera(false);
-            }}>
-            {startAudio ? <MicFill /> : <Mic />}
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={[styles.icon, {marginLeft: 10}]}
-            activeOpacity={0.9}
-            onPress={() => {
-              handleAudio();
-              setPressPhotos(false);
-              setPressCamera(false);
-            }}>
-            <BinFill />
-          </TouchableOpacity>
-        )}
-        {!startAudio && (
-          <TouchableOpacity
-            style={styles.icon}
-            activeOpacity={0.9}
-            onPress={() => {
-              getCamera();
-              setStartAudio(false);
-              setPressPhotos(false);
-            }}>
-            {pressCamera ? <CameraFill /> : <Camera />}
-          </TouchableOpacity>
-        )}
-        {!startAudio && (
-          <TouchableOpacity
-            style={styles.icon}
-            activeOpacity={0.9}
-            onPress={() => {
-              getPhotos(setPhotos);
-              setPressPhotos(!pressPhotos);
-              setPressCamera(false);
-            }}>
-            {pressPhotos ? <GalleryFill /> : <Gallery />}
-          </TouchableOpacity>
-        )}
-        {!startAudio ? (
-          <TextInput
-            style={styles.textInput}
-            value={valueText}
-            onChangeText={(text) => {
-              setValueText(text);
-            }}
-            multiline={true}
-            placeholder="Type a message..."
-          />
-        ) : (
-          <View style={styles.containerWaveSound}>
-            <FlatList
-              ref={flatListWave}
-              data={decibels}
-              renderItem={({item}) => (
-                <View style={[styles.chilWave, {height: item.height}]} />
-              )}
-              horizontal
-              keyExtractor={(item) => item.id}
-              style={styles.wave}
-              showsHorizontalScrollIndicator={false}
-              onContentSizeChange={() => {
-                // @ts-ignore: Object is possibly 'null'.
-                flatListWave.current.scrollToEnd({animated: true});
-              }}
-              onLayout={() => {
-                // @ts-ignore: Object is possibly 'null'.
-                flatListWave.current.scrollToEnd({animated: true});
-              }}
-            />
-            <Text style={styles.textTime}>
-              {getAudioTimeString(currentTime)}
-            </Text>
-          </View>
-        )}
-        {valueText ? (
-          <TouchableOpacity
-            style={[
-              styles.icon,
-              {
-                marginRight: 16,
-                width: 30,
-                alignItems: 'flex-end',
-              },
-            ]}
-            activeOpacity={0.9}
-            onPress={() => {
-              onSendMessage(valueText);
-              setValueText('');
-            }}>
-            <Send />
-          </TouchableOpacity>
-        ) : null}
-        {startAudio && (
-          <TouchableOpacity
-            style={[styles.icon, {marginRight: 16}]}
-            activeOpacity={0.9}
-            onPress={async () => {
-              handleAudio();
-              var fileName = `${uuid.v4()}.aac`;
-              await upload(
-                userId,
-                'sound',
-                fileName,
-                `file://${audioPath}`,
-                () => {
-                  getUrl(userId, 'sound', fileName).then((result) => {
-                    messagesRef
-                      .doc(conversationId)
-                      .collection('messages')
-                      .add({
-                        messageType: 'audio',
-                        audioV: result,
-                        text: '',
-                        createdAt: new Date().getTime(),
-                        user: {
-                          _id: userId,
-                          avatar: user.avatar,
-                        },
-                      });
-                  });
-                },
-              );
-            }}>
-            <Send />
-          </TouchableOpacity>
-        )}
-      </View>
-    );
-  };
-
   const handleBack = () => {
     if (flag) {
       navigation.replace(ROUTER.home);
@@ -502,20 +345,6 @@ export const Chat = () => {
 
   const onPressAvatar = () => {
     navigation.navigate(ROUTER.profile, {userId: ownerId});
-  };
-
-  const onSendMessage = (message: any) => {
-    sendMessage(
-      conversationId,
-      message,
-      userId,
-      // @ts-ignore: Object is possibly 'null'.
-      user.avatar,
-      ownerId,
-      // @ts-ignore: Object is possibly 'null'.
-      messages[0]?.user._id,
-      state,
-    );
   };
 
   const handleSendImage = () => {
@@ -559,6 +388,88 @@ export const Chat = () => {
           }}
         />
       </View>
+    );
+  };
+
+  const handleMic = () => {
+    handleAudio();
+    setPressPhotos(false);
+    setPressCamera(false);
+  };
+
+  const handleBin = () => {
+    handleAudio();
+    setPressPhotos(false);
+    setPressCamera(false);
+  };
+
+  const handleCamera = () => {
+    getCamera();
+    setStartAudio(false);
+    setPressPhotos(false);
+  };
+
+  const handleGallery = () => {
+    getPhotos(setPhotos);
+    setPressPhotos(!pressPhotos);
+    setPressCamera(false);
+  };
+
+  const handleSendAudio = async () => {
+    handleAudio();
+    var fileName = `${uuid.v4()}.aac`;
+    await upload(userId, 'sound', fileName, `file://${audioPath}`, () => {
+      getUrl(userId, 'sound', fileName).then((result) => {
+        messagesRef
+          .doc(conversationId)
+          .collection('messages')
+          .add({
+            messageType: 'audio',
+            audioV: result,
+            text: '',
+            createdAt: new Date().getTime(),
+            user: {
+              _id: userId,
+              avatar: user.avatar,
+            },
+          });
+      });
+    });
+  };
+
+  const onSendMessage = (message: any) => {
+    sendMessage(
+      conversationId,
+      message,
+      userId,
+      // @ts-ignore: Object is possibly 'null'.
+      user.avatar,
+      ownerId,
+      // @ts-ignore: Object is possibly 'null'.
+      messages[0]?.user._id,
+      state,
+    );
+    setValueText('');
+  };
+
+  const renderInputToolBar = () => {
+    return (
+      <InputToolBar
+        currentTime={currentTime}
+        startAudio={startAudio}
+        pressCamera={pressCamera}
+        pressPhotos={pressPhotos}
+        valueText={valueText}
+        decibels={decibels}
+        setValueText={setValueText}
+        setCurrentTime={setCurrentTime}
+        onSendMessage={() => onSendMessage(valueText)}
+        onPressMic={handleMic}
+        onPressBin={handleBin}
+        onPressCamera={handleCamera}
+        onPressGallery={handleGallery}
+        onPressSendAudio={handleSendAudio}
+      />
     );
   };
 
