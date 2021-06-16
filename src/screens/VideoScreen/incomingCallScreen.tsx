@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {RouteStackParamList, CustomIcon} from '../../components';
 import {setStateVideoCall, createKey} from '../../controller';
+import {ROUTER} from '../../constants/router';
 
 export const IncomingCallScreen = ({
   navigation,
@@ -17,11 +18,12 @@ export const IncomingCallScreen = ({
   function handleCancel() {
     setStateVideoCall(channelName, false).then(() => navigation.goBack());
   }
+  console.log('2');
   function handleAccept() {
     createKey(appId, '0a74d4d72dc94bab83c42b611c802c8f', channelName, userId)
       .then((result) => result.json())
       .then((key) => {
-        navigation.replace('VideoScreen', {
+        navigation.replace(ROUTER.video, {
           name,
           avatar,
           appId,

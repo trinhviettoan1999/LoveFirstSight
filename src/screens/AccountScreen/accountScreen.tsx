@@ -89,6 +89,7 @@ export const AccountScreen = () => {
     <View style={styles.container}>
       <HeaderCustom
         barStyle="dark-content"
+        backgroundStatusBar={color.bgWhite}
         leftComponent={<Text style={styles.textHeader}>Account</Text>}
         rightComponent={
           <TouchableOpacity onPress={() => navigation.navigate(ROUTER.setting)}>

@@ -6,6 +6,7 @@ import {
   PermissionsAndroid,
   ImageBackground,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import {updateUser} from '../../controller';
 import RtcEngine, {
@@ -17,6 +18,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Sound from 'react-native-sound';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import {
+  MicFill,
+  MicOff,
+  VideoOff,
+  VideoOn,
+  CallEnd,
+} from '../../components/AllSvgIcon/AllSvgIcon';
+import {color} from '../../theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const requestCameraAndAudioPermission = async () => {
   try {
@@ -57,6 +67,7 @@ export const VideoScreen = () => {
   });
 
   async function init() {
+    console.log('1');
     sound = new Sound(nhachuong);
     sound.setNumberOfLoops(-1);
     sound.setVolume(1);
@@ -108,6 +119,8 @@ export const VideoScreen = () => {
     navigation.goBack();
   }
 
+  useEffect(() => {});
+
   useEffect(() => {
     requestCameraAndAudioPermission();
     init();
@@ -119,7 +132,7 @@ export const VideoScreen = () => {
   }, []);
 
   return (
-    <View style={styles.full}>
+    <SafeAreaView style={styles.full} edges={['bottom']}>
       {props.peerIds.length === 0 && (
         <ImageBackground
           style={styles.image}
@@ -155,37 +168,41 @@ export const VideoScreen = () => {
         </View>
       )}
       <View style={styles.buttonBar}>
-        <Icon.Button
-          style={styles.iconStyle}
-          backgroundColor="#6A1616"
-          name={props.audMute ? 'mic-off' : 'mic'}
-          onPress={toggleAudio}
-        />
-        <Icon.Button
-          style={styles.iconStyle}
-          backgroundColor="#6A1616"
-          name="call-end"
-          onPress={endCall}
-        />
-        <Icon.Button
-          style={styles.iconStyle}
-          backgroundColor="#6A1616"
-          name={props.vidMute ? 'videocam-off' : 'videocam'}
-          onPress={toggleVideo}
-        />
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.buttonIcon}
+          onPress={toggleAudio}>
+          {props.audMute ? <MicOff /> : <MicFill />}
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.buttonIcon}
+          onPress={endCall}>
+          <CallEnd />
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.buttonIcon}
+          onPress={toggleVideo}>
+          {props.vidMute ? <VideoOff /> : <VideoOn />}
+        </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonIcon: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonBar: {
     height: 50,
-    backgroundColor: '#6A1616',
+    backgroundColor: color.light,
     width: '100%',
     position: 'absolute',
-    bottom: 0,
-    left: 0,
+    bottom: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',

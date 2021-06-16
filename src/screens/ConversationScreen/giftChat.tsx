@@ -39,6 +39,7 @@ import {
   getAllMessage,
   getMessageLoadMore,
   sendImageChat,
+  setStateVideoCall,
 } from '../../controller';
 import 'react-native-console-time-polyfill';
 import {ROUTER} from './../../constants/router';
@@ -341,6 +342,7 @@ export const Chat = () => {
           token: key,
         });
       });
+    setStateVideoCall(conversationId, true);
   };
 
   const onPressAvatar = () => {
