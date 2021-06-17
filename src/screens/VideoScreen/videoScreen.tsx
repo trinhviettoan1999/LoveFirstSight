@@ -68,12 +68,10 @@ export const VideoScreen = () => {
   });
 
   async function init() {
-    sound = new Sound(nhachuong);
-    sound.setNumberOfLoops(-1);
-    sound.setVolume(1);
+    console.log('2');
     engine = await RtcEngine.create(appId);
-    await engine.enableVideo(); //Enable the audio
     await engine.joinChannel(token, channelName, null, userId);
+    await engine.enableVideo(); //Enable the audio
     engine.addListener('UserJoined', (uid: number) => {
       // @ts-ignore: Object is possibly 'null'.
       if (props.peerIds.indexOf(uid) === -1) {
@@ -87,10 +85,11 @@ export const VideoScreen = () => {
         ...props,
         peerIds: props.peerIds.filter((result) => result !== uid),
       });
+      sound.stop();
       engine.leaveChannel();
       navigation.goBack();
     });
-    engine.addListener('JoinChannelSuccess', () => {
+    engine.addListener('JoinChannelSuccess', async () => {
       sound.play();
       setProps({...props, joinSucceed: true});
     });
@@ -110,7 +109,6 @@ export const VideoScreen = () => {
   }
 
   function endCallVideo() {
-    sound.stop();
     engine.leaveChannel();
     setStateVideoCall(channelName, false);
     updateUser({
@@ -123,6 +121,10 @@ export const VideoScreen = () => {
 
   useEffect(() => {
     requestCameraAndAudioPermission();
+    console.log('1');
+    sound = new Sound(nhachuong);
+    sound.setNumberOfLoops(-1);
+    sound.setVolume(1);
     init();
     return () => {
       requestCameraAndAudioPermission();
