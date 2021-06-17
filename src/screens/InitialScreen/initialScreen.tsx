@@ -8,6 +8,7 @@ import {
 import {checkPermisstionGPS} from '../../controller';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import auth from '@react-native-firebase/auth';
+import {ROUTER} from '../../constants';
 
 export const InitialScreen = ({
   navigation,
@@ -39,9 +40,9 @@ export const InitialScreen = ({
                     return;
                   }
                   if (auth().currentUser) {
-                    navigation.replace('StaplerScreen');
+                    navigation.replace(ROUTER.home);
                   } else {
-                    navigation.replace('SignInScreen');
+                    navigation.replace(ROUTER.signIn);
                   }
                 });
               }

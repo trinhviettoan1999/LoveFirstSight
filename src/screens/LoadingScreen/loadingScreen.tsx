@@ -5,6 +5,7 @@ import {RouteStackParamList, HeaderCustom} from '../../components';
 import {checkPermisstionGPS} from '../../controller';
 import messaging from '@react-native-firebase/messaging';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+import {ROUTER} from '../../constants/router';
 
 const logo = require('../../../assets/images/Logo.png');
 
@@ -48,9 +49,9 @@ export const LoadingScreen = ({
         } else {
           const time = setTimeout(() => {
             if (auth().currentUser) {
-              navigation.replace('StaplerScreen');
+              navigation.replace(ROUTER.home);
             } else {
-              navigation.replace('SignInScreen');
+              navigation.replace(ROUTER.signIn);
             }
           }, 2000);
           // clearTimeout(time);

@@ -71,7 +71,7 @@ export const InitIntroScreen = () => {
           <View style={styles.lengthContainer}>
             <Text style={styles.textLength}>{value.length} / 500</Text>
           </View>
-          <Text style={styles.textNote}>Visible on your Stapler profile</Text>
+          <Text style={styles.textNote}>Visible on your profile</Text>
           <ButtonCustom
             loading={load}
             title="CONTINUE"

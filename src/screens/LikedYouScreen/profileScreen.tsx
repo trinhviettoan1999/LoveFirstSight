@@ -31,6 +31,7 @@ import {
 } from '../../controller';
 import LinearGradient from 'react-native-linear-gradient';
 import {color, spacing} from '../../theme';
+import {ROUTER} from '../../constants/router';
 
 const sendNotification = async (ownerId: string, userId: string) => {
   return await fetch(
@@ -129,7 +130,7 @@ export const ProfileScreen = ({
                 activeOpacity={0.7}
                 onPress={() => {
                   if (route.params.flag) {
-                    navigation.replace('StaplerScreen');
+                    navigation.replace(ROUTER.home);
                   } else {
                     navigation.goBack();
                   }
@@ -166,7 +167,7 @@ export const ProfileScreen = ({
               onPressIgnore={async () => {
                 await ignoreUser(route.params.userId);
                 if (route.params.flag) {
-                  navigation.replace('StaplerScreen');
+                  navigation.replace(ROUTER.home);
                 } else {
                   navigation.goBack();
                 }
@@ -174,7 +175,7 @@ export const ProfileScreen = ({
               onPressSupperLike={async () => {
                 await superLikeUser(route.params.userId);
                 if (route.params.flag) {
-                  navigation.replace('StaplerScreen');
+                  navigation.replace(ROUTER.home);
                 } else {
                   navigation.goBack();
                 }
@@ -184,7 +185,7 @@ export const ProfileScreen = ({
                 // @ts-ignore: Object is possibly 'null'.
                 sendNotification(route.params.userId, auth().currentUser?.uid);
                 if (route.params.flag) {
-                  navigation.replace('StaplerScreen');
+                  navigation.replace(ROUTER.home);
                 } else {
                   navigation.goBack();
                 }
