@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Text,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {updateUser, setStateVideoCall, endCall} from '../../controller';
 import RtcEngine, {
@@ -28,28 +29,27 @@ import {color} from '../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {HeaderCustom} from '../../components';
 
-const requestCameraAndAudioPermission = async () => {
-  try {
-    const granted = await PermissionsAndroid.requestMultiple([
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-    ]);
-    if (
-      granted['android.permission.RECORD_AUDIO'] ===
-        PermissionsAndroid.RESULTS.GRANTED &&
-      granted['android.permission.CAMERA'] ===
-        PermissionsAndroid.RESULTS.GRANTED
-    ) {
-      console.log('You can use the cameras & mic');
-    } else {
-      console.log('Permission denied');
-    }
-  } catch (err) {
-    console.warn(err);
-  }
-};
+// const requestCameraAndAudioPermission = async () => {
+//   try {
+//     const granted = await PermissionsAndroid.requestMultiple([
+//       PermissionsAndroid.PERMISSIONS.CAMERA,
+//       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+//     ]);
+//     if (
+//       granted['android.permission.RECORD_AUDIO'] ===
+//         PermissionsAndroid.RESULTS.GRANTED &&
+//       granted['android.permission.CAMERA'] ===
+//         PermissionsAndroid.RESULTS.GRANTED
+//     ) {
+//       console.log('You can use the cameras & mic');
+//     } else {
+//       console.log('Permission denied');
+//     }
+//   } catch (err) {
+//     console.warn(err);
+//   }
+// };
 
-var engine: RtcEngine;
 let sound: Sound;
 const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
 const WIDTH = Dimensions.get('window').width;
@@ -58,6 +58,7 @@ const HEIGHT = Dimensions.get('window').height;
 export const VideoScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  var engine: RtcEngine | undefined;
   const {appId, channelName, token, avatar, name, userId, ownerId} =
     route.params;
   const [props, setProps] = useState({
@@ -67,12 +68,13 @@ export const VideoScreen = () => {
     joinSucceed: false,
   });
 
-  async function init() {
-    console.log('2');
-    engine = await RtcEngine.create(appId);
-    await engine.joinChannel(token, channelName, null, userId);
-    await engine.enableVideo(); //Enable the audio
-    engine.addListener('UserJoined', (uid: number) => {
+  const addListener = () => {
+    engine?.addListener('JoinChannelSuccess', () => {
+      console.log('JoinChannelSuccess');
+      setProps({...props, joinSucceed: true});
+    });
+    engine?.addListener('UserJoined', (uid: number) => {
+      console.log('UserJoined');
       // @ts-ignore: Object is possibly 'null'.
       if (props.peerIds.indexOf(uid) === -1) {
         sound.stop();
@@ -80,36 +82,62 @@ export const VideoScreen = () => {
         setProps({...props, peerIds: [...props.peerIds, uid]});
       }
     });
-    engine.addListener('UserOffline', (uid: number) => {
+    engine?.addListener('UserOffline', (uid: number) => {
+      console.log('UserOffline');
       setProps({
         ...props,
         peerIds: props.peerIds.filter((result) => result !== uid),
       });
       sound.stop();
-      engine.leaveChannel();
+      engine?.leaveChannel();
       navigation.goBack();
     });
-    engine.addListener('JoinChannelSuccess', async () => {
-      sound.play();
-      setProps({...props, joinSucceed: true});
-    });
-    engine.addListener('Error', (errorCode) => {
+    engine?.addListener('Error', (errorCode) => {
       console.info('Error', errorCode);
     });
-  }
+  };
 
-  function toggleAudio() {
+  const init = async () => {
+    engine = await RtcEngine.create(appId);
+    await engine
+      .renewToken(token)
+      .then((result) => console.log('result: ', result))
+      .catch((err) => console.log('err: ', err));
+    addListener();
+    await engine?.enableAudio();
+    await engine?.enableVideo(); //Enable the audio
+  };
+
+  const joinChannel = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      ]);
+    }
+    await engine?.joinChannel(token, channelName, null, userId);
+  };
+
+  // async function init() {
+  //   // engine = await RtcEngine.create(appId);
+  //   await engine
+  //     ?.joinChannel(token, channelName, null, userId)
+  //     .then((result) => console.log('result: ', result))
+  //     .catch((err) => console.log('err: ', err));
+  // }
+
+  const toggleAudio = () => {
     engine.muteLocalAudioStream(!props.audMute);
     setProps({...props, audMute: !props.audMute});
-  }
+  };
 
-  function toggleVideo() {
+  const toggleVideo = () => {
     engine.muteLocalVideoStream(!props.vidMute);
     setProps({...props, vidMute: !props.vidMute});
-  }
+  };
 
-  function endCallVideo() {
-    engine.leaveChannel();
+  const endCallVideo = async () => {
+    await engine?.leaveChannel();
     setStateVideoCall(channelName, false);
     updateUser({
       stateJoinCall: false,
@@ -117,21 +145,27 @@ export const VideoScreen = () => {
     setProps({...props, peerIds: [], joinSucceed: false});
     endCall(ownerId);
     navigation.goBack();
-  }
+  };
 
   useEffect(() => {
-    requestCameraAndAudioPermission();
-    console.log('1');
-    sound = new Sound(nhachuong);
-    sound.setNumberOfLoops(-1);
-    sound.setVolume(1);
-    init();
+    init().then(() => {
+      joinChannel();
+    });
     return () => {
-      requestCameraAndAudioPermission();
       init();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!props.joinSucceed) {
+      sound = new Sound(nhachuong);
+      sound.setNumberOfLoops(-1);
+      sound.setVolume(1);
+      sound.play();
+      console.log('ok');
+    }
+  }, [props.joinSucceed]);
 
   return (
     <SafeAreaView style={styles.full} edges={['bottom']}>
