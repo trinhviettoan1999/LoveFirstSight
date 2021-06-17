@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stapler</string>
+    <string name="app_name">First Love Sight</string>
     <string name="facebook_app_id">291194932688423</string>
     <string name="fb_login_protocol_scheme">fb291194932688423</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
