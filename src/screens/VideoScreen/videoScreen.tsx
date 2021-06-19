@@ -9,7 +9,11 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import {updateUser, setStateVideoCall, endCall} from '../../controller';
+import {
+  updateUser,
+  setStateVideoCall,
+  getStateVideoCall,
+} from '../../controller';
 import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
@@ -50,8 +54,8 @@ import {HeaderCustom} from '../../components';
 //   }
 // };
 
-let sound: Sound;
 const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
+const sound = new Sound(nhachuong);
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
@@ -88,9 +92,6 @@ export const VideoScreen = () => {
         ...props,
         peerIds: props.peerIds.filter((result) => result !== uid),
       });
-      sound.stop();
-      engine?.leaveChannel();
-      navigation.goBack();
     });
     engine?.addListener('Error', (errorCode) => {
       console.info('Error', errorCode);
@@ -99,10 +100,6 @@ export const VideoScreen = () => {
 
   const init = async () => {
     engine = await RtcEngine.create(appId);
-    await engine
-      .renewToken(token)
-      .then((result) => console.log('result: ', result))
-      .catch((err) => console.log('err: ', err));
     addListener();
     await engine?.enableAudio();
     await engine?.enableVideo(); //Enable the audio
@@ -118,33 +115,23 @@ export const VideoScreen = () => {
     await engine?.joinChannel(token, channelName, null, userId);
   };
 
-  // async function init() {
-  //   // engine = await RtcEngine.create(appId);
-  //   await engine
-  //     ?.joinChannel(token, channelName, null, userId)
-  //     .then((result) => console.log('result: ', result))
-  //     .catch((err) => console.log('err: ', err));
-  // }
-
   const toggleAudio = () => {
-    engine.muteLocalAudioStream(!props.audMute);
+    engine?.muteLocalAudioStream(!props.audMute);
     setProps({...props, audMute: !props.audMute});
   };
 
   const toggleVideo = () => {
-    engine.muteLocalVideoStream(!props.vidMute);
+    engine?.muteLocalVideoStream(!props.vidMute);
     setProps({...props, vidMute: !props.vidMute});
   };
 
   const endCallVideo = async () => {
-    await engine?.leaveChannel();
+    sound.stop();
     setStateVideoCall(channelName, false);
     updateUser({
       stateJoinCall: false,
     });
     setProps({...props, peerIds: [], joinSucceed: false});
-    endCall(ownerId);
-    navigation.goBack();
   };
 
   useEffect(() => {
@@ -158,14 +145,21 @@ export const VideoScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (!props.joinSucceed) {
-      sound = new Sound(nhachuong);
-      sound.setNumberOfLoops(-1);
-      sound.setVolume(1);
-      sound.play();
-      console.log('ok');
-    }
-  }, [props.joinSucceed]);
+    sound.setNumberOfLoops(-1);
+    sound.setVolume(1);
+    sound.play();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    getStateVideoCall(channelName, async (result: boolean) => {
+      if (!result) {
+        await engine?.leaveChannel();
+        navigation.goBack();
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SafeAreaView style={styles.full} edges={['bottom']}>

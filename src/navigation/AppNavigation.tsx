@@ -71,10 +71,6 @@ export const AppNavigation = () => {
     // @ts-ignore: Object is possibly 'null'.
     navigationRef.current && navigationRef.current.navigate(name, params);
   }
-  function goBack() {
-    // @ts-ignore: Object is possibly 'null'.
-    navigationRef.current && navigationRef.current.goBack();
-  }
 
   useEffect(() => {
     const unsubscribe = messaging().setBackgroundMessageHandler(
@@ -106,16 +102,6 @@ export const AppNavigation = () => {
           userId: parseInt(remoteMessage.data?.userId),
           ownerId: remoteMessage.data?.ownerId,
         });
-        return;
-      }
-    });
-    return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      if (remoteMessage.data?.type === 'EndCall') {
-        goBack();
         return;
       }
     });

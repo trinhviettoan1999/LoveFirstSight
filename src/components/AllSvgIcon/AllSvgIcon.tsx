@@ -140,6 +140,16 @@ export const Info = () => (
   />
 );
 
+export const InfoDown = () => (
+  <SvgXml
+    xml={`
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.998 13.2462L8.99865 13.2469L8.998 13.2462ZM8.998 13.2462L9.44528 12.6442L8.998 13.2462Z" fill="#E0694E" stroke="white" stroke-width="2"/>
+    </svg>
+    `}
+  />
+);
+
 export const Home = () => (
   <SvgXml
     xml={`

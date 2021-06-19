@@ -19,12 +19,11 @@ import {
   ProfileContainer,
   ImagesContainer,
   OptionsGroup,
+  ButtonCustom,
 } from '../../components';
-import Modal from 'react-native-modal';
 import {
   likeUser,
   ignoreUser,
-  reportUser,
   superLikeUser,
   getAvailableUsers,
   computeAge,
@@ -116,6 +115,7 @@ export const StaplerScreen = () => {
   const [isModalVisibleMenu, setIsModalVisibleMenu] = useState(false);
   const [user, setUser] = useState(User);
   const [load, setLoad] = useState(true);
+  const [loadButton, setLoadButton] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [coordinate, setCoordinate] = useState({
     lat: 0,
@@ -143,6 +143,30 @@ export const StaplerScreen = () => {
         state: true,
       });
     });
+  };
+
+  const handleBlock = () => {
+    setLoadButton(true);
+    blockUser(user.userId);
+    setLoad(!load);
+    setLoadButton(false);
+  };
+
+  const handleLike = async () => {
+    await likeUser(user.userId);
+    // @ts-ignore: Object is possibly 'null'.
+    sendNotification(user.userId, auth().currentUser?.uid);
+    setLoad(!load);
+  };
+
+  const handleDisLike = async () => {
+    await ignoreUser(user.userId);
+    setLoad(!load);
+  };
+
+  const handleSupperLike = async () => {
+    await superLikeUser(user.userId);
+    setLoad(!load);
   };
 
   useEffect(() => {
@@ -207,24 +231,19 @@ export const StaplerScreen = () => {
               <View>
                 <ProfileContainer user={user} coordinate={coordinate} />
                 <ImagesContainer images={user.images} />
+                <ButtonCustom
+                  loading={loadButton}
+                  title="Block User"
+                  buttonStyle={styles.button}
+                  onPress={handleBlock}
+                />
               </View>
             )}
           </ScrollView>
           <OptionsGroup
-            onPressIgnore={async () => {
-              await ignoreUser(user.userId);
-              setLoad(!load);
-            }}
-            onPressSupperLike={async () => {
-              await superLikeUser(user.userId);
-              setLoad(!load);
-            }}
-            onPressLike={async () => {
-              await likeUser(user.userId);
-              // @ts-ignore: Object is possibly 'null'.
-              sendNotification(user.userId, auth().currentUser?.uid);
-              setLoad(!load);
-            }}
+            onPressIgnore={handleDisLike}
+            onPressSupperLike={handleSupperLike}
+            onPressLike={handleLike}
           />
         </View>
       ) : null}
@@ -254,5 +273,13 @@ const styles = StyleSheet.create({
     lineHeight: 27,
     fontWeight: '700',
     fontSize: 25,
+  },
+  button: {
+    alignSelf: 'center',
+    minHeight: 50,
+    borderRadius: spacing[2],
+    width: WIDTH - 32,
+    backgroundColor: color.primary,
+    marginTop: spacing[4],
   },
 });

@@ -6,15 +6,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  StatusBar,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {CustomIcon} from '../../components';
+import {CustomIcon, HeaderCustom} from '../../components';
 import {computeAge, getLikedUsers, getTopPick} from '../../controller';
 import {color} from '../../theme/color';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {ROUTER} from '../../constants/router';
 
 const Tab = createMaterialTopTabNavigator();
@@ -147,10 +145,14 @@ const TopPick = () => {
 
 export const LikedYouScreen = () => {
   return (
-    <SafeAreaView
-      style={{width: WIDTH, height: HEIGHT, backgroundColor: color.bgWhite}}
-      edges={['top']}>
-      <StatusBar barStyle="dark-content" backgroundColor={color.bgWhite} />
+    <View
+      style={{width: WIDTH, height: HEIGHT, backgroundColor: color.bgWhite}}>
+      <HeaderCustom
+        height={0}
+        backgroundStatusBar={color.bgWhite}
+        removeBorderWidth
+        barStyle="dark-content"
+      />
       <Tab.Navigator
         lazy={false}
         tabBarOptions={{
@@ -174,7 +176,7 @@ export const LikedYouScreen = () => {
           options={{tabBarLabel: 'Top Pick'}}
         />
       </Tab.Navigator>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -14,6 +14,7 @@ type propsHeader = {
   removeBorderWidth?: boolean;
   textColor?: string;
   ViewComponent?: React.Component;
+  height?: number;
 };
 
 export const HeaderCustom = ({
@@ -25,6 +26,7 @@ export const HeaderCustom = ({
   barStyle = 'dark-content',
   removeBorderWidth = false,
   textColor = color.primary,
+  height,
 }: propsHeader) => {
   return (
     <Header
@@ -44,6 +46,7 @@ export const HeaderCustom = ({
         }
       }
       containerStyle={{
+        height: height,
         backgroundColor: backgroundStatusBar,
         paddingHorizontal: spacing[4],
         borderBottomWidth: removeBorderWidth ? 0 : 1,

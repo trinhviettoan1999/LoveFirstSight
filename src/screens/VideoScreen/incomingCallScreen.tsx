@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,9 +7,17 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {RouteStackParamList, DisLike} from '../../components';
-import {setStateVideoCall, createKey, endCall} from '../../controller';
+import {
+  setStateVideoCall,
+  createKey,
+  getStateVideoCall,
+} from '../../controller';
 import {ROUTER} from '../../constants/router';
 import {VideoFull} from '../../components/AllSvgIcon/AllSvgIcon';
+import Sound from 'react-native-sound';
+
+const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
+const sound = new Sound(nhachuong);
 
 export const IncomingCallScreen = ({
   navigation,
@@ -18,9 +26,25 @@ export const IncomingCallScreen = ({
   const {name, avatar, appId, channelName, userId, ownerId} = route.params;
 
   const handleCancel = () => {
-    endCall(ownerId).then(() => navigation.goBack());
     setStateVideoCall(channelName, false);
   };
+
+  useEffect(() => {
+    getStateVideoCall(channelName, async (result: boolean) => {
+      if (!result) {
+        sound.stop();
+        navigation.goBack();
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    sound.setNumberOfLoops(-1);
+    sound.setVolume(1);
+    sound.play();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleAccept = () => {
     createKey(appId, '0a74d4d72dc94bab83c42b611c802c8f', channelName, userId)
