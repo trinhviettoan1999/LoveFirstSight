@@ -199,7 +199,7 @@ export const StaplerScreen = () => {
   useEffect(() => {
     if (showInfo) {
       // @ts-ignore: Object is possibly 'null'.
-      ref_scroll.current.scrollTo({x: 0, y: HEIGHT, animated: true});
+      ref_scroll.current.scrollTo({x: 0, y: HEIGHT - 50, animated: true});
     }
   }, [showInfo]);
 
