@@ -46,11 +46,13 @@ static void InitializeFlipper(UIApplication *application) {
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [FIRApp configure];
+  //Config Facebook
   [[FBSDKApplicationDelegate sharedInstance] application:application
                            didFinishLaunchingWithOptions:launchOptions];
   return YES;
 }
 
+//Config Facebook
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
             options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
@@ -61,6 +63,7 @@ static void InitializeFlipper(UIApplication *application) {
   return YES;
 }
 
+//Config Facebook
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts
 {
   UIOpenURLContext *context = URLContexts.allObjects.firstObject;
