@@ -21,7 +21,7 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import FlashMessage from 'react-native-flash-message';
 import {ROUTER} from '../constants';
-import {Alert, AppState} from 'react-native';
+import {color} from '../theme/color';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -44,12 +44,9 @@ const AppTab = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: '#6A1616',
-        inactiveTintColor: '#212121',
-        labelStyle: {fontSize: 12},
         showLabel: false,
         style: {
-          backgroundColor: '#F8F8F8',
+          backgroundColor: color.bgWhite,
         },
       }}
       lazy={false}>

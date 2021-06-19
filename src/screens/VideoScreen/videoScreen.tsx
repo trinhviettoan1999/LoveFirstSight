@@ -33,27 +33,6 @@ import {color} from '../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {HeaderCustom} from '../../components';
 
-// const requestCameraAndAudioPermission = async () => {
-//   try {
-//     const granted = await PermissionsAndroid.requestMultiple([
-//       PermissionsAndroid.PERMISSIONS.CAMERA,
-//       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-//     ]);
-//     if (
-//       granted['android.permission.RECORD_AUDIO'] ===
-//         PermissionsAndroid.RESULTS.GRANTED &&
-//       granted['android.permission.CAMERA'] ===
-//         PermissionsAndroid.RESULTS.GRANTED
-//     ) {
-//       console.log('You can use the cameras & mic');
-//     } else {
-//       console.log('Permission denied');
-//     }
-//   } catch (err) {
-//     console.warn(err);
-//   }
-// };
-
 const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
 const sound = new Sound(nhachuong);
 const WIDTH = Dimensions.get('window').width;

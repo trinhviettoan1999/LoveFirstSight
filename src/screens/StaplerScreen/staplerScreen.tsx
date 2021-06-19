@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -121,6 +121,7 @@ export const StaplerScreen = () => {
     lat: 0,
     long: 0,
   });
+  const ref_scroll = useRef(null);
 
   async function loadData(isMounted: boolean) {
     // setIsModalVisibleLoading(true);
@@ -195,12 +196,20 @@ export const StaplerScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load]);
 
+  useEffect(() => {
+    if (showInfo) {
+      // @ts-ignore: Object is possibly 'null'.
+      ref_scroll.current.scrollTo({x: 0, y: HEIGHT, animated: true});
+    }
+  }, [showInfo]);
+
   return (
     <View style={styles.wrap}>
       {load && <Loading />}
       {user?.name && !load ? (
         <View>
           <ScrollView
+            ref={ref_scroll}
             style={{width: WIDTH, height: HEIGHT - tabBarHeight}}
             contentContainerStyle={{paddingBottom: showInfo ? 70 : 0}}>
             <ImageBackground
@@ -220,7 +229,10 @@ export const StaplerScreen = () => {
                   <Text style={styles.name}>
                     {`${user.name}  ${computeAge(user.birthday)}`}
                   </Text>
-                  <TouchableOpacity onPress={() => setShowInfo(!showInfo)}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowInfo(!showInfo);
+                    }}>
                     <Info />
                   </TouchableOpacity>
                 </View>
