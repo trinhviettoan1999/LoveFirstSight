@@ -4,15 +4,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-  Image,
   TextInput,
   FlatList,
+  Dimensions,
 } from 'react-native';
 import {
-  StatusBarCustom,
-  Header,
-  RouteStackParamList,
   CustomIcon,
+  HeaderCustom,
+  Back,
+  VideoOn,
+  GalleryFill,
 } from '../../components';
 import FastImage from 'react-native-fast-image';
 import uuid from 'react-native-uuid';
@@ -20,9 +21,9 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Video from 'react-native-video';
 import {addPost} from '../../controller';
 import auth from '@react-native-firebase/auth';
-
-var videoIcon = require('../../../assets/images/video-icon.png');
-var galleryIcon = require('../../../assets/images/gallery-icon.png');
+import {color, spacing} from '../../theme';
+import {useNavigation} from '@react-navigation/native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const ItemImage = ({item, onPressRemove}: any) => {
   return (
@@ -45,13 +46,17 @@ const ItemImage = ({item, onPressRemove}: any) => {
         activeOpacity={0.5}
         onPress={onPressRemove}
         style={{position: 'absolute', bottom: 100, left: 100}}>
-        <CustomIcon name="cancel" size={20} color="#6A1616" />
+        <CustomIcon name="cancel" size={20} color="#E10000" />
       </TouchableOpacity>
     </View>
   );
 };
 
-export const PostScreen = ({navigation}: RouteStackParamList<'InitScreen'>) => {
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
+export const PostScreen = () => {
+  const navigation = useNavigation();
   const [content, onChangeContent] = useState('');
   const [listCollection, setListCollection] = useState([]);
   const removeItem = (items: any, valueId: string) => {
@@ -71,97 +76,113 @@ export const PostScreen = ({navigation}: RouteStackParamList<'InitScreen'>) => {
       />
     );
   };
+
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
+  const handlePost = () => {
+    // @ts-ignore: Object is possibly 'null'.
+    addPost(auth().currentUser.uid, content, listCollection, () =>
+      navigation.goBack(),
+    );
+  };
+
+  const handleAddImage = () => {
+    ImagePicker.openPicker({
+      mediaType: 'photo',
+      multiple: true,
+    }).then((images) => {
+      // @ts-ignore: Object is possibly 'null'.
+      let arrayResult = [];
+      images.forEach((image) => {
+        let obj = {collectionId: uuid.v4(), mediaType: 'image'};
+        Object.assign(obj, image);
+        arrayResult.push(obj);
+      });
+      //@ts-ignore: Object is possibly 'null'.
+      setListCollection(listCollection.concat(arrayResult));
+    });
+  };
+
+  const handleAddVideo = () => {
+    ImagePicker.openPicker({
+      mediaType: 'video',
+      multiple: true,
+    }).then((videos) => {
+      // @ts-ignore: Object is possibly 'null'.
+      let arrayResult = [];
+      videos.forEach((video) => {
+        let obj = {collectionId: uuid.v4(), mediaType: 'video'};
+        Object.assign(obj, video);
+        arrayResult.push(obj);
+      });
+      //@ts-ignore: Object is possibly 'null'.
+      setListCollection(listCollection.concat(arrayResult));
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         title="Create post"
-        showIconLeft={true}
-        iconNameLeft="back"
-        showTextRight={content || listCollection.length > 0 ? true : false}
-        textRight="Post"
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
-        onPressRight={() => {
-          // @ts-ignore: Object is possibly 'null'.
-          addPost(auth().currentUser.uid, content, listCollection, () =>
-            navigation.goBack(),
-          );
-        }}
+        leftComponent={
+          <TouchableOpacity onPress={handleBack}>
+            <Back />
+          </TouchableOpacity>
+        }
+        rightComponent={
+          content || listCollection.length > 0 ? (
+            <Text style={styles.post} onPress={handlePost}>
+              Post
+            </Text>
+          ) : (
+            <View />
+          )
+        }
       />
-      <View style={styles.content}>
-        <View style={styles.containerInput}>
-          <TextInput
-            multiline
-            onChangeText={(text) => onChangeContent(text)}
-            placeholder="Type content..."
-            value={content}
-            style={styles.textContent}
-          />
-        </View>
-        {listCollection ? (
-          <View>
-            <FlatList
-              horizontal
-              data={listCollection}
-              renderItem={renderItemImage}
-              keyExtractor={(item) =>
-                // @ts-ignore: Object is possibly 'null'.
-                item.path
-              }
+      <KeyboardAwareScrollView
+        contentContainerStyle={{width: WIDTH, height: HEIGHT - 65}}>
+        <View style={styles.content}>
+          <View style={styles.containerInput}>
+            <TextInput
+              multiline
+              onChangeText={(text) => onChangeContent(text)}
+              placeholder="Type content..."
+              value={content}
+              style={styles.textContent}
             />
           </View>
-        ) : null}
-      </View>
-      <View style={styles.bottomButtonContainer}>
+          {listCollection ? (
+            <View>
+              <FlatList
+                horizontal
+                data={listCollection}
+                renderItem={renderItemImage}
+                keyExtractor={(item) =>
+                  // @ts-ignore: Object is possibly 'null'.
+                  item.path
+                }
+              />
+            </View>
+          ) : null}
+        </View>
         <TouchableOpacity
           style={styles.bottomButton}
-          onPress={() =>
-            ImagePicker.openPicker({
-              mediaType: 'photo',
-              multiple: true,
-            }).then((images) => {
-              // @ts-ignore: Object is possibly 'null'.
-              let arrayResult = [];
-              images.forEach((image) => {
-                let obj = {collectionId: uuid.v4(), mediaType: 'image'};
-                Object.assign(obj, image);
-                arrayResult.push(obj);
-              });
-              //@ts-ignore: Object is possibly 'null'.
-              setListCollection(listCollection.concat(arrayResult));
-            })
-          }
+          onPress={handleAddImage}
           activeOpacity={0.8}>
-          <Image style={{width: 30, height: 30}} source={galleryIcon} />
+          <GalleryFill />
           <Text style={styles.textSelection}>Add images to your post</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.bottomButtonContainer}>
         <TouchableOpacity
           style={styles.bottomButton}
-          onPress={() =>
-            ImagePicker.openPicker({
-              mediaType: 'video',
-              multiple: true,
-            }).then((videos) => {
-              // @ts-ignore: Object is possibly 'null'.
-              let arrayResult = [];
-              videos.forEach((video) => {
-                let obj = {collectionId: uuid.v4(), mediaType: 'video'};
-                Object.assign(obj, video);
-                arrayResult.push(obj);
-              });
-              //@ts-ignore: Object is possibly 'null'.
-              setListCollection(listCollection.concat(arrayResult));
-            })
-          }
+          onPress={handleAddVideo}
           activeOpacity={0.8}>
-          <Image style={{width: 30, height: 30}} source={videoIcon} />
+          <VideoOn />
           <Text style={styles.textSelection}>Add video to your post</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
@@ -171,19 +192,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F8F8',
   },
-
-  bottomButtonContainer: {
-    flex: 1,
-    paddingHorizontal: 16,
-    borderTopWidth: 0.2,
-    flexDirection: 'row',
-  },
   content: {
-    flex: 10,
-    paddingHorizontal: 16,
-    marginBottom: 16,
+    height: HEIGHT - 150,
+    paddingHorizontal: spacing[4],
+    paddingBottom: spacing[4],
+    backgroundColor: color.light,
+  },
+  post: {
+    fontSize: 18,
+    fontWeight: '400',
+    color: color.blue,
   },
   bottomButton: {
+    maxHeight: 50,
+    backgroundColor: color.bgWhite,
+    borderTopWidth: 0.5,
+    borderColor: color.textGray,
+    paddingHorizontal: spacing[4],
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
