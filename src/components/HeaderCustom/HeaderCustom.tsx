@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import {StatusBarStyle} from 'react-native';
-import {Header, HeaderProps} from 'react-native-elements';
+import {Header} from 'react-native-elements';
 import {color, spacing} from '../../theme';
 
 type propsHeader = {
@@ -23,15 +23,14 @@ export const HeaderCustom = ({
   rightComponent,
   centerComponent,
   backgroundStatusBar = color.second,
-  barStyle = 'dark-content',
   removeBorderWidth = false,
   textColor = color.primary,
   height,
 }: propsHeader) => {
   return (
     <Header
+      barStyle="dark-content"
       statusBarProps={{
-        barStyle: barStyle,
         backgroundColor: backgroundStatusBar,
       }}
       centerComponent={

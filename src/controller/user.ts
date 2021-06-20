@@ -334,3 +334,8 @@ export const deleteTokenToDatabase = async (token: string) => {
       tokens: firestore.FieldValue.arrayRemove(token),
     });
 };
+
+export const getUserPost = async (userId: string) => {
+  const user = (await firestore().collection('users').doc(userId).get()).data();
+  return user;
+};
