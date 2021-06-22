@@ -1,18 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  TextInput,
-  FlatList,
-} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text, FlatList} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {HeaderCustom, PostItem} from '../../components';
-import {getAllPosts, getUserPost} from '../../controller';
+import {getAllPosts} from '../../controller';
 import auth from '@react-native-firebase/auth';
-import {color} from '../../theme';
+import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
 
 export const NewsScreen = () => {
@@ -38,12 +31,7 @@ export const NewsScreen = () => {
           }}
           resizeMode={FastImage.resizeMode.cover}
         />
-        <TextInput
-          placeholder="Create your new post!!"
-          placeholderTextColor="#000000"
-          editable={false}
-          style={styles.textCreatePost}
-        />
+        <Text style={styles.textCreatePost}>Create your new post!!</Text>
       </TouchableOpacity>
     );
   };
@@ -120,11 +108,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   textCreatePost: {
-    flex: 2,
-    borderWidth: 0.3,
-    borderRadius: 10,
-    width: '100%',
-    backgroundColor: '#F8F8F8',
+    flex: 1,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
+    borderRadius: spacing[1],
+    borderWidth: 1,
+    borderColor: color.textGray,
+    color: color.text,
+    fontSize: 16,
+    fontWeight: '500',
   },
   contentContainer: {
     marginTop: 10,

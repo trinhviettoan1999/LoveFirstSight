@@ -1,12 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Dimensions,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
 import Video from 'react-native-video';
 import {getUserPost, unVotePost, votePost} from '../../controller';
 import auth from '@react-native-firebase/auth';
 import {Comment, Heart, HeartFill} from '../AllSvgIcon/AllSvgIcon';
-import {color} from '../../theme';
+import {color, spacing} from '../../theme';
 
 interface ItemPostProps {
   userId: string;
@@ -17,6 +23,8 @@ interface ItemPostProps {
   comments?: any;
   onPressComment?: any;
 }
+
+const WIDTH = Dimensions.get('window').width;
 
 export const PostItem = ({
   userId,
@@ -79,7 +87,7 @@ export const PostItem = ({
                         headers: {Authorization: 'staplerapp123456'},
                         priority: FastImage.priority.normal,
                       }}
-                      resizeMode={FastImage.resizeMode.cover}
+                      resizeMode={FastImage.resizeMode.stretch}
                     />
                   );
                 } else {
@@ -88,6 +96,7 @@ export const PostItem = ({
                       key={item.collectionId}
                       style={styles.wrapper}
                       source={{uri: item.path}}
+                      resizeMode="cover"
                     />
                   );
                 }
@@ -172,7 +181,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   wrapper: {
-    width: '100%',
+    width: WIDTH - spacing[4] * 2,
     height: 350,
   },
   countView: {
