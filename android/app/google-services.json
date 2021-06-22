@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "500865270015-0si2o6um9qu19rqs1oi75rqcfqnqcpho.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.stapler.client",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
           "client_id": "500865270015-2bnn9r63o2e8b9o4gpq7livn78nafaeo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

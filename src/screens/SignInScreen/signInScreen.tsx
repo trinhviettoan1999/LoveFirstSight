@@ -208,11 +208,17 @@ export const SignInScreen = ({navigation}) => {
           }
           errorMessage={required && !password ? 'Password is required' : ''}
         />
-        <Text
-          style={styles.textForgot}
-          onPress={() => navigation.navigate(ROUTER.forGotPassword)}>
-          Forgot Password?
-        </Text>
+        <View
+          style={{
+            marginTop: -10,
+            alignItems: 'flex-end',
+          }}>
+          <Text
+            style={styles.textForgot}
+            onPress={() => navigation.navigate(ROUTER.forGotPassword)}>
+            Forgot Password?
+          </Text>
+        </View>
         <ButtonCustom
           loading={load}
           title="LOG IN"
@@ -296,8 +302,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     color: color.text,
-    textAlign: 'right',
-    marginTop: -10,
   },
   textOptions: {
     marginTop: spacing[5],
