@@ -1,18 +1,19 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, Platform, Image} from 'react-native';
+import {ImageBackground, Platform, Dimensions} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
-import {RouteStackParamList, HeaderCustom} from '../../components';
 import {checkPermisstionGPS} from '../../controller';
 import messaging from '@react-native-firebase/messaging';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {ROUTER} from '../../constants/router';
 
 const logo = require('../../../assets/images/Logo.png');
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
-export const LoadingScreen = ({
-  navigation,
-}: RouteStackParamList<'LoadingScreen'>) => {
-  function load() {
+export const LoadingScreen = () => {
+  const navigation = useNavigation();
+  const load = () => {
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
@@ -47,17 +48,16 @@ export const LoadingScreen = ({
             });
           }
         } else {
-          const time = setTimeout(() => {
+          setTimeout(() => {
             if (auth().currentUser) {
               navigation.replace(ROUTER.home);
             } else {
               navigation.replace(ROUTER.signIn);
             }
           }, 2000);
-          // clearTimeout(time);
         }
       });
-  }
+  };
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -69,7 +69,7 @@ export const LoadingScreen = ({
           if (data) {
             checkPermisstionGPS().then((result) => {
               if (!result) {
-                navigation.replace('InitialScreen');
+                navigation.replace(ROUTER.initial);
               }
               load();
             });
@@ -77,14 +77,14 @@ export const LoadingScreen = ({
         })
         .catch((err) => {
           if (err.message === 'denied') {
-            navigation.replace('InitialScreen');
+            navigation.replace(ROUTER.initial);
           }
           console.log(err);
         });
     } else {
       checkPermisstionGPS().then((result) => {
         if (!result) {
-          navigation.replace('InitialScreen');
+          navigation.replace(ROUTER.initial);
         }
         load();
       });
@@ -93,26 +93,6 @@ export const LoadingScreen = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <View style={styles.container}>
-      <Image
-        style={{height: 250, width: 250}}
-        source={logo}
-        resizeMode="contain"
-      />
-    </View>
+    <ImageBackground style={{height: HEIGHT, width: WIDTH}} source={logo} />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  activityIndicator: {
-    bottom: 15,
-    position: 'absolute',
-    alignItems: 'center',
-  },
-});

@@ -1,5 +1,6 @@
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {LoginManager} from 'react-native-fbsdk';
 import {Alert} from 'react-native';
 //Login Account
 export const loginAccount = async (
@@ -42,6 +43,9 @@ export const signOutAccount = async (success_callback: any) => {
     });
     await GoogleSignin.revokeAccess();
     await GoogleSignin.signOut();
+  }
+  if (auth().currentUser?.providerData[0].providerId === 'facebook.com') {
+    LoginManager.logOut();
   }
   auth().signOut().then(success_callback);
 };

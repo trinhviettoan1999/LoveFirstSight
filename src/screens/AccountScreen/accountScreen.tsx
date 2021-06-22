@@ -338,15 +338,18 @@ export const AccountScreen = () => {
               buttonStyle={styles.button}
               onPress={() => {
                 setLoadLogout(true);
-                messaging()
-                  .getToken()
-                  .then((token) => {
-                    deleteTokenToDatabase(token).then(() => {
-                      signOutAccount(() => {
-                        navigation.replace(ROUTER.loading);
-                      });
-                    });
-                  });
+                signOutAccount(() => {
+                  navigation.replace(ROUTER.loading);
+                });
+                // messaging()
+                //   .getToken()
+                //   .then((token) => {
+                //     deleteTokenToDatabase(token).then(() => {
+                //       signOutAccount(() => {
+                //         navigation.replace(ROUTER.loading);
+                //       });
+                //     });
+                //   });
                 setLoadLogout(false);
               }}
             />

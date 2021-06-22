@@ -35,6 +35,8 @@ export const SignInScreen = ({navigation}) => {
   const [password, setPassWord] = useState('');
   const ref_input2 = useRef(null);
   const [load, setLoad] = useState(false);
+  const [loadingFacebook, setLoadingFacebook] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [show, setShow] = useState(false);
   const [required, setRequired] = useState(false);
   GoogleSignin.configure({
@@ -43,6 +45,7 @@ export const SignInScreen = ({navigation}) => {
   });
 
   const onFacebookButtonPress = async () => {
+    setLoadingFacebook(true);
     // Attempt login with permissions
     const result = await LoginManager.logInWithPermissions([
       'public_profile',
@@ -53,7 +56,6 @@ export const SignInScreen = ({navigation}) => {
     }
     // Once signed in, get the users AccessToken
     const data = await AccessToken.getCurrentAccessToken();
-    console.log(data);
     if (!data) {
       throw 'Something went wrong obtaining access token';
     }
@@ -64,19 +66,8 @@ export const SignInScreen = ({navigation}) => {
     // Sign-in the user with the credential
     return auth()
       .signInWithCredential(facebookCredential)
-      .then((result) => console.log(result))
-      .catch((err) => console.log(err));
-  };
-
-  const onGoogleButtonPress = async () => {
-    // Get the users ID token
-    const {idToken} = await GoogleSignin.signIn();
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    // Sign-in the user with the credential
-    return auth()
-      .signInWithCredential(googleCredential)
       .then(async (result) => {
+        setLoadingFacebook(false);
         const check = await checkAccount(auth().currentUser?.uid || '');
         if (check) {
           navigation.reset({
@@ -91,7 +82,48 @@ export const SignInScreen = ({navigation}) => {
             },
           });
         }
+      })
+      .catch((err) => {
+        setLoadingFacebook(false);
+        console.log(err);
       });
+  };
+
+  const onGoogleButtonPress = async () => {
+    setLoadingGoogle(true);
+    // Get the users ID token
+    try {
+      const {idToken} = await GoogleSignin.signIn();
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // Sign-in the user with the credential
+      return auth()
+        .signInWithCredential(googleCredential)
+        .then(async (result) => {
+          setLoadingGoogle(false);
+          const check = await checkAccount(auth().currentUser?.uid || '');
+          if (check) {
+            navigation.reset({
+              index: 0,
+              routes: [{name: ROUTER.home}],
+            });
+          } else {
+            navigation.navigate(ROUTER.initName, {
+              user: {
+                name: result.user.displayName,
+                email: result.user.email,
+              },
+            });
+          }
+        })
+        .catch((error) => {
+          setLoadingGoogle(false);
+          console.log(error);
+        });
+    } catch (err) {
+      setLoadingGoogle(false);
+      console.log('err: ', err);
+    }
   };
 
   const handleLogin = () => {
@@ -132,6 +164,8 @@ export const SignInScreen = ({navigation}) => {
         />
         <Text style={styles.textWelcome}>Welcome</Text>
         <ButtonCustom
+          loadingProps={{color: color.primary}}
+          loading={loadingFacebook}
           title="CONTINUE WITH FACEBOOK"
           titleStyle={styles.textFacebook}
           containerStyle={styles.containerButton}
@@ -140,6 +174,8 @@ export const SignInScreen = ({navigation}) => {
           onPress={onFacebookButtonPress}
         />
         <ButtonCustom
+          loadingProps={{color: color.primary}}
+          loading={loadingGoogle}
           title="CONTINUE WITH GOOGLE"
           titleStyle={styles.textGoogle}
           containerStyle={styles.containerButton}
