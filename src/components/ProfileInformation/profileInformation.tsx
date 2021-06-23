@@ -15,21 +15,25 @@ export const ProfileInformation = ({
 }: propsInformation) => {
   return (
     <View style={styles.container}>
-      <CustomIcon
-        name={iconName}
-        color="#ADACAC"
-        size={20}
-        style={{paddingTop: 16}}
-      />
-      {content ? (
-        <Text style={styles.text} onPress={onPress}>
-          {content}
-        </Text>
-      ) : (
-        <Text style={styles.textPlaceHolder} onPress={onPress}>
-          Add {iconName}
-        </Text>
-      )}
+      <View style={{flex: 1}}>
+        <CustomIcon
+          name={iconName}
+          color="#ADACAC"
+          size={20}
+          style={{paddingTop: 16}}
+        />
+      </View>
+      <View style={{flex: 12}}>
+        {content ? (
+          <Text style={styles.text} onPress={onPress}>
+            {content}
+          </Text>
+        ) : (
+          <Text style={styles.textPlaceHolder} onPress={onPress}>
+            Add {iconName}
+          </Text>
+        )}
+      </View>
     </View>
   );
 };
@@ -42,18 +46,18 @@ const styles = StyleSheet.create({
   },
   text: {
     paddingTop: 16,
-    marginLeft: 16,
     fontSize: 17,
     fontStyle: 'normal',
     fontWeight: 'bold',
     color: '#000000',
+    marginLeft: 10,
   },
   textPlaceHolder: {
     paddingTop: 16,
-    marginLeft: 16,
     fontSize: 17,
     fontStyle: 'normal',
     fontWeight: 'bold',
     color: '#ACACAC',
+    marginLeft: 10,
   },
 });

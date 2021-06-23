@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import {
   CustomIcon,
@@ -59,7 +60,9 @@ const HEIGHT = Dimensions.get('window').height;
 export const PostScreen = () => {
   const navigation = useNavigation();
   const [content, onChangeContent] = useState('');
+  const [pressPost, setPressPost] = useState(false);
   const [listCollection, setListCollection] = useState([]);
+
   const removeItem = (items: any, valueId: string) => {
     const itemsFilter = items.filter(
       (item: any) => item.collectionId !== valueId,
@@ -83,10 +86,12 @@ export const PostScreen = () => {
   };
 
   const handlePost = () => {
+    setPressPost(true);
     // @ts-ignore: Object is possibly 'null'.
-    addPost(auth().currentUser.uid, content, listCollection, () =>
-      navigation.goBack(),
-    );
+    addPost(auth().currentUser.uid, content, listCollection, () => {
+      setPressPost(false);
+      navigation.goBack();
+    });
   };
 
   const handleAddImage = () => {
@@ -135,9 +140,13 @@ export const PostScreen = () => {
         }
         rightComponent={
           content || listCollection.length > 0 ? (
-            <Text style={styles.post} onPress={handlePost}>
-              Post
-            </Text>
+            !pressPost ? (
+              <Text style={styles.post} onPress={handlePost}>
+                Post
+              </Text>
+            ) : (
+              <ActivityIndicator color={color.blue} />
+            )
           ) : (
             <View />
           )
@@ -194,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F8F8',
   },
   content: {
-    height: HEIGHT - 150,
+    flex: 1,
     paddingHorizontal: spacing[4],
     paddingBottom: spacing[4],
     backgroundColor: color.light,

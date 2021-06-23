@@ -67,7 +67,6 @@ export const SignInScreen = ({navigation}) => {
     return auth()
       .signInWithCredential(facebookCredential)
       .then(async (result) => {
-        setLoadingFacebook(false);
         const check = await checkAccount(auth().currentUser?.uid || '');
         if (check) {
           navigation.reset({
@@ -82,6 +81,7 @@ export const SignInScreen = ({navigation}) => {
             },
           });
         }
+        setLoadingFacebook(false);
       })
       .catch((err) => {
         setLoadingFacebook(false);
@@ -100,7 +100,6 @@ export const SignInScreen = ({navigation}) => {
       return auth()
         .signInWithCredential(googleCredential)
         .then(async (result) => {
-          setLoadingGoogle(false);
           const check = await checkAccount(auth().currentUser?.uid || '');
           if (check) {
             navigation.reset({
@@ -115,6 +114,7 @@ export const SignInScreen = ({navigation}) => {
               },
             });
           }
+          setLoadingGoogle(false);
         })
         .catch((error) => {
           setLoadingGoogle(false);

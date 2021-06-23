@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {View, StyleSheet, TouchableOpacity, Text, FlatList} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {HeaderCustom, PostItem} from '../../components';
-import {getAllPosts} from '../../controller';
+import {getAllPosts, getUserPost} from '../../controller';
 import auth from '@react-native-firebase/auth';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
@@ -11,6 +11,9 @@ import {ROUTER} from '../../constants/router';
 export const NewsScreen = () => {
   const navigation = useNavigation();
   const [news, setNews] = useState(null);
+  const [user, setUser] = useState({
+    avatar: '',
+  });
 
   const FlatListHeader = () => {
     //View to set in Header
@@ -25,7 +28,7 @@ export const NewsScreen = () => {
           style={styles.avatar}
           source={{
             // @ts-ignore: Object is possibly 'null'.
-            uri: 'https://i.pinimg.com/originals/d5/5e/fc/d55efcc94b469ad21115c1d7fb9f0631.jpg',
+            uri: user.avatar,
             headers: {Authorization: 'staplerapp123456'},
             priority: FastImage.priority.normal,
           }}
@@ -35,6 +38,13 @@ export const NewsScreen = () => {
       </TouchableOpacity>
     );
   };
+
+  useEffect(() => {
+    getUserPost(auth().currentUser?.uid || '').then((result) =>
+      setUser(result),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     // @ts-ignore: Object is possibly 'null'.

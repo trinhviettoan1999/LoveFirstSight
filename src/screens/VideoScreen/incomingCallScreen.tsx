@@ -50,6 +50,7 @@ export const IncomingCallScreen = ({
     createKey(appId, '0a74d4d72dc94bab83c42b611c802c8f', channelName, userId)
       .then((result) => result.json())
       .then((key) => {
+        sound.stop();
         navigation.replace(ROUTER.video, {
           name,
           avatar,
@@ -65,16 +66,10 @@ export const IncomingCallScreen = ({
     <ImageBackground source={{uri: avatar}} style={styles.imageBackground}>
       <Text style={styles.text}>{name} is calling...</Text>
       <View style={styles.containerButton}>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.7}
-          onPress={handleCancel}>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleCancel}>
           <DisLike />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.7}
-          onPress={handleAccept}>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleAccept}>
           <VideoFull />
         </TouchableOpacity>
       </View>
@@ -99,12 +94,5 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
-  },
-  button: {
-    // width: 60,
-    // height: 60,
-    // borderRadius: 30,
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
 });

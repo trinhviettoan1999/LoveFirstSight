@@ -199,12 +199,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginBottom: 16,
     alignSelf: 'center',
-    paddingHorizontal: 10,
     borderRadius: 10,
   },
   text: {
-    fontSize: 17,
-    fontWeight: 'bold',
+    fontSize: 13,
+    fontWeight: '700',
     fontStyle: 'normal',
   },
   flatList: {

@@ -479,6 +479,7 @@ export const Chat = () => {
   return (
     <View style={styles.containerAll}>
       <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         leftComponent={
           <TouchableOpacity onPress={handleBack}>
             <Back />
@@ -582,6 +583,7 @@ const styles = StyleSheet.create({
   },
   containerGiftChat: {
     flex: 2,
+    backgroundColor: color.light,
   },
   flatlist: {
     flex: 1,

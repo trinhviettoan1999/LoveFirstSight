@@ -9,6 +9,7 @@ export const addPost = (
   collections: any,
   next: any,
 ) => {
+  const createdAt = new Date().getTime();
   if (collections.length === 0) {
     firestore()
       .collection('news')
@@ -16,6 +17,7 @@ export const addPost = (
         userId,
         content,
         collections,
+        createdAt,
       })
       .then(() => next());
     return;
@@ -44,6 +46,7 @@ export const addPost = (
                 userId,
                 content,
                 collections: listColections,
+                createdAt,
               })
               .then(() => next());
           }
@@ -67,6 +70,7 @@ export const addPost = (
                 userId,
                 content,
                 collections: listColections,
+                createdAt,
               })
               .then(() => next());
           }
@@ -125,9 +129,13 @@ export const getAllPosts = (userId: string, next: any) => {
     result.push(userId);
     firestore()
       .collection('news')
-      .where('userId', 'in', result)
+      .orderBy('createdAt', 'desc')
       .onSnapshot(async (querySnapshot) => {
-        next(querySnapshot.docs);
+        next(
+          querySnapshot.docs.filter((item) =>
+            result.includes(item.data().userId),
+          ),
+        );
       });
   });
 };

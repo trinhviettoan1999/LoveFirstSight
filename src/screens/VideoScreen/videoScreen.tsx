@@ -141,7 +141,7 @@ export const VideoScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.full} edges={['bottom']}>
+    <View style={styles.full}>
       {props.peerIds.length === 0 && (
         <ImageBackground
           style={styles.image}
@@ -161,11 +161,6 @@ export const VideoScreen = () => {
             width: WIDTH,
             height: HEIGHT,
           }}>
-          <HeaderCustom
-            backgroundStatusBar={color.transparent}
-            barStyle="light-content"
-            removeBorderWidth
-          />
           {!props.vidMute && (
             <RtcLocalView.SurfaceView
               style={styles.localVideo}
@@ -183,6 +178,11 @@ export const VideoScreen = () => {
             channelId={channelName}
             renderMode={VideoRenderMode.Hidden}
             key={props.peerIds[0]}
+          />
+          <HeaderCustom
+            backgroundStatusBar={color.transparent}
+            barStyle="light-content"
+            removeBorderWidth
           />
         </View>
       )}
@@ -206,7 +206,7 @@ export const VideoScreen = () => {
           {props.vidMute ? <VideoOff /> : <VideoOn />}
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

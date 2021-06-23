@@ -107,9 +107,9 @@ export const PostItem = ({
       </View>
       <View style={styles.bottomContainerPost}>
         <View style={styles.countView}>
-          <Text style={styles.textContent}>{votes.length}</Text>
+          <Text style={styles.textContent}>{votes.length} </Text>
           <HeartFill />
-          <Text style={styles.textContent}>, {comments.length}</Text>
+          <Text style={styles.textContent}> {comments.length} </Text>
           <Comment />
         </View>
         {votes.indexOf(auth().currentUser?.uid) >= 0 ? (
@@ -160,8 +160,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderTopWidth: 0.1,
-    paddingHorizontal: 16,
     paddingBottom: 10,
+    justifyContent: 'space-around',
+  },
+  countView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonVote: {
+    height: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonComment: {
+    height: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatar: {
     width: 40,
@@ -184,25 +201,5 @@ const styles = StyleSheet.create({
   wrapper: {
     width: WIDTH - spacing[4] * 2,
     height: 350,
-  },
-  countView: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonVote: {
-    flex: 1,
-    height: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonComment: {
-    flex: 1,
-    height: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

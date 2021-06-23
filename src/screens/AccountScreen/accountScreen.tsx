@@ -329,9 +329,6 @@ export const AccountScreen = () => {
                 }
               />
             )}
-            {/* <TouchableHighlight style={styles.button}>
-              <Text style={styles.textButton}>Connect Instagram</Text>
-            </TouchableHighlight> */}
             <ButtonCustom
               loading={loadLogout}
               title="Log out"
@@ -341,15 +338,15 @@ export const AccountScreen = () => {
                 signOutAccount(() => {
                   navigation.replace(ROUTER.loading);
                 });
-                // messaging()
-                //   .getToken()
-                //   .then((token) => {
-                //     deleteTokenToDatabase(token).then(() => {
-                //       signOutAccount(() => {
-                //         navigation.replace(ROUTER.loading);
-                //       });
-                //     });
-                //   });
+                messaging()
+                  .getToken()
+                  .then((token) => {
+                    deleteTokenToDatabase(token).then(() => {
+                      signOutAccount(() => {
+                        navigation.replace(ROUTER.loading);
+                      });
+                    });
+                  });
                 setLoadLogout(false);
               }}
             />
