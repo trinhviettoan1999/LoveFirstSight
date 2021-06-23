@@ -8,11 +8,24 @@ const splitName = (name: string) => {
 };
 
 export const getConversation = async (state: boolean, next: any) => {
-  const conversationsRef = firestore().collection('conversations');
+  const conversationsRef = await firestore().collection('conversations');
+  // await conversationsRef
+  //   .orderBy('createdAt', 'desc')
+  //   .onSnapshot(async (querySnapshot) => {
+  //     console.log(
+  //       querySnapshot.docs.filter((item) => item.data().state === state),
+  //     );
+  //     next(querySnapshot.docs.filter((item) => item.data().state === state));
+  //   });
+
   await conversationsRef
-    .where('participants', 'array-contains', auth().currentUser?.uid)
-    .where('state', '==', state)
+    .orderBy('createdAt', 'desc')
     .onSnapshot(async (conversations) => {
+      const newConversations = conversations.docs.filter(
+        (item) =>
+          item.data().state === state &&
+          item.data().participants.includes(auth().currentUser?.uid),
+      );
       const results: (void | {
         conversationId: string;
         lastModified: any;
@@ -21,9 +34,9 @@ export const getConversation = async (state: boolean, next: any) => {
         avatar: any;
         stateVideoCall: boolean;
       })[] = [];
-      conversations.forEach(async (conversation) => {
-        const length = conversations.size;
-        results.push(
+      newConversations.forEach(async (conversation) => {
+        const length = newConversations.length;
+        results.unshift(
           await conversationsRef
             .doc(conversation.id)
             .collection('messages')
@@ -149,4 +162,18 @@ export const sendMessageRequest = (receiverId: string) => {
       }),
     },
   ).then((res) => res.json());
+};
+
+export const updateConversation = async (
+  conversationId: string,
+  messageType: string,
+  message: string,
+) => {
+  const conversationsRef = await firestore().collection('conversations');
+  const createdAt = new Date().getTime();
+  conversationsRef.doc(conversationId).update({
+    messageType,
+    message,
+    createdAt,
+  });
 };

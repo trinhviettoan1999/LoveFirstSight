@@ -66,15 +66,11 @@ const ConversationWait = ({navigation}: RouteStackParamList<'InitScreen'>) => {
       />
     );
   };
+
   useEffect(() => {
     getConversationWait().then((result) => setConversation(result));
   }, []);
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      getConversationWait().then((result) => setConversation(result));
-    });
-    return unsubscribe;
-  }, [navigation]);
+
   return (
     <View style={styles.allContainer}>
       <View style={styles.container}>
@@ -100,6 +96,7 @@ const ConversationWait = ({navigation}: RouteStackParamList<'InitScreen'>) => {
     </View>
   );
 };
+
 const Conversation = ({navigation}: RouteStackParamList<'InitScreen'>) => {
   const [selectedId, setSelectedId] = useState(null);
   const [conversation, setConversation] = useState();
@@ -121,15 +118,13 @@ const Conversation = ({navigation}: RouteStackParamList<'InitScreen'>) => {
       />
     );
   };
+
   useEffect(() => {
-    getConversation(false, (result: any) => setConversation(result));
-  }, []);
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      getConversation(false, (result: any) => setConversation(result));
+    getConversation(false, (result: any) => {
+      setConversation(result);
     });
-    return unsubscribe;
-  }, [navigation]);
+  }, []);
+
   return (
     <View style={styles.allContainer}>
       <View style={styles.container}>

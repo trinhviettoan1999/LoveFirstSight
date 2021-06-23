@@ -5,6 +5,7 @@ import {GiftedChat} from 'react-native-gifted-chat';
 import {likeUser, updateStateConversation} from '.';
 import {upload, getUrl} from '../firebase/storage';
 import uuid from 'react-native-uuid';
+import {updateConversation} from './conversation';
 
 export const createKey = (
   appID: string,
@@ -180,6 +181,7 @@ export const sendMessage = async (
       },
     })
     .then(async () => {
+      updateConversation(conversationId, 'text', message);
       sendNotification(ownerId, userId, message, conversationId);
       // @ts-ignore: Object is possibly 'null'.
       if (state && firstUserId !== auth().currentUser?.uid) {
