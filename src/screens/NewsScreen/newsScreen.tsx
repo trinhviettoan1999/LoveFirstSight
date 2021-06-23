@@ -2,15 +2,24 @@ import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, StyleSheet, TouchableOpacity, Text, FlatList} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {HeaderCustom, PostItem} from '../../components';
-import {getAllPosts, getUserPost} from '../../controller';
+import {
+  Bin,
+  Edit,
+  HeaderCustom,
+  openNotification,
+  PostItem,
+} from '../../components';
+import {deletePost, getAllPosts, getUserPost} from '../../controller';
 import auth from '@react-native-firebase/auth';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
+import Modal from 'react-native-modal';
 
 export const NewsScreen = () => {
   const navigation = useNavigation();
   const [news, setNews] = useState(null);
+  const [isModalVisibleMenu, setIsModalVisibleMenu] = useState(false);
+  const [idSelected, setIdSelected] = useState('');
   const [user, setUser] = useState({
     avatar: '',
   });
@@ -39,10 +48,27 @@ export const NewsScreen = () => {
     );
   };
 
+  const handleMore = (postId: string) => {
+    setIsModalVisibleMenu(true);
+    setIdSelected(postId);
+  };
+
+  const handleDeletePost = () => {
+    setIsModalVisibleMenu(false);
+    deletePost(idSelected).then(() =>
+      openNotification('success', 'Deleted success!'),
+    );
+  };
+
   useEffect(() => {
     getUserPost(auth().currentUser?.uid || '').then((result) =>
       setUser(result),
     );
+    return () => {
+      getUserPost(auth().currentUser?.uid || '').then((result) =>
+        setUser(result),
+      );
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -80,11 +106,40 @@ export const NewsScreen = () => {
                   content: item.data().content,
                 })
               }
+              onPressMore={() => handleMore(item.id)}
             />
           )}
           contentContainerStyle={styles.contentContainerFlat}
         />
       ) : null}
+      <Modal
+        backdropTransitionOutTiming={0}
+        swipeDirection="down"
+        onSwipeComplete={() => setIsModalVisibleMenu(false)}
+        hideModalContentWhileAnimating
+        isVisible={isModalVisibleMenu}
+        style={styles.modalMenu}
+        onBackdropPress={() => setIsModalVisibleMenu(false)}
+        backdropOpacity={0.5}>
+        <View style={[styles.buttonModal, {backgroundColor: color.primary}]}>
+          <Edit />
+          <Text
+            style={[styles.textButtonModal, {color: color.bgWhite}]}
+            onPress={() => {
+              setIsModalVisibleMenu(false);
+            }}>
+            Edit post
+          </Text>
+        </View>
+        <View style={[styles.buttonModal, {backgroundColor: color.light}]}>
+          <Bin />
+          <Text
+            style={[styles.textButtonModal, {color: color.primary}]}
+            onPress={handleDeletePost}>
+            Delete post
+          </Text>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -136,5 +191,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 10,
     paddingTop: 10,
+  },
+  modalMenu: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  buttonModal: {
+    height: 50,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  textButtonModal: {
+    fontSize: 17,
+    fontWeight: '500',
+    fontStyle: 'normal',
+    marginLeft: spacing[2],
   },
 });

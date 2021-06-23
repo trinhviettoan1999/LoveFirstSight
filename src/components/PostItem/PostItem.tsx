@@ -11,7 +11,7 @@ import Swiper from 'react-native-swiper';
 import Video from 'react-native-video';
 import {getUserPost, unVotePost, votePost} from '../../controller';
 import auth from '@react-native-firebase/auth';
-import {Comment, Heart, HeartFill} from '../AllSvgIcon/AllSvgIcon';
+import {Comment, Heart, HeartFill, More} from '../AllSvgIcon/AllSvgIcon';
 import {color, spacing} from '../../theme';
 
 interface ItemPostProps {
@@ -22,6 +22,7 @@ interface ItemPostProps {
   votes?: any;
   comments?: any;
   onPressComment?: any;
+  onPressMore?: () => void;
 }
 
 const WIDTH = Dimensions.get('window').width;
@@ -34,6 +35,7 @@ export const PostItem = ({
   votes,
   comments,
   onPressComment,
+  onPressMore,
 }: ItemPostProps) => {
   const [user, setUser] = useState({
     avatar: '',
@@ -131,6 +133,13 @@ export const PostItem = ({
           <Text style={styles.textContent}> Comment</Text>
         </TouchableOpacity>
       </View>
+      {userId === auth().currentUser?.uid && (
+        <TouchableOpacity
+          onPress={onPressMore}
+          style={{position: 'absolute', right: 16, top: 10}}>
+          <More />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

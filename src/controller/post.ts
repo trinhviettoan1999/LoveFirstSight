@@ -80,12 +80,8 @@ export const addPost = (
   });
 };
 
-export const deletePost = (postId: string) => {
-  firestore()
-    .collection('news')
-    .doc(postId)
-    .delete()
-    .then(() => console.log('Delete Success!!'));
+export const deletePost = async (postId: string) => {
+  return await firestore().collection('news').doc(postId).delete();
 };
 
 const getListMatched = async (userId: string) => {
