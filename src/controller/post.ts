@@ -116,15 +116,6 @@ const getListMatched = async (userId: string) => {
 };
 
 export const getAllPosts = (userId: string, next: any) => {
-  // getListMatched(userId).then((result) => {
-  //   result.push(userId);
-  //   firestore()
-  //     .collection('news')
-  //     .where('userId', 'in', result)
-  //     .onSnapshot((querySnapshot) => {
-  //       next(querySnapshot.docs);
-  //     });
-  // });
   getListMatched(userId).then((result) => {
     result.push(userId);
     firestore()

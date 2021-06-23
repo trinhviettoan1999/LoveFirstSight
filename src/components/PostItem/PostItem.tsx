@@ -42,8 +42,7 @@ export const PostItem = ({
 
   useEffect(() => {
     getUserPost(userId).then((result) => setUser(result));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userId]);
 
   return (
     <View style={styles.itemPost}>
