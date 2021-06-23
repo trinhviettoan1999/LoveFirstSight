@@ -8,8 +8,8 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {
-  RouteStackParamList,
   Loading,
   HeaderCustom,
   NotUser,
@@ -52,10 +52,9 @@ const sendNotification = async (ownerId: string, userId: string) => {
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-export const ProfileScreen = ({
-  navigation,
-  route,
-}: RouteStackParamList<'InitScreen'>) => {
+export const ProfileScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   const User = {
     userId: '',
     name: '',
@@ -221,12 +220,14 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   back: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     borderRadius: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     width: 30,
     height: 30,
     position: 'absolute',
-    top: 30,
+    top: 40,
     left: 16,
   },
 });

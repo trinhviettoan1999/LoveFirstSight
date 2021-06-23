@@ -156,11 +156,12 @@ const styles = StyleSheet.create({
   },
   bottomContainerPost: {
     width: '100%',
-    height: 50,
+    height: 30,
     flexDirection: 'row',
     alignItems: 'center',
-    borderTopWidth: 0.2,
+    borderTopWidth: 0.1,
     paddingHorizontal: 16,
+    paddingBottom: 10,
   },
   avatar: {
     width: 40,

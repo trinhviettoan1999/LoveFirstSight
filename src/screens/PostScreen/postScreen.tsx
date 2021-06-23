@@ -24,6 +24,7 @@ import auth from '@react-native-firebase/auth';
 import {color, spacing} from '../../theme';
 import {useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const ItemImage = ({item, onPressRemove}: any) => {
   return (
@@ -123,7 +124,7 @@ export const PostScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <HeaderCustom
         backgroundStatusBar={color.bgWhite}
         title="Create post"
@@ -183,7 +184,7 @@ export const PostScreen = () => {
           <Text style={styles.textSelection}>Add video to your post</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
