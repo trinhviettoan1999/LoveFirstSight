@@ -9,15 +9,6 @@ const splitName = (name: string) => {
 
 export const getConversation = async (state: boolean, next: any) => {
   const conversationsRef = await firestore().collection('conversations');
-  // await conversationsRef
-  //   .orderBy('createdAt', 'desc')
-  //   .onSnapshot(async (querySnapshot) => {
-  //     console.log(
-  //       querySnapshot.docs.filter((item) => item.data().state === state),
-  //     );
-  //     next(querySnapshot.docs.filter((item) => item.data().state === state));
-  //   });
-
   await conversationsRef
     .orderBy('createdAt', 'desc')
     .onSnapshot(async (conversations) => {
@@ -36,7 +27,7 @@ export const getConversation = async (state: boolean, next: any) => {
       })[] = [];
       newConversations.forEach(async (conversation) => {
         const length = newConversations.length;
-        results.unshift(
+        results.push(
           await conversationsRef
             .doc(conversation.id)
             .collection('messages')
@@ -110,7 +101,10 @@ export const getConversation = async (state: boolean, next: any) => {
             .catch((err) => console.log(err)),
         );
         if (results.length === length) {
-          next(results);
+          results.sort(function (value1, value2) {
+            return value1?.lastModified - value2?.lastModified;
+          });
+          next(results.reverse());
         }
       });
     });
@@ -164,16 +158,10 @@ export const sendMessageRequest = (receiverId: string) => {
   ).then((res) => res.json());
 };
 
-export const updateConversation = async (
-  conversationId: string,
-  messageType: string,
-  message: string,
-) => {
+export const updateConversation = async (conversationId: string) => {
   const conversationsRef = await firestore().collection('conversations');
   const createdAt = new Date().getTime();
   conversationsRef.doc(conversationId).update({
-    messageType,
-    message,
     createdAt,
   });
 };

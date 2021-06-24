@@ -181,7 +181,7 @@ export const sendMessage = async (
       },
     })
     .then(async () => {
-      updateConversation(conversationId, 'text', message);
+      updateConversation(conversationId);
       sendNotification(ownerId, userId, message, conversationId);
       // @ts-ignore: Object is possibly 'null'.
       if (state && firstUserId !== auth().currentUser?.uid) {
