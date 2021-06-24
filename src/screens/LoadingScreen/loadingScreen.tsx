@@ -6,6 +6,8 @@ import {checkPermisstionGPS} from '../../controller';
 import messaging from '@react-native-firebase/messaging';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {ROUTER} from '../../constants/router';
+import {HeaderCustom} from '../../components';
+import {color} from '../../theme/color';
 
 const logo = require('../../../assets/images/Logo.png');
 const WIDTH = Dimensions.get('window').width;
@@ -93,6 +95,8 @@ export const LoadingScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <ImageBackground style={{height: HEIGHT, width: WIDTH}} source={logo} />
+    <ImageBackground style={{height: HEIGHT, width: WIDTH}} source={logo}>
+      <HeaderCustom removeBorderWidth backgroundStatusBar={color.transparent} />
+    </ImageBackground>
   );
 };
