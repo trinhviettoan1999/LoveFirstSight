@@ -163,5 +163,33 @@ export const updateConversation = async (conversationId: string) => {
   const createdAt = new Date().getTime();
   conversationsRef.doc(conversationId).update({
     createdAt,
+    senderId: auth().currentUser?.uid,
+    isRead: false,
+  });
+};
+
+export const checkIsReadConversation = async (
+  conversationId: string,
+  next: any,
+) => {
+  return await firestore()
+    .collection('conversations')
+    .doc(conversationId)
+    .onSnapshot((result) => {
+      if (
+        result.data()?.isRead === false &&
+        result.data()?.senderId !== auth().currentUser?.uid
+      ) {
+        return next(true);
+      } else {
+        return next(false);
+      }
+    });
+};
+
+export const updateStatusIsRead = (conversationId: string) => {
+  const conversationsRef = firestore().collection('conversations');
+  conversationsRef.doc(conversationId).update({
+    isRead: true,
   });
 };

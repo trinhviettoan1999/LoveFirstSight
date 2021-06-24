@@ -8,9 +8,14 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
-import {RouteStackParamList} from '../../components';
+import {useNavigation} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {getConversation, getConversationWait} from '../../controller';
+import {
+  checkIsReadConversation,
+  getConversation,
+  getConversationWait,
+  updateStatusIsRead,
+} from '../../controller';
 import FastImage from 'react-native-fast-image';
 import {ROUTER} from '../../constants/router';
 import {color} from '../../theme';
@@ -22,11 +27,30 @@ const HEIGHT = Dimensions.get('window').height;
 
 //item Conversation
 const ItemConversation = ({item, onPress}: any) => {
+  const [isRead, setIsRead] = useState(false);
+
+  useEffect(() => {
+    checkIsReadConversation(item.conversationId, (result: boolean) => {
+      setIsRead(result || false);
+    });
+    return () => {
+      checkIsReadConversation(item.conversationId, (result: boolean) => {
+        setIsRead(result || false);
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <TouchableOpacity
       style={styles.itemConversationContainer}
       activeOpacity={0.5}
-      onPress={onPress}>
+      onPress={() => {
+        onPress();
+        if (isRead) {
+          updateStatusIsRead(item.conversationId);
+        }
+      }}>
       <FastImage
         style={styles.avatar}
         source={{
@@ -37,15 +61,27 @@ const ItemConversation = ({item, onPress}: any) => {
         }}
         resizeMode={FastImage.resizeMode.cover}
       />
-      <View style={{paddingHorizontal: 10}}>
+      <View style={{flex: 1, paddingHorizontal: 10}}>
         <Text style={styles.textName}>{item.name}</Text>
-        <Text style={styles.textMessage}>{item.text}</Text>
+        {isRead ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+            }}>
+            <Text style={styles.textMessage}>{item.text}</Text>
+            <View style={styles.status} />
+          </View>
+        ) : (
+          <Text style={styles.textMessageIsRead}>{item.text}</Text>
+        )}
       </View>
     </TouchableOpacity>
   );
 };
 
-const ConversationWait = ({navigation}: RouteStackParamList<'InitScreen'>) => {
+const ConversationWait = () => {
+  const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
   const [conversation, setConversation] = useState();
   const renderItemConversation = ({item}: any) => {
@@ -97,7 +133,8 @@ const ConversationWait = ({navigation}: RouteStackParamList<'InitScreen'>) => {
   );
 };
 
-const Conversation = ({navigation}: RouteStackParamList<'InitScreen'>) => {
+const Conversation = () => {
+  const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
   const [conversation, setConversation] = useState();
   const renderItemConversation = ({item}: any) => {
@@ -197,12 +234,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 10,
   },
-  textTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    fontStyle: 'normal',
-    color: '#6A1616',
-  },
+
   itemMatchContainer: {
     height: 120,
     width: 70,
@@ -230,10 +262,23 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     borderRadius: 10,
   },
-  textMessage: {
+  textMessageIsRead: {
     fontSize: 14,
-    fontWeight: '500',
     fontStyle: 'normal',
-    color: '#919191',
+    color: color.textGray,
+    fontWeight: '500',
+  },
+  textMessage: {
+    flex: 1,
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    color: color.text,
+  },
+  status: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: color.primary,
   },
 });
