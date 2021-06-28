@@ -193,3 +193,22 @@ export const updateStatusIsRead = (conversationId: string) => {
     isRead: true,
   });
 };
+
+export const getCountNotRead = async (next: any) => {
+  return await firestore()
+    .collection('conversations')
+    .where('participants', 'array-contains', auth().currentUser?.uid)
+    .where('isRead', '==', false)
+    .onSnapshot((snapshot) => {
+      if (snapshot.docs.length > 0) {
+        next(
+          snapshot.docs.filter(
+            (conversation) =>
+              conversation.data().senderId !== auth().currentUser?.uid,
+          ),
+        );
+      } else {
+        next([]);
+      }
+    });
+};

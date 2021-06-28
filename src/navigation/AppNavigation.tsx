@@ -1,4 +1,5 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
@@ -22,10 +23,17 @@ import messaging from '@react-native-firebase/messaging';
 import FlashMessage from 'react-native-flash-message';
 import {ROUTER} from '../constants';
 import {color} from '../theme/color';
+import {getCountNotRead} from '../controller';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const AppTab = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    getCountNotRead((result: any) => setCount(result.length));
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -35,7 +43,27 @@ const AppTab = () => {
           } else if (route.name === ROUTER.likedYou) {
             return focused ? <SupperLikeFill /> : <SupperLike />;
           } else if (route.name === ROUTER.conversation) {
-            return focused ? <ConversationFill /> : <Conversation />;
+            return (
+              <View>
+                {focused ? <ConversationFill /> : <Conversation />}
+                {count > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: -5,
+                      right: -8,
+                      width: 16,
+                      height: 16,
+                      borderRadius: 10,
+                      backgroundColor: 'red',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{fontSize: 13, color: 'white'}}>{count}</Text>
+                  </View>
+                )}
+              </View>
+            );
           } else if (route.name === ROUTER.account) {
             return focused ? <AccountFill /> : <Account />;
           } else if (route.name === ROUTER.news) {

@@ -61,7 +61,7 @@ export const EnterPassword = () => {
         </Text>
         <InputCustom
           value={valuePassword}
-          placeholder="Password must contain at least 8 characters"
+          placeholder="Password must least 8 characters"
           onChangeText={(text) => onChangeTextPassword(text)}
           errorMessage={
             required && !valuePassword ? 'Password is required' : ''

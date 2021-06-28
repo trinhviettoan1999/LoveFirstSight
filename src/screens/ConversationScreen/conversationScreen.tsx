@@ -14,6 +14,7 @@ import {
   checkIsReadConversation,
   getConversation,
   getConversationWait,
+  getCountNotRead,
   updateStatusIsRead,
 } from '../../controller';
 import FastImage from 'react-native-fast-image';
@@ -105,6 +106,7 @@ const ConversationWait = () => {
 
   useEffect(() => {
     getConversationWait().then((result) => setConversation(result));
+    getCountNotRead();
   }, []);
 
   return (
