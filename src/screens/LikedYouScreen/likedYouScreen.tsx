@@ -21,7 +21,10 @@ const HEIGHT = Dimensions.get('window').height;
 
 const Item = ({item, onPress, iconName}: any) => {
   return (
-    <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={onPress}
+      activeOpacity={0.7}>
       <View style={styles.avatar}>
         <FastImage
           style={styles.avatar}
@@ -66,11 +69,12 @@ const ListItem = ({data, navigation, iconName}: any) => {
   };
   return (
     <FlatList
+      contentContainerStyle={{paddingBottom: 16, backgroundColor: 'white'}}
+      numColumns={2}
+      columnWrapperStyle={{flex: 1}}
       data={data}
       renderItem={renderItem}
       keyExtractor={(item) => item.userId}
-      numColumns={2}
-      columnWrapperStyle={styles.flatList}
     />
   );
 };
@@ -98,7 +102,7 @@ const LikedYou = () => {
   }, [navigation]);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#F8F8F8'}}>
+    <View style={{backgroundColor: 'white', flex: 1}}>
       {status === 200 ? (
         <ListItem data={data} navigation={navigation} iconName="lookingfor" />
       ) : (
@@ -121,6 +125,7 @@ const TopPick = () => {
       setStatus(await result.status);
     });
   }, []);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getTopPick().then(async (result) => {
@@ -130,8 +135,9 @@ const TopPick = () => {
     });
     return unsubscribe;
   }, [navigation]);
+
   return (
-    <View style={{flex: 1, backgroundColor: '#F8F8F8'}}>
+    <View style={{backgroundColor: 'white', flex: 1}}>
       {status === 200 ? (
         <ListItem data={data} navigation={navigation} iconName="star" />
       ) : (
@@ -145,8 +151,7 @@ const TopPick = () => {
 
 export const LikedYouScreen = () => {
   return (
-    <View
-      style={{width: WIDTH, height: HEIGHT, backgroundColor: color.bgWhite}}>
+    <View style={{flex: 1, backgroundColor: color.bgWhite}}>
       <HeaderCustom
         height={0}
         backgroundStatusBar={color.bgWhite}
@@ -159,7 +164,7 @@ export const LikedYouScreen = () => {
           activeTintColor: color.primary,
           inactiveTintColor: color.text,
           labelStyle: {fontSize: 14, fontWeight: 'bold'},
-          tabStyle: {height: 50},
+          tabStyle: {height: 45},
           indicatorStyle: {backgroundColor: color.primary},
           style: {
             backgroundColor: color.bgWhite,
@@ -182,11 +187,20 @@ export const LikedYouScreen = () => {
 
 const styles = StyleSheet.create({
   itemContainer: {
-    width: '47.5%',
+    width: (WIDTH - 16 * 3) / 2,
     height: 250,
-    borderRadius: 10,
-    marginTop: 8,
-    marginBottom: 8,
+    borderRadius: 5,
+    marginTop: 16,
+    marginLeft: 16,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 10,
   },
   informationContainer: {
     width: '80%',
@@ -199,7 +213,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginBottom: 16,
     alignSelf: 'center',
-    borderRadius: 10,
+    borderRadius: 5,
   },
   text: {
     fontSize: 13,
@@ -207,14 +221,14 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
   },
   flatList: {
-    flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F8F8F8',
     paddingHorizontal: 16,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'space-between',
+    height: HEIGHT,
   },
   avatar: {
     flex: 1,
-    borderRadius: 10,
+    borderRadius: 5,
   },
 });
