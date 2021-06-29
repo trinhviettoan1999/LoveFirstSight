@@ -17,6 +17,7 @@ import {
   HeaderCustom,
   ButtonCustom,
   openNotification,
+  Calender,
 } from '../../components';
 import {ROUTER} from '../../constants/router';
 
@@ -97,26 +98,32 @@ export const InitAgeScreen = () => {
         <Text style={styles.textQuestion}>
           Hey, {user.name}, when’s your bithday?
         </Text>
-        <View style={styles.dateContainer}>
-          <Text style={styles.textDate} onPress={() => setShow(true)}>
-            {getParsedDate(date)}
-          </Text>
-          <CustomIcon
-            name="calendar"
-            size={20}
-            color="#6A1616"
-            onPress={() => setShow(true)}
+        {Platform.OS === 'ios' && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="date"
+            display="spinner"
+            onChange={onChange}
           />
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode="date"
-              display="calendar"
-              onChange={onChange}
-            />
-          )}
-        </View>
+        )}
+        {Platform.OS === 'android' && (
+          <View style={styles.dateContainer}>
+            <Calender />
+            <Text style={styles.textDate} onPress={() => setShow(true)}>
+              {getParsedDate(date)}
+            </Text>
+            {show && Platform.OS === 'android' && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode="date"
+                display="default"
+                onChange={onChange}
+              />
+            )}
+          </View>
+        )}
         <Text style={styles.textNote}>
           We need this to make sure you’ve over 18
         </Text>
@@ -160,11 +167,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textDate: {
-    fontSize: 22,
+    fontSize: 20,
     fontStyle: 'normal',
     fontWeight: 'bold',
     alignSelf: 'center',
-    marginRight: 10,
+    marginLeft: 5,
   },
   dateContainer: {
     marginTop: 30,
