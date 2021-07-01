@@ -9,6 +9,7 @@ import {checkPermisstionGPS} from '../../controller';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import auth from '@react-native-firebase/auth';
 import {ROUTER} from '../../constants';
+import {color} from '../../theme/color';
 
 export const InitialScreen = ({
   navigation,
@@ -16,8 +17,7 @@ export const InitialScreen = ({
   return (
     <View style={styles.container}>
       <View style={styles.containerLogo}>
-        <CustomIcon name="stapler-outline" size={50} color="#6A1616" />
-        <Text style={styles.textLogo}>STAPLER</Text>
+        <Text style={styles.textLogo}>LOVE FIRST SIGHT</Text>
       </View>
       <StatusBarCustom backgroundColor="#FFFFFF" barStyle="dark-content" />
       <View style={styles.containerText}>
@@ -50,7 +50,7 @@ export const InitialScreen = ({
               console.log(err);
             });
         }}>
-        <CustomIcon name="reload" size={30} color="#6A1616" />
+        <CustomIcon name="reload" size={30} color={color.primary} />
       </Pressable>
     </View>
   );
@@ -83,15 +83,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   containerLogo: {
-    flexDirection: 'row',
     top: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   textLogo: {
-    marginLeft: 16,
-    color: '#6A1616',
-    fontSize: 50,
+    color: color.primary,
+    fontSize: 40,
     fontWeight: '600',
     fontStyle: 'normal',
   },
