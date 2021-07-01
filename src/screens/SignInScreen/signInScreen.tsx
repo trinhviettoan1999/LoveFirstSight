@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Dimensions,
   Alert,
+  Pressable,
 } from 'react-native';
 import {
   InputCustom,
@@ -22,7 +23,6 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import * as firebase from '../../firebase/firebase';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {spacing, color} from '../../theme';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ROUTER} from '../../constants/router';
 import {checkAccount} from '../../controller';
 
@@ -202,9 +202,9 @@ export const SignInScreen = ({navigation}) => {
           onChangeText={(text) => setPassWord(text)}
           secureTextEntry={!show}
           rightIcon={
-            <TouchableOpacity onPress={() => setShow(!show)}>
+            <Pressable onPress={() => setShow(!show)}>
               {!show ? <Eye /> : <EyeDisable />}
-            </TouchableOpacity>
+            </Pressable>
           }
           errorMessage={required && !password ? 'Password is required' : ''}
         />

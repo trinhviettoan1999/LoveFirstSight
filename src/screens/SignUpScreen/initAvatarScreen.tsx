@@ -12,12 +12,12 @@ import {useRoute} from '@react-navigation/native';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
 import {
-  CustomIcon,
-  StatusBarCustom,
   BackCircle,
   HeaderCustom,
   ButtonCustom,
   openNotification,
+  CameraFill,
+  GalleryFill,
 } from '../../components';
 import {checkPermissionCamera, checkPermissionPhoto} from '../../controller';
 import Modal from 'react-native-modal';
@@ -174,7 +174,6 @@ export const InitAvatarScreen = ({navigation}: any) => {
 
   return (
     <ImageBackground style={styles.image} source={background_image}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
       <HeaderCustom
         backgroundStatusBar={color.transparent}
         removeBorderWidth
@@ -211,12 +210,7 @@ export const InitAvatarScreen = ({navigation}: any) => {
           animationOutTiming={2000}
           backdropOpacity={0.5}>
           <View style={styles.buttonModal}>
-            <CustomIcon
-              name="addcamera"
-              size={30}
-              color="#6A1616"
-              style={{flex: 0.5}}
-            />
+            <CameraFill />
             <Text
               style={styles.textButtonModal}
               onPress={() => {
@@ -227,12 +221,7 @@ export const InitAvatarScreen = ({navigation}: any) => {
             </Text>
           </View>
           <View style={styles.buttonModal}>
-            <CustomIcon
-              name="addpicture"
-              size={30}
-              color="#6A1616"
-              style={{flex: 0.5}}
-            />
+            <GalleryFill />
             <Text
               style={styles.textButtonModal}
               onPress={() => {
@@ -295,6 +284,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontStyle: 'normal',
     color: '#000000',
+    marginLeft: 16,
   },
   avatar: {
     width: '100%',

@@ -6,12 +6,15 @@ import {
   Dimensions,
   TouchableOpacity,
   ImageBackground,
+  Pressable,
 } from 'react-native';
 import {
   HeaderCustom,
   ButtonCustom,
   BackCircle,
   InputCustom,
+  Eye,
+  EyeDisable,
 } from '../../components';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {color, spacing} from '../../theme';
@@ -27,6 +30,7 @@ export const EnterPassword = () => {
   const [valuePassword, onChangeTextPassword] = useState('');
   const [required, setRequired] = useState(false);
   const [load, setLoad] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const {user} = route.params;
   user.password = valuePassword;
 
@@ -60,6 +64,12 @@ export const EnterPassword = () => {
           To access to your account, please type password.
         </Text>
         <InputCustom
+          rightIcon={
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              {!showPassword ? <Eye /> : <EyeDisable />}
+            </Pressable>
+          }
+          secureTextEntry={!showPassword}
           value={valuePassword}
           placeholder="Password must least 8 characters"
           onChangeText={(text) => onChangeTextPassword(text)}
