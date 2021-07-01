@@ -5,7 +5,6 @@ import {
   View,
   Pressable,
   ScrollView,
-  Alert,
   ImageBackground,
   Dimensions,
 } from 'react-native';
@@ -29,7 +28,6 @@ import {
   computeAge,
   getUserRandom,
   blockUser,
-  sendMessageRequest,
   sendNotification,
   uploadCoordinates,
 } from '../../controller';
@@ -40,7 +38,6 @@ import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import {spacing, color} from '../../theme';
-import {ROUTER} from '../../constants/router';
 import LinearGradient from 'react-native-linear-gradient';
 
 const saveTokenToDatabase = async (token: string) => {
@@ -115,6 +112,7 @@ export const StaplerScreen = () => {
   });
   const [isModalVisibleMenu, setIsModalVisibleMenu] = useState(false);
   const [user, setUser] = useState(User);
+  const [listUsers, setListUsers] = useState([]);
   const [load, setLoad] = useState(true);
   const [loadButton, setLoadButton] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
@@ -124,27 +122,8 @@ export const StaplerScreen = () => {
   });
   const ref_scroll = useRef(null);
 
-  const loadData = async (isMounted: boolean) => {
-    // setIsModalVisibleLoading(true);
-    await getAvailableUsers(filter).then(async (result) => {
-      if (isMounted) {
-        setUser(getUserRandom(result));
-        setLoad(false);
-      }
-    });
-  };
-
-  const handleYesAlert = () => {
-    sendMessageRequest(user.userId).then((conversationId) => {
-      setLoad(!load);
-      navigation.navigate(ROUTER.chat, {
-        name: user.name,
-        avatar: user.avatar,
-        conversationId: conversationId,
-        ownerId: user.userId,
-        state: true,
-      });
-    });
+  const loadData = async () => {
+    setUser(getUserRandom(listUsers));
   };
 
   const handleBlock = () => {
@@ -155,6 +134,7 @@ export const StaplerScreen = () => {
   };
 
   const handleLike = async () => {
+    loadData();
     await likeUser(user.userId);
     // @ts-ignore: Object is possibly 'null'.
     sendNotification(user.userId, auth().currentUser?.uid);
@@ -162,11 +142,13 @@ export const StaplerScreen = () => {
   };
 
   const handleDisLike = async () => {
+    loadData();
     await ignoreUser(user.userId);
     setLoad(!load);
   };
 
   const handleSupperLike = async () => {
+    loadData();
     await superLikeUser(user.userId);
     setLoad(!load);
   };
@@ -189,13 +171,19 @@ export const StaplerScreen = () => {
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-    loadData(isMounted);
+    getAvailableUsers(filter).then((result) => {
+      setListUsers(result);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    loadData();
     return () => {
-      isMounted = false;
+      loadData();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [load]);
+  }, [listUsers]);
 
   useEffect(() => {
     if (showInfo) {
@@ -206,8 +194,8 @@ export const StaplerScreen = () => {
 
   return (
     <View style={styles.wrap}>
-      {load && <Loading />}
-      {user?.name && !load ? (
+      {/* {load && <Loading />} */}
+      {user?.name ? (
         <View>
           <ScrollView
             ref={ref_scroll}
