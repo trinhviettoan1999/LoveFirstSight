@@ -123,7 +123,7 @@ export const StaplerScreen = () => {
   });
   const ref_scroll = useRef(null);
 
-  async function loadData(isMounted: boolean) {
+  const loadData = async (isMounted: boolean) => {
     // setIsModalVisibleLoading(true);
     await getAvailableUsers(filter).then(async (result) => {
       if (isMounted) {
@@ -131,7 +131,7 @@ export const StaplerScreen = () => {
         setLoad(false);
       }
     });
-  }
+  };
 
   const handleYesAlert = () => {
     sendMessageRequest(user.userId).then((conversationId) => {

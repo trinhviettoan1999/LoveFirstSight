@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -28,26 +28,11 @@ import {
   computeAge,
   getUser,
   uploadCoordinates,
+  sendNotification,
 } from '../../controller';
 import LinearGradient from 'react-native-linear-gradient';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
-
-const sendNotification = async (ownerId: string, userId: string) => {
-  return await fetch(
-    'https://still-brushlands-96770.herokuapp.com/notification/like/' +
-      ownerId +
-      '/' +
-      userId,
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json());
-};
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -82,6 +67,7 @@ export const ProfileScreen = () => {
     lat: 0,
     long: 0,
   });
+  const ref_scroll = useRef(null);
 
   const loadData = async () => {
     setLoad(true);
@@ -105,12 +91,20 @@ export const ProfileScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (showInfo) {
+      // @ts-ignore: Object is possibly 'null'.
+      ref_scroll.current.scrollTo({x: 0, y: HEIGHT - 50, animated: true});
+    }
+  }, [showInfo]);
+
   return (
     <View style={styles.wrap}>
       {load && <Loading />}
       {user?.name && !load ? (
         <View>
           <ScrollView
+            ref={ref_scroll}
             style={{width: WIDTH, height: HEIGHT}}
             contentContainerStyle={{
               paddingBottom: showInfo ? (isMatched > -1 ? 70 : spacing[4]) : 0,
@@ -223,7 +217,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
     borderRadius: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
     width: 30,
     height: 30,
     position: 'absolute',

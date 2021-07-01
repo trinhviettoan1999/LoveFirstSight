@@ -1,21 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Pressable,
   ScrollView,
-  ActivityIndicator,
+  Dimensions,
+  ImageBackground,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {
   StatusBarCustom,
-  CustomIcon,
-  ProfileInformation,
-  ImageUser,
   Header,
-  RouteStackParamList,
+  HeaderCustom,
+  Back,
+  OptionsGroup,
+  Info,
+  Hobbies,
+  ProfileContainer,
+  ImagesContainer,
 } from '../../../components';
-import Modal from 'react-native-modal';
 import {
   getListIgnore,
   computeAge,
@@ -23,50 +27,24 @@ import {
   likeUserIgnored,
   ignoreUserIgnored,
   superLikeUserIgnored,
-  reportUser,
-  blockUser,
+  sendNotification,
+  uploadCoordinates,
 } from '../../../controller';
 import auth from '@react-native-firebase/auth';
-import FastImage from 'react-native-fast-image';
+import {color, spacing} from '../../../theme';
+import LinearGradient from 'react-native-linear-gradient';
 
-type Props = {
-  name: string;
-  size: number;
-  color: string;
-  onPress?: any;
-};
-const ButtonIcon = ({name, size, color, onPress}: Props) => {
-  return (
-    <Pressable style={styles.buttonIcon} onPress={onPress}>
-      <CustomIcon name={name} size={size} color={color} />
-    </Pressable>
-  );
-};
-const sendNotification = async (ownerId: string, userId: string) => {
-  return await fetch(
-    'https://still-brushlands-96770.herokuapp.com/notification/like/' +
-      ownerId +
-      '/' +
-      userId,
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json());
-};
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
-export const ListIgnoreScreen = ({
-  navigation,
-}: RouteStackParamList<'LoadingScreen'>) => {
+export const ListIgnoreScreen = () => {
+  const navigation = useNavigation();
   const User = {
     userId: '',
     name: '',
     birthday: '',
     gender: '',
-    avatar: null,
+    avatar: '',
     email: '',
     intro: '',
     lookingFor: '',
@@ -77,15 +55,20 @@ export const ListIgnoreScreen = ({
     kids: '',
     province: '',
     coordinates: '',
-    images: [null, null, null, null, null, null, null, null],
+    images: ['', '', '', '', '', '', '', ''],
+    hobbies: [],
   };
-  const [isModalVisibleMenu, setIsModalVisibleMenu] = useState(false);
-  const [isModalVisibleLoading, setIsModalVisibleLoading] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [coordinate, setCoordinate] = useState({
+    lat: 0,
+    long: 0,
+  });
   const [status, setStatus] = useState(0);
   const [user, setUser] = useState(User);
   const [load, setLoad] = useState(false);
-  async function loadData(isMounted: boolean) {
-    setIsModalVisibleLoading(true);
+  const ref_scroll = useRef(null);
+
+  const loadData = async (isMounted: boolean) => {
     await getListIgnore().then(async (result) => {
       if (isMounted) {
         if (result.status === 200) {
@@ -97,8 +80,28 @@ export const ListIgnoreScreen = ({
         }
       }
     });
-    setIsModalVisibleLoading(false);
-  }
+  };
+
+  const ignoreUser = async () => {
+    await ignoreUserIgnored(user.userId);
+    setLoad(!load);
+  };
+
+  const starUser = async () => {
+    await superLikeUserIgnored(user.userId);
+    setLoad(!load);
+  };
+
+  const likeUser = async () => {
+    await likeUserIgnored(user.userId);
+    // @ts-ignore: Object is possibly 'null'.
+    sendNotification(user.userId, auth().currentUser?.uid);
+    setLoad(!load);
+  };
+
+  useEffect(() => {
+    uploadCoordinates(setCoordinate);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -109,176 +112,74 @@ export const ListIgnoreScreen = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load]);
 
+  useEffect(() => {
+    if (showInfo) {
+      // @ts-ignore: Object is possibly 'null'.
+      ref_scroll.current.scrollTo({x: 0, y: HEIGHT - 50, animated: true});
+    }
+  }, [showInfo]);
   return status === 200 ? (
-    <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <View style={styles.containerAll}>
-        <ScrollView style={styles.scrollView}>
-          <Header
-            title="List Ignore"
-            showIconLeft={true}
-            iconNameLeft="back"
-            onPressLeft={() => {
+    <View style={styles.wrap}>
+      <ScrollView
+        ref={ref_scroll}
+        style={{width: WIDTH, height: HEIGHT}}
+        contentContainerStyle={{
+          paddingBottom: showInfo ? 70 : 0,
+        }}>
+        <ImageBackground
+          source={{uri: user.avatar || undefined}}
+          style={styles.containerAll}
+          resizeMode="cover">
+          <HeaderCustom
+            backgroundStatusBar={color.transparent}
+            removeBorderWidth
+            barStyle="light-content"
+          />
+          <Pressable
+            style={styles.back}
+            onPress={() => {
               navigation.goBack();
-            }}
-            showIconRight={true}
-            iconNameRight="menu"
-            onPressRight={() => {
-              setIsModalVisibleMenu(true);
-            }}
-          />
-          <FastImage
-            style={styles.avatar}
-            source={{
-              // @ts-ignore: Object is possibly 'null'.
-              uri: user.avatar,
-              headers: {Authorization: 'staplerapp123456'},
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-          <View style={styles.container}>
-            <View style={styles.informationContainer}>
-              <View style={styles.firstContainer}>
-                <Text style={styles.font26}>{user.name}</Text>
-                <Text style={styles.font26}>, {computeAge(user.birthday)}</Text>
-              </View>
-              <Text style={styles.font17}>{user.intro}</Text>
-              <ProfileInformation iconName="gender" content={user.gender} />
-              {user.lookingFor ? (
-                <ProfileInformation
-                  iconName="lookingfor"
-                  content={user.lookingFor}
-                />
-              ) : null}
-              <ProfileInformation
-                iconName="location"
-                content="Located in Ho Chi Minh City, Viet Nam"
-              />
-              <ProfileInformation iconName="scope" content="10 Km" />
-              {user.height ? (
-                <ProfileInformation iconName="height" content={user.height} />
-              ) : null}
-              {user.university ? (
-                <ProfileInformation
-                  iconName="university"
-                  content={user.university}
-                />
-              ) : null}
-              {user.province ? (
-                <ProfileInformation
-                  iconName="province"
-                  content={user.province}
-                />
-              ) : null}
-              {user.drinking ? (
-                <ProfileInformation
-                  iconName="drinking"
-                  content={user.drinking}
-                />
-              ) : null}
-              {user.smoking ? (
-                <ProfileInformation iconName="smoking" content={user.smoking} />
-              ) : null}
-              {user.kids ? (
-                <ProfileInformation iconName="child" content={user.kids} />
-              ) : null}
+            }}>
+            <Back color={color.bgWhite} />
+          </Pressable>
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0)', '#000000']}
+            locations={[0.5323, 0.993]}
+            style={[styles.image, {paddingBottom: 70}]}>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.name}>
+                {`${user.name}  ${computeAge(user.birthday)}`}
+              </Text>
+              <Pressable onPress={() => setShowInfo(!showInfo)}>
+                <Info />
+              </Pressable>
             </View>
-            {user.images[0] ? <ImageUser urlImage={user.images[0]} /> : null}
-            {user.images[1] ? <ImageUser urlImage={user.images[1]} /> : null}
-            {user.images[2] ? <ImageUser urlImage={user.images[2]} /> : null}
-            {user.images[3] ? <ImageUser urlImage={user.images[3]} /> : null}
-            {user.images[4] ? <ImageUser urlImage={user.images[4]} /> : null}
-            {user.images[5] ? <ImageUser urlImage={user.images[5]} /> : null}
-            {user.images[6] ? <ImageUser urlImage={user.images[6]} /> : null}
-            {user.images[7] ? <ImageUser urlImage={user.images[7]} /> : null}
+            <Hobbies data={user.hobbies} />
+          </LinearGradient>
+        </ImageBackground>
+        {showInfo && (
+          <View>
+            <ProfileContainer user={user} coordinate={coordinate} />
+            <ImagesContainer images={user.images} />
           </View>
-          <View style={{height: 70}} />
-        </ScrollView>
-        <View style={styles.interactiveContainer}>
-          <ButtonIcon
-            name="dislike"
-            size={30}
-            color="#745300"
-            onPress={async () => {
-              await ignoreUserIgnored(user.userId);
-              setLoad(!load);
-            }}
-          />
-          <ButtonIcon
-            name="star"
-            size={40}
-            color="#0078D4"
-            onPress={async () => {
-              await superLikeUserIgnored(user.userId);
-              setLoad(!load);
-            }}
-          />
-          <ButtonIcon
-            name="lookingfor"
-            size={30}
-            color="#6A1616"
-            onPress={async () => {
-              await likeUserIgnored(user.userId);
-              // @ts-ignore: Object is possibly 'null'.
-              sendNotification(user.userId, auth().currentUser?.uid);
-              setLoad(!load);
-            }}
-          />
-        </View>
-        <Modal
-          swipeDirection="down"
-          onSwipeComplete={() => setIsModalVisibleMenu(false)}
-          hideModalContentWhileAnimating
-          isVisible={isModalVisibleMenu}
-          style={styles.modalMenu}
-          onBackdropPress={() => setIsModalVisibleMenu(false)}
-          backdropOpacity={0.5}>
-          <View style={styles.buttonModal}>
-            <CustomIcon
-              name="report"
-              size={30}
-              color="#6A1616"
-              style={{flex: 0.5}}
-            />
-            <Text
-              style={styles.textButtonModal}
-              onPress={() => reportUser(user.userId)}>
-              Report {user.name}'s profile
-            </Text>
-          </View>
-          <View style={styles.buttonModal}>
-            <CustomIcon
-              name="block-people"
-              size={30}
-              color="#6A1616"
-              style={{flex: 0.5}}
-            />
-            <Text
-              style={styles.textButtonModal}
-              onPress={() => blockUser(user.userId)}>
-              Block {user.name}'s profile
-            </Text>
-          </View>
-        </Modal>
-        <Modal
-          isVisible={isModalVisibleLoading}
-          style={styles.modalLoading}
-          backdropOpacity={0.5}>
-          <ActivityIndicator size="large" color="#6A1616" />
-        </Modal>
-      </View>
+        )}
+      </ScrollView>
+      <OptionsGroup
+        onPressIgnore={ignoreUser}
+        onPressSupperLike={starUser}
+        onPressLike={likeUser}
+      />
     </View>
   ) : (
     <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         title="List Ignore"
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
+        leftComponent={
+          <Pressable onPress={() => navigation.goBack()}>
+            <Back />
+          </Pressable>
+        }
       />
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Don't have list ignore</Text>
@@ -288,9 +189,38 @@ export const ListIgnoreScreen = ({
 };
 
 const styles = StyleSheet.create({
-  containerAll: {
+  wrap: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: color.bgWhite,
+  },
+  containerAll: {
+    width: '100%',
+    height: HEIGHT,
+    backgroundColor: color.bgWhite,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingHorizontal: spacing[4],
+  },
+  name: {
+    marginBottom: spacing[4],
+    marginRight: spacing[2],
+    color: color.bgWhite,
+    lineHeight: 27,
+    fontWeight: '700',
+    fontSize: 25,
+  },
+  back: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    width: 30,
+    height: 30,
+    position: 'absolute',
+    top: 40,
+    left: 16,
   },
   modalFilter: {
     flex: 1,

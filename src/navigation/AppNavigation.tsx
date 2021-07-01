@@ -220,19 +220,6 @@ export const AppNavigation = () => {
           name={ROUTER.listBlock}
           component={screen.ListBlockScreen}
         />
-        <Stack.Screen name={ROUTER.email} component={screen.EmailScreen} />
-        <Stack.Screen
-          name={ROUTER.connectedAccount}
-          component={screen.ConnectedAccountScreen}
-        />
-        <Stack.Screen
-          name={ROUTER.emailNotification}
-          component={screen.EmailNotificationScreen}
-        />
-        <Stack.Screen
-          name={ROUTER.pushNotification}
-          component={screen.PushNotificationScreen}
-        />
         <Stack.Screen
           name={ROUTER.editName}
           component={screen.EditNameScreen}

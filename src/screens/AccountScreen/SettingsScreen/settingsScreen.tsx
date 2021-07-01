@@ -1,11 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import {
-  Header,
-  RouteStackParamList,
-  CustomIcon,
-  StatusBarCustom,
-} from '../../../components';
+import {View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {color} from '../../../theme';
+import {CustomIcon, HeaderCustom, Back} from '../../../components';
+import {ROUTER} from '../../../constants';
 
 type Props = {
   content: string;
@@ -32,37 +30,27 @@ const Item = ({content, onPress}: Props) => {
   );
 };
 
-export const SettingsScreen = ({
-  navigation,
-}: RouteStackParamList<'SettingsScreen'>) => {
+export const SettingsScreen = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         title="Settings"
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => navigation.goBack()}
+        leftComponent={
+          <Pressable onPress={() => navigation.goBack()}>
+            <Back />
+          </Pressable>
+        }
       />
       <ScrollView style={styles.scrollView}>
-        {/* <Title content="ACCOUNT SETTINGS" />
-        <View style={styles.twoContainer}>
-          <Item
-            content="Email"
-            onPress={() => navigation.navigate('EmailScreen')}
-          />
-          <View style={styles.divider} />
-          <Item
-            content="Connected Accounts"
-            onPress={() => navigation.navigate('ConnectedAccountScreen')}
-          />
-        </View> */}
         <Title content="LIST IGNORE" />
         <View style={styles.oneContainer}>
           <Item
             content="List Ignore User"
             onPress={() => {
-              navigation.navigate('ListIgnoreScreen');
+              navigation.navigate(ROUTER.listIgnore);
             }}
           />
         </View>
@@ -71,30 +59,8 @@ export const SettingsScreen = ({
           <Item
             content="List Block User"
             onPress={() => {
-              navigation.navigate('ListBlockScreen');
+              navigation.navigate(ROUTER.listBlock);
             }}
-          />
-        </View>
-        <Title content="ACTIVE STATUS" />
-        <View style={styles.oneContainer}>
-          <Item content="Recently Active Status" />
-        </View>
-        <Title content="COMMUNITY" />
-        <View style={styles.twoContainer}>
-          <Item content="Community Guidelines" />
-          <View style={styles.divider} />
-          <Item content="Safety Tips" />
-        </View>
-        <Title content="NOTIFICATIONS" />
-        <View style={styles.twoContainer}>
-          <Item
-            content="Email"
-            onPress={() => navigation.navigate('EmailNotificationScreen')}
-          />
-          <View style={styles.divider} />
-          <Item
-            content="Push Notifications"
-            onPress={() => navigation.navigate('PushNotificationScreen')}
           />
         </View>
       </ScrollView>
@@ -119,20 +85,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#FFFFFF',
   },
-  twoContainer: {
-    height: 90,
-    width: '100%',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  threeContainer: {
-    height: 135,
-    width: '100%',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    backgroundColor: '#FFFFFF',
-  },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -148,8 +100,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     color: '#0078D4',
-    marginTop: 6,
-    marginBottom: 6,
+    marginVertical: 10,
   },
   content: {
     flex: 16,
