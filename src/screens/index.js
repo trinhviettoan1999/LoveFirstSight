@@ -14,6 +14,7 @@ export * from './AccountScreen/EditProfileScreen/editGenderScreen';
 export * from './AccountScreen/EditProfileScreen/editHeightScreen';
 export * from './AccountScreen/EditProfileScreen/editHomeTownScreen';
 export * from './AccountScreen/EditProfileScreen/editUniversityScreen';
+export * from './AccountScreen/EditProfileScreen/editBioScreen';
 export * from './SignUpScreen/enterMailScreen';
 export * from './SignUpScreen/enterCodeScreen';
 export * from './SignUpScreen/initNameScreen';

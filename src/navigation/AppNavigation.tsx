@@ -262,6 +262,7 @@ export const AppNavigation = () => {
           name={ROUTER.editYourKid}
           component={screen.EditYourKidScreen}
         />
+        <Stack.Screen name={ROUTER.editBio} component={screen.EditBioScreen} />
         <Stack.Screen name={ROUTER.chat} component={screen.Chat} />
         <Stack.Screen
           name={ROUTER.conversation}

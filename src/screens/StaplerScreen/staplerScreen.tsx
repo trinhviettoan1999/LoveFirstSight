@@ -38,6 +38,7 @@ import messaging from '@react-native-firebase/messaging';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
+import Modal from 'react-native-modal';
 import {spacing, color} from '../../theme';
 import {ROUTER} from '../../constants/router';
 import LinearGradient from 'react-native-linear-gradient';
@@ -136,7 +137,7 @@ export const StaplerScreen = () => {
   const handleYesAlert = () => {
     sendMessageRequest(user.userId).then((conversationId) => {
       setLoad(!load);
-      navigation.navigate('Chat', {
+      navigation.navigate(ROUTER.chat, {
         name: user.name,
         avatar: user.avatar,
         conversationId: conversationId,

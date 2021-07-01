@@ -30,6 +30,7 @@ export const ROUTER = {
   editDrinking: 'EditDrinkingScreen',
   editSmoking: 'EditSmokingScreen',
   editYourKid: 'EditYourKidScreen',
+  editBio: 'EditBioScreen',
   chat: 'Chat',
   conversation: 'ConversationScreen',
   profile: 'ProfileScreen',

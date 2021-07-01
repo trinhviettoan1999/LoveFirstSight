@@ -1,8 +1,10 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {calculateDistance} from '../../controller';
-import {ProfileInformation} from '../';
+import {View, StyleSheet, Pressable, Alert} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {calculateDistance, sendMessageRequest} from '../../controller';
+import {ProfileInformation, MessageIcon} from '../';
 import {color, spacing} from '../../theme';
+import {ROUTER} from '../../constants';
 
 interface ProfileProps {
   user: {
@@ -31,6 +33,38 @@ interface ProfileProps {
 }
 
 export const ProfileContainer = ({user, coordinate}: ProfileProps) => {
+  const navigation = useNavigation();
+
+  const handleYesAlert = () => {
+    sendMessageRequest(user.userId).then((conversationId) => {
+      navigation.navigate(ROUTER.chat, {
+        name: user.name,
+        avatar: user.avatar,
+        conversationId: conversationId,
+        ownerId: user.userId,
+        state: true,
+      });
+    });
+  };
+
+  const handleMessage = () => {
+    Alert.alert(
+      'Notification',
+      `Do you want to send message to ${user.name}?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: handleYesAlert,
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   return (
     <View style={styles.infoContainer}>
       <ProfileInformation iconName="gender" content={user.gender} />
@@ -67,6 +101,9 @@ export const ProfileContainer = ({user, coordinate}: ProfileProps) => {
       {user.kids ? (
         <ProfileInformation iconName="child" content={user.kids} />
       ) : null}
+      <Pressable style={styles.messageIcon} onPress={handleMessage}>
+        <MessageIcon />
+      </Pressable>
     </View>
   );
 };
@@ -87,5 +124,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 4,
     elevation: 5,
+  },
+  messageIcon: {
+    position: 'absolute',
+    top: 15,
+    right: 16,
   },
 });

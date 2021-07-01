@@ -72,18 +72,10 @@ export const AccountScreen = () => {
     setUser(user);
   };
 
-  // console.log(user);
   useEffect(() => {
     // @ts-ignore: Object is possibly 'null'.
     loadUser();
-  }, [route.params, loadAvatar]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      loadUser();
-    });
-    return unsubscribe;
-  }, [navigation]);
+  }, [user]);
 
   return (
     <View style={styles.container}>
@@ -144,7 +136,15 @@ export const AccountScreen = () => {
                 , {computeAge(user.birthday)}
               </Text>
             </View>
-            <Text style={styles.font17}>{user.intro}</Text>
+            <Text
+              style={styles.font17}
+              onPress={() => {
+                navigation.navigate(ROUTER.editBio, {
+                  intro: user.intro,
+                });
+              }}>
+              {user.intro}
+            </Text>
             <ProfileInformation
               iconName="gender"
               content={user.gender}
