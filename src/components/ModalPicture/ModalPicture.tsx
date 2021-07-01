@@ -1,9 +1,10 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import Modal from 'react-native-modal';
-import {ButtonCustom, CustomIcon} from '..';
+import {ButtonCustom} from '..';
 import {cameraLaunch, deleteImage, galleryLaunch} from '../../controller';
 import auth from '@react-native-firebase/auth';
+import {BinFill, CameraFill, GalleryFill} from '../AllSvgIcon/AllSvgIcon';
 
 interface PropsModal {
   isModalVisible: boolean;
@@ -26,6 +27,7 @@ export const ModalPicture = ({
 }: PropsModal) => {
   return (
     <Modal
+      backdropTransitionOutTiming={0}
       swipeDirection="down"
       onSwipeComplete={() => setIsModalVisible(false)}
       hideModalContentWhileAnimating
@@ -37,7 +39,7 @@ export const ModalPicture = ({
         buttonStyle={styles.buttonModal}
         titleStyle={styles.text}
         title="Open camera"
-        icon={<CustomIcon name="addcamera" size={30} color="#6A1616" />}
+        icon={<CameraFill />}
         onPress={() => {
           setIsModalVisible(false);
           cameraLaunch({
@@ -56,7 +58,7 @@ export const ModalPicture = ({
         buttonStyle={styles.buttonModal}
         titleStyle={styles.text}
         title="Upload From Gallery"
-        icon={<CustomIcon name="addpicture" size={30} color="#6A1616" />}
+        icon={<GalleryFill />}
         onPress={() => {
           setIsModalVisible(false);
           galleryLaunch({
@@ -76,7 +78,7 @@ export const ModalPicture = ({
           buttonStyle={styles.buttonModal}
           titleStyle={styles.text}
           title="Delete Image"
-          icon={<CustomIcon name="bin" size={30} color="#6A1616" />}
+          icon={<BinFill />}
           onPress={() => {
             deleteImage(fileName, images);
             setIsModalVisible(false);
@@ -106,5 +108,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontStyle: 'normal',
     color: '#000000',
+    marginLeft: 5,
   },
 });

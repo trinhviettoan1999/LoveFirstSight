@@ -1,36 +1,35 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, Pressable} from 'react-native';
-import {
-  Header,
-  StatusBarCustom,
-  RouteStackParamList,
-  CustomIcon,
-} from '../../../components';
+import {useNavigation} from '@react-navigation/native';
+import {CustomIcon, Back, HeaderCustom} from '../../../components';
 import {getListBlock, unBlockUser} from '../../../controller';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import {ROUTER} from '../../../constants';
+import {color} from '../../../theme';
 
-export const ListBlockScreen = ({
-  navigation,
-}: RouteStackParamList<'LoadingScreen'>) => {
+export const ListBlockScreen = () => {
+  const navigation = useNavigation();
   const [listBlock, setListBlock] = useState([]);
   const [status, setStatus] = useState(0);
   const [load, setLoad] = useState(false);
+
   useEffect(() => {
     getListBlock().then(async (result) => {
       setListBlock(await result.json());
       setStatus(await result.status);
     });
   }, [load]);
+
   return (
     <View style={styles.containerAll}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <Header
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
         title="List Block"
-        showIconLeft={true}
-        iconNameLeft="back"
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
+        leftComponent={
+          <Pressable onPress={() => navigation.goBack()}>
+            <Back />
+          </Pressable>
+        }
       />
       {status === 200 ? (
         <View style={styles.container}>
@@ -43,7 +42,7 @@ export const ListBlockScreen = ({
               <Pressable
                 style={styles.item}
                 onPress={() => {
-                  navigation.navigate('ProfileScreen', {
+                  navigation.navigate(ROUTER.profile, {
                     // @ts-ignore: Object is possibly 'null'.
                     userId: data.item.userId,
                   });
