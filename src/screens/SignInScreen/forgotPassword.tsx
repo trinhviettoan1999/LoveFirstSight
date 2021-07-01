@@ -6,7 +6,7 @@ import {
   Alert,
   ImageBackground,
   Dimensions,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {
   ButtonCustom,
@@ -59,9 +59,9 @@ export const ForgotPasswordScreen = () => {
         backgroundStatusBar={color.transparent}
         removeBorderWidth
         leftComponent={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Pressable onPress={() => navigation.goBack()}>
             <BackCircle />
-          </TouchableOpacity>
+          </Pressable>
         }
       />
       <View style={styles.container}>

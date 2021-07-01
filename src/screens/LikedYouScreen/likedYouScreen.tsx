@@ -4,7 +4,7 @@ import {
   View,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -21,10 +21,7 @@ const HEIGHT = Dimensions.get('window').height;
 
 const Item = ({item, onPress, iconName}: any) => {
   return (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={onPress}
-      activeOpacity={0.7}>
+    <Pressable style={styles.itemContainer} onPress={onPress}>
       <View style={styles.avatar}>
         <FastImage
           style={styles.avatar}
@@ -51,7 +48,7 @@ const Item = ({item, onPress, iconName}: any) => {
           style={{marginLeft: 5}}
         />
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

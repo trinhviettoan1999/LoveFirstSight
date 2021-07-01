@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   ImageBackground,
   Dimensions,
@@ -124,9 +124,8 @@ export const ProfileScreen = () => {
                 removeBorderWidth
                 barStyle="light-content"
               />
-              <TouchableOpacity
+              <Pressable
                 style={styles.back}
-                activeOpacity={0.7}
                 onPress={() => {
                   if (route.params.flag) {
                     navigation.replace(ROUTER.home);
@@ -135,7 +134,7 @@ export const ProfileScreen = () => {
                   }
                 }}>
                 <Back color={color.bgWhite} />
-              </TouchableOpacity>
+              </Pressable>
               <LinearGradient
                 colors={['rgba(255, 255, 255, 0)', '#000000']}
                 locations={[0.5323, 0.993]}
@@ -147,9 +146,9 @@ export const ProfileScreen = () => {
                   <Text style={styles.name}>
                     {`${user.name}  ${computeAge(user.birthday)}`}
                   </Text>
-                  <TouchableOpacity onPress={() => setShowInfo(!showInfo)}>
+                  <Pressable onPress={() => setShowInfo(!showInfo)}>
                     <Info />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
                 <Hobbies data={user.hobbies} />
               </LinearGradient>

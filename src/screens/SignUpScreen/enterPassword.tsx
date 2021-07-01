@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   Dimensions,
-  TouchableOpacity,
   ImageBackground,
   Pressable,
 } from 'react-native';
@@ -53,9 +52,9 @@ export const EnterPassword = () => {
         backgroundStatusBar={color.transparent}
         removeBorderWidth
         leftComponent={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Pressable onPress={() => navigation.goBack()}>
             <BackCircle />
-          </TouchableOpacity>
+          </Pressable>
         }
       />
       <View style={styles.container}>

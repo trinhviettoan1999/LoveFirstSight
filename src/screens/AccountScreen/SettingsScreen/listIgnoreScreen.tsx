@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
@@ -37,9 +37,9 @@ type Props = {
 };
 const ButtonIcon = ({name, size, color, onPress}: Props) => {
   return (
-    <TouchableOpacity style={styles.buttonIcon} onPress={onPress}>
+    <Pressable style={styles.buttonIcon} onPress={onPress}>
       <CustomIcon name={name} size={size} color={color} />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 const sendNotification = async (ownerId: string, userId: string) => {

@@ -1,11 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {
   CustomIcon,
@@ -298,9 +292,9 @@ export const FilterScreen = ({
         title="Filter"
         backgroundStatusBar={color.bgWhite}
         leftComponent={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Pressable onPress={() => navigation.goBack()}>
             <Back />
-          </TouchableOpacity>
+          </Pressable>
         }
       />
       <ScrollView style={styles.scrollView}>
@@ -409,7 +403,7 @@ export const FilterScreen = ({
             }}
           />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
+            <Pressable
               activeOpacity={0.6}
               style={[styles.button, {backgroundColor: '#E1E1E1'}]}
               onPress={() => {
@@ -440,8 +434,8 @@ export const FilterScreen = ({
               <Text style={[styles.textContent, {color: '#ACACAC'}]}>
                 Clear All
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               onPress={async () => {
                 await setFilter({
                   gender: gender.value,
@@ -465,7 +459,7 @@ export const FilterScreen = ({
               <Text style={[styles.textContent, {color: '#FFFFFF'}]}>
                 Apply changes
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
         <Modal

@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Text,
   Dimensions,
-  TouchableOpacity,
+  Pressable,
   ImageBackground,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -90,9 +90,9 @@ export const InitNameScreen = () => {
           backgroundStatusBar={color.transparent}
           removeBorderWidth
           leftComponent={
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Pressable onPress={() => navigation.goBack()}>
               <BackCircle />
-            </TouchableOpacity>
+            </Pressable>
           }
         />
         <View style={styles.container}>

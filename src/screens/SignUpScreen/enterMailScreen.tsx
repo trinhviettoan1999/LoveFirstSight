@@ -5,7 +5,7 @@ import {
   Text,
   ImageBackground,
   Dimensions,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -80,9 +80,9 @@ export const EnterMailScreen = () => {
         backgroundStatusBar={color.transparent}
         removeBorderWidth
         leftComponent={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Pressable onPress={() => navigation.goBack()}>
             <BackCircle />
-          </TouchableOpacity>
+          </Pressable>
         }
       />
       <View style={styles.container}>

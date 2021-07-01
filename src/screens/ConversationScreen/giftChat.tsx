@@ -7,7 +7,7 @@ import {
   FlatList,
   Image,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   Text,
   ActivityIndicator,
 } from 'react-native';
@@ -481,23 +481,20 @@ export const Chat = () => {
       <HeaderCustom
         backgroundStatusBar={color.bgWhite}
         leftComponent={
-          <TouchableOpacity onPress={handleBack}>
+          <Pressable onPress={handleBack}>
             <Back />
-          </TouchableOpacity>
+          </Pressable>
         }
         rightComponent={
-          <TouchableOpacity onPress={handleVideoCall}>
+          <Pressable onPress={handleVideoCall}>
             <Video />
-          </TouchableOpacity>
+          </Pressable>
         }
         centerComponent={
           <View style={styles.headerName}>
-            <TouchableOpacity
-              style={styles.avatar}
-              activeOpacity={0.5}
-              onPress={onPressAvatar}>
+            <Pressable style={styles.avatar} onPress={onPressAvatar}>
               <Image style={styles.avatar} source={{uri: avatar}} />
-            </TouchableOpacity>
+            </Pressable>
             <Text style={styles.textName}>{name}</Text>
           </View>
         }
@@ -530,9 +527,8 @@ export const Chat = () => {
           data={photos}
           numColumns={3}
           renderItem={({item}) => (
-            <TouchableOpacity
+            <Pressable
               style={styles.buttonFlatlist}
-              activeOpacity={0.6}
               onPress={() => {
                 setImage(item.node.image.uri);
               }}>
@@ -540,7 +536,7 @@ export const Chat = () => {
                 style={styles.imageFlatlist}
                 source={{uri: item.node.image.uri}}
               />
-            </TouchableOpacity>
+            </Pressable>
           )}
           keyExtractor={(item) => item.node.image.uri}
           columnWrapperStyle={styles.row}
@@ -548,12 +544,9 @@ export const Chat = () => {
         />
       ) : null}
       {image && (
-        <TouchableOpacity
-          style={styles.buttonSend}
-          onPress={handleSendImage}
-          activeOpacity={0.6}>
+        <Pressable style={styles.buttonSend} onPress={handleSendImage}>
           <Text style={styles.textButtonSend}>Send</Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   );

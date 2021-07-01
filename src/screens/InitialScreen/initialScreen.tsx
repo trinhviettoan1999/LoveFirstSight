@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, Pressable} from 'react-native';
 import {
   RouteStackParamList,
   CustomIcon,
@@ -25,9 +25,8 @@ export const InitialScreen = ({
           Please try again. If you don't have GPS turned on, turn on GPS.
         </Text>
       </View>
-      <TouchableOpacity
+      <Pressable
         style={styles.reload}
-        activeOpacity={0.7}
         onPress={() => {
           RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
             interval: 10000,
@@ -52,7 +51,7 @@ export const InitialScreen = ({
             });
         }}>
         <CustomIcon name="reload" size={30} color="#6A1616" />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };

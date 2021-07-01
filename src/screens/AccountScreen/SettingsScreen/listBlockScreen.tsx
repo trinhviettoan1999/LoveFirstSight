@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, Pressable} from 'react-native';
 import {
   Header,
   StatusBarCustom,
@@ -40,9 +40,8 @@ export const ListBlockScreen = ({
             // @ts-ignore: Object is possibly 'null'.
             keyExtractor={(item) => item.userId}
             renderItem={(data) => (
-              <TouchableOpacity
+              <Pressable
                 style={styles.item}
-                activeOpacity={1}
                 onPress={() => {
                   navigation.navigate('ProfileScreen', {
                     // @ts-ignore: Object is possibly 'null'.
@@ -55,15 +54,14 @@ export const ListBlockScreen = ({
                     data.item.name
                   }
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             )}
             disableRightSwipe
             rightOpenValue={-80}
             renderHiddenItem={(data) => (
               <View style={styles.itemHidden}>
-                <TouchableOpacity
+                <Pressable
                   style={styles.containerRight}
-                  activeOpacity={0.3}
                   onPress={async () => {
                     // @ts-ignore: Object is possibly 'null'.
                     await unBlockUser(data.item.userId);
@@ -71,7 +69,7 @@ export const ListBlockScreen = ({
                   }}>
                   <CustomIcon name="bin" size={18} />
                   <Text>Unblock</Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             )}
           />

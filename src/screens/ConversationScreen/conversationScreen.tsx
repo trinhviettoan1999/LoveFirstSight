@@ -4,7 +4,7 @@ import {
   View,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
+  Pressable,
   Dimensions,
   StatusBar,
 } from 'react-native';
@@ -14,7 +14,6 @@ import {
   checkIsReadConversation,
   getConversation,
   getConversationWait,
-  getCountNotRead,
   updateStatusIsRead,
 } from '../../controller';
 import FastImage from 'react-native-fast-image';
@@ -43,9 +42,8 @@ const ItemConversation = ({item, onPress}: any) => {
   }, []);
 
   return (
-    <TouchableOpacity
+    <Pressable
       style={styles.itemConversationContainer}
-      activeOpacity={0.5}
       onPress={() => {
         onPress();
         if (isRead) {
@@ -77,7 +75,7 @@ const ItemConversation = ({item, onPress}: any) => {
           <Text style={styles.textMessageIsRead}>{item.text}</Text>
         )}
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -106,7 +104,6 @@ const ConversationWait = () => {
 
   useEffect(() => {
     getConversationWait().then((result) => setConversation(result));
-    getCountNotRead();
   }, []);
 
   return (

@@ -5,7 +5,7 @@ import {
   Text,
   FlatList,
   TextInput,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {
   StatusBarCustom,
@@ -52,8 +52,7 @@ const ItemComment = ({
       <FastImage
         style={styles.avatar}
         source={{
-          uri:
-            'https://media-cdn.laodong.vn/Storage/NewsPortal/2020/8/21/829850/Bat-Cuoi-Truoc-Nhung-07.jpg',
+          uri: 'https://media-cdn.laodong.vn/Storage/NewsPortal/2020/8/21/829850/Bat-Cuoi-Truoc-Nhung-07.jpg',
         }}
       />
       <View style={styles.info}>
@@ -88,35 +87,33 @@ const ItemComment = ({
         )}
       </View>
       {userId === auth().currentUser?.uid && !edit ? (
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => setShowOption(!showOption)}>
+        <Pressable onPress={() => setShowOption(!showOption)}>
           <CustomIcon
             name="option"
             size={18}
             color="#6A1616"
             style={{alignSelf: 'flex-end'}}
           />
-        </TouchableOpacity>
+        </Pressable>
       ) : null}
       {showOption && (
         <View style={styles.option}>
-          <TouchableOpacity
+          <Pressable
             style={styles.textOption}
             onPress={() => {
               deleteComment(postId, commentId, comment, userId),
                 setShowOption(false);
             }}>
             <Text>Delete comment</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Pressable>
+          <Pressable
             style={styles.textOption}
             onPress={() => {
               setEdit(true);
               setShowOption(false);
             }}>
             <Text>Edit comment</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       )}
     </View>
@@ -181,11 +178,9 @@ export const DetailNewScreen = ({
                 }
               })}
             </Swiper>
-            <TouchableOpacity
-              style={styles.back}
-              onPress={() => navigation.goBack()}>
+            <Pressable style={styles.back} onPress={() => navigation.goBack()}>
               <CustomIcon name="cancel" color="#6A1616" size={20} />
-            </TouchableOpacity>
+            </Pressable>
           </View>
         ) : null}
         <Text style={styles.content}>{content}</Text>
@@ -204,7 +199,7 @@ export const DetailNewScreen = ({
               value={comment}
               onChangeText={setComment}
             />
-            <TouchableOpacity
+            <Pressable
               style={styles.send}
               onPress={() => {
                 commentPost(comment, postId);
@@ -216,7 +211,7 @@ export const DetailNewScreen = ({
                 size={20}
                 style={{alignSelf: 'center'}}
               />
-            </TouchableOpacity>
+            </Pressable>
           </View>
         }
         renderItem={({item}) => (

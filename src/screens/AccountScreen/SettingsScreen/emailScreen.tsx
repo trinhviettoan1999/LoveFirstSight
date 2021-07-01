@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Text, StyleSheet, Pressable} from 'react-native';
 import {
   Header,
   CustomIcon,
@@ -37,9 +36,9 @@ export const EmailScreen = ({
           <Text style={styles.textNotify}>Please check your email</Text>
         )}
         {isVerified ? null : (
-          <TouchableOpacity style={styles.button}>
+          <Pressable style={styles.button}>
             <Text style={styles.textButton}>Send Verification Email</Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
     </View>

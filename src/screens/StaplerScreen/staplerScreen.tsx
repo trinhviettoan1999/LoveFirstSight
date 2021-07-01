@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   Alert,
   ImageBackground,
@@ -229,12 +229,12 @@ export const StaplerScreen = () => {
                   <Text style={styles.name}>
                     {`${user.name}  ${computeAge(user.birthday)}`}
                   </Text>
-                  <TouchableOpacity
+                  <Pressable
                     onPress={() => {
                       setShowInfo(!showInfo);
                     }}>
                     <Info />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
                 <Hobbies data={user.hobbies} />
               </LinearGradient>

@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   FlatList,
   TextInput,
   Text,
@@ -93,35 +93,23 @@ export const InputToolBar = ({
   return (
     <View style={styles.inputToolbar}>
       {!startAudio ? (
-        <TouchableOpacity
-          style={styles.icon}
-          activeOpacity={0.9}
-          onPress={onPressMic}>
+        <Pressable style={styles.icon} onPress={onPressMic}>
           {startAudio ? <MicFill /> : <Mic />}
-        </TouchableOpacity>
+        </Pressable>
       ) : (
-        <TouchableOpacity
-          style={[styles.icon, {marginLeft: 10}]}
-          activeOpacity={0.9}
-          onPress={onPressBin}>
+        <Pressable style={[styles.icon, {marginLeft: 10}]} onPress={onPressBin}>
           <BinFill />
-        </TouchableOpacity>
+        </Pressable>
       )}
       {!startAudio && (
-        <TouchableOpacity
-          style={styles.icon}
-          activeOpacity={0.9}
-          onPress={onPressCamera}>
+        <Pressable style={styles.icon} onPress={onPressCamera}>
           {pressCamera ? <CameraFill /> : <Camera />}
-        </TouchableOpacity>
+        </Pressable>
       )}
       {!startAudio && (
-        <TouchableOpacity
-          style={styles.icon}
-          activeOpacity={0.9}
-          onPress={onPressGallery}>
+        <Pressable style={styles.icon} onPress={onPressGallery}>
           {pressPhotos ? <GalleryFill /> : <Gallery />}
-        </TouchableOpacity>
+        </Pressable>
       )}
       {!startAudio ? (
         <TextInput
@@ -158,7 +146,7 @@ export const InputToolBar = ({
         </View>
       )}
       {valueText ? (
-        <TouchableOpacity
+        <Pressable
           style={[
             styles.icon,
             {
@@ -167,18 +155,16 @@ export const InputToolBar = ({
               alignItems: 'flex-end',
             },
           ]}
-          activeOpacity={0.9}
           onPress={onSendMessage}>
           <Send />
-        </TouchableOpacity>
+        </Pressable>
       ) : null}
       {startAudio && (
-        <TouchableOpacity
+        <Pressable
           style={[styles.icon, {marginRight: 16}]}
-          activeOpacity={0.9}
           onPress={onPressSendAudio}>
           <Send />
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   );

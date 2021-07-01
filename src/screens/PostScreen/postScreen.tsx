@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   Text,
   TextInput,
   FlatList,
@@ -44,12 +44,11 @@ const ItemImage = ({item, onPressRemove}: any) => {
       ) : (
         <Video style={styles.image} source={{uri: item.path}} />
       )}
-      <TouchableOpacity
-        activeOpacity={0.5}
+      <Pressable
         onPress={onPressRemove}
         style={{position: 'absolute', bottom: 100, left: 100}}>
         <CustomIcon name="cancel" size={20} color="#E10000" />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -134,9 +133,9 @@ export const PostScreen = () => {
         backgroundStatusBar={color.bgWhite}
         title="Create post"
         leftComponent={
-          <TouchableOpacity onPress={handleBack}>
+          <Pressable onPress={handleBack}>
             <Back />
-          </TouchableOpacity>
+          </Pressable>
         }
         rightComponent={
           content || listCollection.length > 0 ? (
@@ -178,20 +177,14 @@ export const PostScreen = () => {
             </View>
           ) : null}
         </View>
-        <TouchableOpacity
-          style={styles.bottomButton}
-          onPress={handleAddImage}
-          activeOpacity={0.8}>
+        <Pressable style={styles.bottomButton} onPress={handleAddImage}>
           <GalleryFill />
           <Text style={styles.textSelection}>Add images to your post</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.bottomButton}
-          onPress={handleAddVideo}
-          activeOpacity={0.8}>
+        </Pressable>
+        <Pressable style={styles.bottomButton} onPress={handleAddVideo}>
           <VideoOn />
           <Text style={styles.textSelection}>Add video to your post</Text>
-        </TouchableOpacity>
+        </Pressable>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );

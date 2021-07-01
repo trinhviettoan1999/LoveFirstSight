@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, Image, Pressable} from 'react-native';
 import CustomIcon from '../CustomIcon/customIcon';
 
 type Props = {
@@ -38,32 +38,23 @@ export const Header = ({
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.headerLeft}
-          onPress={onPressLeft}
-          activeOpacity={0.9}>
+        <Pressable style={styles.headerLeft} onPress={onPressLeft}>
           {showIconLeft ? (
             <CustomIcon name={iconNameLeft} size={20} color="#000000" />
           ) : null}
           {showTextLeft ? (
             <Text style={styles.textLeft}>{textLeft}</Text>
           ) : null}
-        </TouchableOpacity>
+        </Pressable>
         <View style={styles.headerTiltle}>
           {showAvatar ? (
-            <TouchableOpacity
-              style={styles.avatar}
-              activeOpacity={0.5}
-              onPress={onPressAvatar}>
+            <Pressable style={styles.avatar} onPress={onPressAvatar}>
               <Image style={styles.avatar} source={{uri: avatarUri}} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           <Text style={styles.textTitle}>{title}</Text>
         </View>
-        <TouchableOpacity
-          style={styles.headerRight}
-          onPress={onPressRight}
-          activeOpacity={0.9}>
+        <Pressable style={styles.headerRight} onPress={onPressRight}>
           {showTextRight ? (
             <Text style={styles.textRight} onPress={onPressRight}>
               {textRight}
@@ -77,7 +68,7 @@ export const Header = ({
               onPress={onPressRight}
             />
           ) : null}
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <View style={styles.divider} />
     </View>

@@ -5,14 +5,13 @@ import {
   Text,
   Platform,
   Dimensions,
-  TouchableOpacity,
+  Pressable,
   ImageBackground,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {color, spacing} from '../../theme';
 import {
-  CustomIcon,
   BackCircle,
   HeaderCustom,
   ButtonCustom,
@@ -88,9 +87,9 @@ export const InitAgeScreen = () => {
         backgroundStatusBar={color.transparent}
         removeBorderWidth
         leftComponent={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Pressable onPress={() => navigation.goBack()}>
             <BackCircle />
-          </TouchableOpacity>
+          </Pressable>
         }
       />
       <View style={styles.container}>

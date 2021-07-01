@@ -4,7 +4,7 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
+  Pressable,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
@@ -92,19 +92,18 @@ export const AccountScreen = () => {
         backgroundStatusBar={color.bgWhite}
         leftComponent={<Text style={styles.textHeader}>Account</Text>}
         rightComponent={
-          <TouchableOpacity onPress={() => navigation.navigate(ROUTER.setting)}>
+          <Pressable onPress={() => navigation.navigate(ROUTER.setting)}>
             <Setting />
-          </TouchableOpacity>
+          </Pressable>
         }
       />
       <ScrollView>
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             setIsModalVisible(true);
             setFileName('avatar.png');
             setEdit(false);
-          }}
-          activeOpacity={0.9}>
+          }}>
           <View style={styles.avatar}>
             {load ? (
               <ActivityIndicator
@@ -126,7 +125,7 @@ export const AccountScreen = () => {
               onLoadEnd={() => setLoad(false)}
             />
           </View>
-        </TouchableOpacity>
+        </Pressable>
         <View style={styles.scrollView}>
           <View style={styles.informationContainer}>
             <View style={styles.firstContainer}>
@@ -221,92 +220,84 @@ export const AccountScreen = () => {
             />
           </View>
           {user.images[0] ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 setIsModalVisible(true);
                 setFileName('image1.png');
                 setEdit(true);
-              }}
-              activeOpacity={0.9}>
+              }}>
               <ImageUser urlImage={user.images[0] || undefined} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           {user.images[1] ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 setIsModalVisible(true);
                 setFileName('image2.png');
                 setEdit(true);
-              }}
-              activeOpacity={0.9}>
+              }}>
               <ImageUser urlImage={user.images[1] || undefined} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           {user.images[2] ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 setIsModalVisible(true);
                 setFileName('image3.png');
                 setEdit(true);
-              }}
-              activeOpacity={0.9}>
+              }}>
               <ImageUser urlImage={user.images[2] || undefined} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           {user.images[3] ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 setIsModalVisible(true);
                 setFileName('image4.png');
                 setEdit(true);
-              }}
-              activeOpacity={0.9}>
+              }}>
               <ImageUser urlImage={user.images[3] || undefined} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           {user.images[4] ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 setIsModalVisible(true);
                 setFileName('image5.png');
                 setEdit(true);
-              }}
-              activeOpacity={0.9}>
+              }}>
               <ImageUser urlImage={user.images[4] || undefined} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           {user.images[5] ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 setIsModalVisible(true);
                 setFileName('image6.png');
                 setEdit(true);
-              }}
-              activeOpacity={0.9}>
+              }}>
               <ImageUser urlImage={user.images[5] || undefined} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           {user.images[6] ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 setIsModalVisible(true);
                 setFileName('image7.png');
                 setEdit(true);
-              }}
-              activeOpacity={0.9}>
+              }}>
               <ImageUser urlImage={user.images[6] || undefined} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           {user.images[7] ? (
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 setIsModalVisible(true);
                 setFileName('image8.png');
                 setEdit(true);
-              }}
-              activeOpacity={0.9}>
+              }}>
               <ImageUser urlImage={user.images[7] || undefined} />
-            </TouchableOpacity>
+            </Pressable>
           ) : null}
           <View style={styles.buttonContainer}>
             {user.images.indexOf(null) === -1 ? null : (

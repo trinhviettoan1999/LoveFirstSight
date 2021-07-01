@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, Pressable} from 'react-native';
 import SelectionGroup from 'react-native-selection-group';
 import {SelectionHandler} from 'react-native-selection-group';
 import {color} from '../../theme';
@@ -11,7 +11,7 @@ const renderButton = (
   onPress: any,
 ) => {
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
       key={index}
       style={[
@@ -25,7 +25,7 @@ const renderButton = (
         ]}>
         {data.value}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

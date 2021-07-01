@@ -6,7 +6,7 @@ import {
   PermissionsAndroid,
   ImageBackground,
   Text,
-  TouchableOpacity,
+  Pressable,
   Platform,
 } from 'react-native';
 import {
@@ -30,7 +30,6 @@ import {
   CallEnd,
 } from '../../components/AllSvgIcon/AllSvgIcon';
 import {color} from '../../theme';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {HeaderCustom} from '../../components';
 
 const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
@@ -187,24 +186,15 @@ export const VideoScreen = () => {
         </View>
       )}
       <View style={styles.buttonBar}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.buttonIcon}
-          onPress={toggleAudio}>
+        <Pressable style={styles.buttonIcon} onPress={toggleAudio}>
           {props.audMute ? <MicOff /> : <MicFill />}
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.buttonIcon}
-          onPress={endCallVideo}>
+        </Pressable>
+        <Pressable style={styles.buttonIcon} onPress={endCallVideo}>
           <CallEnd />
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.buttonIcon}
-          onPress={toggleVideo}>
+        </Pressable>
+        <Pressable style={styles.buttonIcon} onPress={toggleVideo}>
           {props.vidMute ? <VideoOff /> : <VideoOn />}
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

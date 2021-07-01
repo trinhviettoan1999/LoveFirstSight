@@ -1,11 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-} from 'react-native';
+import {View, StyleSheet, Pressable, Text, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
 import Video from 'react-native-video';
@@ -114,31 +108,29 @@ export const PostItem = ({
           <Comment />
         </View>
         {votes.indexOf(auth().currentUser?.uid) >= 0 ? (
-          <TouchableOpacity
+          <Pressable
             style={styles.buttonVote}
             onPress={() => unVotePost(postId)}>
             <HeartFill />
             <Text style={styles.textContent}>Vote</Text>
-          </TouchableOpacity>
+          </Pressable>
         ) : (
-          <TouchableOpacity
-            style={styles.buttonVote}
-            onPress={() => votePost(postId)}>
+          <Pressable style={styles.buttonVote} onPress={() => votePost(postId)}>
             <Heart />
             <Text style={styles.textContent}> Vote</Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
-        <TouchableOpacity style={styles.buttonComment} onPress={onPressComment}>
+        <Pressable style={styles.buttonComment} onPress={onPressComment}>
           <Comment />
           <Text style={styles.textContent}> Comment</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
       {userId === auth().currentUser?.uid && (
-        <TouchableOpacity
+        <Pressable
           onPress={onPressMore}
           style={{position: 'absolute', right: 16, top: 10}}>
           <More />
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   );

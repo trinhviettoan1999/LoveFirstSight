@@ -1,11 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, ImageBackground, Text, Pressable} from 'react-native';
 import {RouteStackParamList, DisLike} from '../../components';
 import {
   setStateVideoCall,
@@ -66,12 +60,12 @@ export const IncomingCallScreen = ({
     <ImageBackground source={{uri: avatar}} style={styles.imageBackground}>
       <Text style={styles.text}>{name} is calling...</Text>
       <View style={styles.containerButton}>
-        <TouchableOpacity activeOpacity={0.7} onPress={handleCancel}>
+        <Pressable onPress={handleCancel}>
           <DisLike />
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} onPress={handleAccept}>
+        </Pressable>
+        <Pressable onPress={handleAccept}>
           <VideoFull />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </ImageBackground>
   );

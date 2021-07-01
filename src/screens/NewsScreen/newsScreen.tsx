@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {View, StyleSheet, TouchableOpacity, Text, FlatList} from 'react-native';
+import {View, StyleSheet, Pressable, Text, FlatList} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
   Bin,
@@ -27,9 +27,8 @@ export const NewsScreen = () => {
   const FlatListHeader = () => {
     //View to set in Header
     return (
-      <TouchableOpacity
+      <Pressable
         style={styles.createPostView}
-        activeOpacity={0.8}
         onPress={() => {
           navigation.navigate(ROUTER.post);
         }}>
@@ -44,7 +43,7 @@ export const NewsScreen = () => {
           resizeMode={FastImage.resizeMode.cover}
         />
         <Text style={styles.textCreatePost}>Create your new post!!</Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 

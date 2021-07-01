@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Dimensions, Pressable} from 'react-native';
 import {DisLike, Like, Star} from '..';
 import {spacing} from '../../theme';
 
@@ -18,15 +18,15 @@ export const OptionsGroup = ({
 }: OptionsProps) => {
   return (
     <View style={styles.containerButton}>
-      <TouchableOpacity activeOpacity={0.6} onPress={onPressIgnore}>
+      <Pressable onPress={onPressIgnore}>
         <DisLike />
-      </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.6} onPress={onPressSupperLike}>
+      </Pressable>
+      <Pressable onPress={onPressSupperLike}>
         <Star />
-      </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.6} onPress={onPressLike}>
+      </Pressable>
+      <Pressable onPress={onPressLike}>
         <Like />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };

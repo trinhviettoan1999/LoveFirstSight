@@ -5,7 +5,7 @@ import {
   Text,
   TouchableHighlight,
   Dimensions,
-  TouchableOpacity,
+  Pressable,
   ImageBackground,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
@@ -178,9 +178,9 @@ export const InitAvatarScreen = ({navigation}: any) => {
         backgroundStatusBar={color.transparent}
         removeBorderWidth
         leftComponent={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Pressable onPress={() => navigation.goBack()}>
             <BackCircle />
-          </TouchableOpacity>
+          </Pressable>
         }
       />
       <View style={styles.container}>
