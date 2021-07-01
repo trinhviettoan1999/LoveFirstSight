@@ -21,7 +21,6 @@ const HEIGHT = Dimensions.get('window').height;
 
 const Item = ({item, onPress, iconName}: any) => {
   const subString = (name: string) => {
-    console.log(name);
     if (name.length > 15) {
       return name.substring(0, 10) + '...';
     }
