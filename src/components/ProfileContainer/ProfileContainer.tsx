@@ -79,5 +79,13 @@ const styles = StyleSheet.create({
     paddingBottom: spacing[4],
     backgroundColor: color.bgWhite,
     borderRadius: spacing[2],
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

@@ -360,7 +360,7 @@ export const AccountScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: color.bgWhite,
   },
   scrollView: {
     paddingHorizontal: 16,
@@ -381,9 +381,17 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 16,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: color.bgWhite,
     paddingHorizontal: 16,
     paddingBottom: 16,
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 5,
   },
   avatar: {
     height: 400,
@@ -402,7 +410,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginBottom: 16,
-    marginTop: 16,
   },
   button: {
     minHeight: 50,
@@ -416,23 +423,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontStyle: 'normal',
     color: '#FFFFFF',
-  },
-  headerContainer: {
-    flex: 1,
-    height: 45,
-    backgroundColor: '#F8F8F8',
-  },
-  header: {
-    flex: 1,
-    height: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-  },
-  divider: {
-    width: '100%',
-    height: 1,
-    backgroundColor: '#C8C8C8',
   },
   activityIndicator: {
     bottom: 200,

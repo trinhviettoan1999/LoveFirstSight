@@ -200,6 +200,7 @@ export const ProfileScreen = () => {
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
+    backgroundColor: color.bgWhite,
   },
   containerAll: {
     width: '100%',

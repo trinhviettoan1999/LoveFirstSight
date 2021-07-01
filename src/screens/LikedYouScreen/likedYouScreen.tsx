@@ -10,7 +10,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {CustomIcon, HeaderCustom} from '../../components';
+import {StarSmall, HeaderCustom, HeartFill} from '../../components';
 import {computeAge, getLikedUsers, getTopPick} from '../../controller';
 import {color} from '../../theme/color';
 import {ROUTER} from '../../constants/router';
@@ -20,6 +20,14 @@ const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 const Item = ({item, onPress, iconName}: any) => {
+  const subString = (name: string) => {
+    console.log(name);
+    if (name.length > 15) {
+      return name.substring(0, 10) + '...';
+    }
+    return name;
+  };
+
   return (
     <Pressable style={styles.itemContainer} onPress={onPress}>
       <View style={styles.avatar}>
@@ -36,17 +44,12 @@ const Item = ({item, onPress, iconName}: any) => {
       </View>
       <View style={styles.informationContainer}>
         <Text onPress={onPress} style={styles.text}>
-          {item.name}
+          {subString(item.name)}
         </Text>
         <Text onPress={onPress} style={styles.text}>
-          , {computeAge(item.birthday)}
+          {`, ${computeAge(item.birthday)} `}
         </Text>
-        <CustomIcon
-          name={iconName}
-          size={15}
-          color={iconName === 'lookingfor' ? 'red' : '#0078D4'}
-          style={{marginLeft: 5}}
-        />
+        {iconName === 'lookingfor' ? <HeartFill /> : <StarSmall />}
       </View>
     </Pressable>
   );
@@ -190,17 +193,17 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginLeft: 16,
     backgroundColor: 'white',
-    shadowColor: '#000',
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 4,
     },
     shadowOpacity: 0.4,
     shadowRadius: 4,
-    elevation: 10,
+    elevation: 5,
   },
   informationContainer: {
-    width: '80%',
+    width: '90%',
     height: 35,
     flexDirection: 'row',
     alignItems: 'center',
