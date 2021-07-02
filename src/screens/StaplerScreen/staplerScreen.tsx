@@ -122,7 +122,13 @@ export const StaplerScreen = () => {
   });
   const ref_scroll = useRef(null);
 
-  const loadData = async () => {
+  // const getUserRandom = (listuser) => {
+  //   const index = Math.floor(listUsers.length * Math.random());
+  //   setUser(listUsers[index]);
+  //   setListUsers(listUsers.splice(index, 1));
+  // };
+
+  const loadData = () => {
     setUser(getUserRandom(listUsers));
   };
 
@@ -173,17 +179,18 @@ export const StaplerScreen = () => {
   useEffect(() => {
     getAvailableUsers(filter).then((result) => {
       setListUsers(result);
+      setUser(getUserRandom(result));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    loadData();
-    return () => {
-      loadData();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listUsers]);
+  // useEffect(() => {
+  //   loadData();
+  //   return () => {
+  //     loadData();
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [listUsers]);
 
   useEffect(() => {
     if (showInfo) {

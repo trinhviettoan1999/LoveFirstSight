@@ -82,7 +82,7 @@ const ItemConversation = ({item, onPress}: any) => {
 const ConversationWait = () => {
   const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
-  const [conversation, setConversation] = useState();
+  const [conversation, setConversation] = useState([]);
   const renderItemConversation = ({item}: any) => {
     return (
       <ItemConversation
@@ -103,13 +103,20 @@ const ConversationWait = () => {
   };
 
   useEffect(() => {
-    getConversationWait().then((result) => setConversation(result));
+    getConversation(true, (result: any) => {
+      setConversation(result);
+    });
+    return () => {
+      getConversation(true, (result: any) => {
+        setConversation(result);
+      });
+    };
   }, []);
 
   return (
     <View style={styles.allContainer}>
       <View style={styles.container}>
-        {conversation === '404 Not Found' ? (
+        {conversation.length <= 0 ? (
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Text>Don't have Messages Request</Text>
@@ -135,7 +142,7 @@ const ConversationWait = () => {
 const Conversation = () => {
   const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
-  const [conversation, setConversation] = useState();
+  const [conversation, setConversation] = useState([]);
   const renderItemConversation = ({item}: any) => {
     return (
       <ItemConversation
@@ -159,12 +166,17 @@ const Conversation = () => {
     getConversation(false, (result: any) => {
       setConversation(result);
     });
+    return () => {
+      getConversation(false, (result: any) => {
+        setConversation(result);
+      });
+    };
   }, []);
 
   return (
     <View style={styles.allContainer}>
       <View style={styles.container}>
-        {conversation === '404 Not Found' ? (
+        {conversation.length <= 0 ? (
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Text>Don't have Conversations</Text>

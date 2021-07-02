@@ -110,20 +110,20 @@ export const getConversation = async (state: boolean, next: any) => {
     });
 };
 
-export const getConversationWait = async () => {
-  return await fetch(
-    'https://still-brushlands-96770.herokuapp.com/conversation/' +
-      auth().currentUser?.uid +
-      '/true',
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json());
-};
+// export const getConversationWait = async () => {
+//   return await fetch(
+//     'https://still-brushlands-96770.herokuapp.com/conversation/' +
+//       auth().currentUser?.uid +
+//       '/true',
+//     {
+//       method: 'GET',
+//       headers: {
+//         Accept: 'application/json, text/plain, */*',
+//         'Content-Type': 'application/json',
+//       },
+//     },
+//   ).then((res) => res.json());
+// };
 
 export const updateStateConversation = (conversationId: any) => {
   return fetch(

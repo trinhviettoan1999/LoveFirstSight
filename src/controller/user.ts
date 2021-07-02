@@ -32,7 +32,9 @@ export const getHobbiesUser = async () => {
 };
 
 export const getUserRandom = (availableUsers: any) => {
-  return availableUsers[Math.floor(availableUsers.length * Math.random())];
+  // return availableUsers[Math.floor(availableUsers.length * Math.random())];
+  const index = Math.floor(availableUsers.length * Math.random());
+  return availableUsers[index];
 };
 
 // export const getAvailableUsers = async () => {
