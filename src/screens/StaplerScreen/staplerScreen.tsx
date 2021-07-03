@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
+import {useRoute, RouteProp} from '@react-navigation/native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {
   Filter,
@@ -52,30 +53,59 @@ const saveTokenToDatabase = async (token: string) => {
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-// interface User {
-//   userId: string;
-//   name: string;
-//   birthday: string;
-//   gender: string;
-//   avatar?: string;
-//   email: string;
-//   intro: string;
-//   lookingFor: string;
-//   height: string;
-//   university: string;
-//   drinking: string;
-//   smoking: string;
-//   kids: string;
-//   province: string;
-//   coordinates: string;
-//   images: Array<string>;
-//   hobbies: Array<{id: number; value: string}>;
-// }
+interface IUser {
+  userId: string;
+  name: string;
+  birthday: string;
+  gender: string;
+  avatar: string;
+  email: string;
+  intro: string;
+  lookingFor: string;
+  height: string;
+  university: string;
+  drinking: string;
+  smoking: string;
+  kids: string;
+  province: string;
+  coordinates: string;
+  images: Array<string>;
+  hobbies: Array<{id: number; value: string}>;
+}
+
+interface TFilter {
+  gender: string;
+  lookingFor: string;
+  drinking: string;
+  smoking: string;
+  kids: string;
+  distance: number;
+  age: {from: number; to: number};
+}
+
+type TRouteProps = {
+  Filter: {
+    filter: TFilter;
+  };
+};
 
 export const StaplerScreen = () => {
+  const route = useRoute<RouteProp<TRouteProps, 'Filter'>>();
   const navigation = useNavigation();
   const tabBarHeight = useBottomTabBarHeight();
-  const User = {
+  const [filter] = useState({
+    gender: '',
+    lookingFor: '',
+    drinking: '',
+    smoking: '',
+    kids: '',
+    distance: 10,
+    age: {
+      from: 18,
+      to: 40,
+    },
+  });
+  const [user, setUser] = useState<IUser>({
     userId: '',
     name: '',
     birthday: '',
@@ -93,23 +123,7 @@ export const StaplerScreen = () => {
     coordinates: '',
     images: ['', '', '', '', '', '', '', ''],
     hobbies: [],
-  };
-  const [filter, setFilter] = useState({
-    gender: '',
-    lookingFor: '',
-    drinking: '',
-    smoking: '',
-    kids: '',
-    province: '',
-    university: '',
-    height: '',
-    distance: 10,
-    age: {
-      from: 18,
-      to: 40,
-    },
   });
-  const [user, setUser] = useState(User);
   const [listUsers, setListUsers] = useState([]);
   const [load, setLoad] = useState(true);
   const [loadButton, setLoadButton] = useState(false);
@@ -119,12 +133,6 @@ export const StaplerScreen = () => {
     long: 0,
   });
   const ref_scroll = useRef(null);
-
-  // const getUserRandom = (listuser) => {
-  //   const index = Math.floor(listUsers.length * Math.random());
-  //   setUser(listUsers[index]);
-  //   setListUsers(listUsers.splice(index, 1));
-  // };
 
   const loadData = () => {
     setUser(getUserRandom(listUsers));
@@ -159,7 +167,7 @@ export const StaplerScreen = () => {
 
   const handleFilter = () => {
     navigation.navigate(ROUTER.filter, {
-      filter,
+      filter: route.params?.filter ?? filter,
     });
   };
 
@@ -189,6 +197,16 @@ export const StaplerScreen = () => {
   }, []);
 
   useEffect(() => {
+    if (route.params?.filter) {
+      getAvailableUsers(route.params?.filter).then((result) => {
+        setListUsers(result);
+        setUser(getUserRandom(result));
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.params?.filter]);
+
+  useEffect(() => {
     if (showInfo) {
       // @ts-ignore: Object is possibly 'null'.
       ref_scroll.current.scrollTo({x: 0, y: HEIGHT - 50, animated: true});
@@ -213,9 +231,6 @@ export const StaplerScreen = () => {
                 removeBorderWidth
                 barStyle="light-content"
               />
-              <Pressable style={styles.iconFilter} onPress={handleFilter}>
-                <Filter />
-              </Pressable>
               <LinearGradient
                 colors={['rgba(255, 255, 255, 0)', '#000000']}
                 locations={[0.5323, 0.993]}
@@ -254,6 +269,9 @@ export const StaplerScreen = () => {
           />
         </View>
       ) : null}
+      <Pressable style={styles.iconFilter} onPress={handleFilter}>
+        <Filter />
+      </Pressable>
       {!user?.name && !load && <NotUser />}
     </View>
   );

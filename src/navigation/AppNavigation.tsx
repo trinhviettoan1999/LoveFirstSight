@@ -209,7 +209,7 @@ export const AppNavigation = () => {
           name={ROUTER.initAvatar}
           component={screen.InitAvatarScreen}
         />
-        <Stack.Screen name={ROUTER.home} component={AppTab} />
+        <Stack.Screen name={ROUTER.tab} component={AppTab} />
         <Stack.Screen name={ROUTER.filter} component={screen.FilterScreen} />
         <Stack.Screen name={ROUTER.setting} component={screen.SettingsScreen} />
         <Stack.Screen

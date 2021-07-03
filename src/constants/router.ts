@@ -1,4 +1,5 @@
 export const ROUTER = {
+  tab: 'TabScreen',
   loading: 'LoadingScreen',
   initial: 'InitialScreen',
   signIn: 'SignInScreen',

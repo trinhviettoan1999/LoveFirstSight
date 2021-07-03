@@ -73,7 +73,7 @@ export const FilterContent: FC<IProps> = ({
           isSelected={selectionHandler.isSelected}
           containerStyle={styles.containerButton}
           onItemSelected={(item: any) => {
-            setItemSelected(item);
+            setItemSelected(item.value);
           }}
         />
       ) : (

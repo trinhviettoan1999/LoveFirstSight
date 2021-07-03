@@ -122,7 +122,7 @@ export const ProfileScreen = () => {
                 style={styles.back}
                 onPress={() => {
                   if (route.params.flag) {
-                    navigation.replace(ROUTER.home);
+                    navigation.replace(ROUTER.tab);
                   } else {
                     navigation.goBack();
                   }
@@ -159,7 +159,7 @@ export const ProfileScreen = () => {
               onPressIgnore={async () => {
                 await ignoreUser(route.params.userId);
                 if (route.params.flag) {
-                  navigation.replace(ROUTER.home);
+                  navigation.replace(ROUTER.tab);
                 } else {
                   navigation.goBack();
                 }
@@ -167,7 +167,7 @@ export const ProfileScreen = () => {
               onPressSupperLike={async () => {
                 await superLikeUser(route.params.userId);
                 if (route.params.flag) {
-                  navigation.replace(ROUTER.home);
+                  navigation.replace(ROUTER.tab);
                 } else {
                   navigation.goBack();
                 }
@@ -177,7 +177,7 @@ export const ProfileScreen = () => {
                 // @ts-ignore: Object is possibly 'null'.
                 sendNotification(route.params.userId, auth().currentUser?.uid);
                 if (route.params.flag) {
-                  navigation.replace(ROUTER.home);
+                  navigation.replace(ROUTER.tab);
                 } else {
                   navigation.goBack();
                 }

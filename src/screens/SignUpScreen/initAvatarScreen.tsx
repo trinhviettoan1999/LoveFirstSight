@@ -130,7 +130,7 @@ export const InitAvatarScreen = ({navigation}: any) => {
               .then(() => {
                 navigation.reset({
                   index: 0,
-                  routes: [{name: ROUTER.home}],
+                  routes: [{name: ROUTER.tab}],
                 });
                 setLoad(false);
               })
@@ -157,7 +157,7 @@ export const InitAvatarScreen = ({navigation}: any) => {
                 .then(() => {
                   navigation.reset({
                     index: 0,
-                    routes: [{name: ROUTER.home}],
+                    routes: [{name: ROUTER.tab}],
                   });
                   setLoad(false);
                 })

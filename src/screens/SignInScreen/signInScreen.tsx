@@ -71,7 +71,7 @@ export const SignInScreen = ({navigation}) => {
         if (check) {
           navigation.reset({
             index: 0,
-            routes: [{name: ROUTER.home}],
+            routes: [{name: ROUTER.tab}],
           });
         } else {
           navigation.navigate(ROUTER.initName, {
@@ -104,7 +104,7 @@ export const SignInScreen = ({navigation}) => {
           if (check) {
             navigation.reset({
               index: 0,
-              routes: [{name: ROUTER.home}],
+              routes: [{name: ROUTER.tab}],
             });
           } else {
             navigation.navigate(ROUTER.initName, {
@@ -137,7 +137,7 @@ export const SignInScreen = ({navigation}) => {
       email,
       password,
       () => {
-        navigation.replace(ROUTER.home);
+        navigation.replace(ROUTER.tab);
         setLoad(false);
       },
       (error: any) => {

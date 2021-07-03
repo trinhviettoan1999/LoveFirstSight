@@ -52,7 +52,7 @@ export const LoadingScreen = () => {
         } else {
           setTimeout(() => {
             if (auth().currentUser) {
-              navigation.replace(ROUTER.home);
+              navigation.replace(ROUTER.tab);
             } else {
               navigation.replace(ROUTER.signIn);
             }

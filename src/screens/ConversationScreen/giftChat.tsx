@@ -313,7 +313,7 @@ export const Chat = () => {
 
   const handleBack = () => {
     if (flag) {
-      navigation.replace(ROUTER.home);
+      navigation.replace(ROUTER.tab);
     } else {
       navigation.goBack();
     }

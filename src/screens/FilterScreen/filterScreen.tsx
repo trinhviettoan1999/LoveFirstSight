@@ -16,61 +16,54 @@ import {
   checkChild,
 } from '../../controller';
 import {spacing, color} from '../../theme/';
+import {ROUTER} from '../../constants';
 
 var genderData = require('../../../assets/json/gender.json');
 var lookingForData = require('../../../assets/json/lookingFor.json');
 var drinkingData = require('../../../assets/json/drinking.json');
 var childData = require('../../../assets/json/child.json');
 
-export const FilterScreen = ({
-  setIsModalVisible,
-  setFilter,
-  setLoad,
-  load,
-}: any) => {
+interface PropsFilter {
+  gender: string;
+  lookingFor: string;
+  drinking: string;
+  smoking: string;
+  kids: string;
+  distance: number;
+  age: number[];
+}
+
+export const FilterScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const [gender, setGender] = useState(
-    checkGender(route.params?.filter.gender),
-  );
-  const [lookingFor, setLookingFor] = useState(
-    checkLookingFor(route.params?.filter.lookingFor),
-  );
-  const [drinking, setDrinking] = useState(
-    checkDrinking(route.params?.filter.drinking),
-  );
-  const [smoking, setSmoking] = useState(
-    checkDrinking(route.params?.filter.smoking),
-  );
-  const [child, setChild] = useState(checkChild(route.params?.filter.kids));
-  const [height, setHeight] = useState(route.params?.filter.height);
-  const [province, setProvince] = useState(route.params?.filter.province);
-  const [university, setUniversity] = useState(route.params?.filter.university);
-  const [age, setAge] = useState([
-    route.params?.filter.age.from,
-    route.params?.filter.age.to,
-  ]);
-  const [distance, setDistance] = useState(route.params?.filter.distance);
+  const [filter, setFilter] = useState<PropsFilter>({
+    gender: route.params?.filter.gender,
+    lookingFor: route.params?.filter.lookingFor,
+    drinking: route.params?.filter.drinking,
+    smoking: route.params?.filter.smoking,
+    kids: route.params?.filter.kids,
+    distance: route.params?.filter.distance,
+    age: [route.params?.filter.age.from, route.params?.filter.age.to],
+  });
 
-  const handleFilter = async () => {
-    await setFilter({
-      gender: gender.value,
-      lookingFor: lookingFor.value,
-      drinking: drinking.value,
-      smoking: smoking.value,
-      kids: child.value,
-      province: province,
-      university: university,
-      height: height,
-      age: {
-        from: age[0],
-        to: age[1],
+  const handleFilter = () => {
+    navigation.navigate(ROUTER.tab, {
+      screen: ROUTER.home,
+      params: {
+        filter: {
+          gender: checkGender(filter.gender).value,
+          lookingFor: checkLookingFor(filter.lookingFor).value,
+          drinking: checkDrinking(filter.drinking).value,
+          smoking: checkDrinking(filter.smoking).value,
+          kids: checkChild(filter.kids).value,
+          distance: filter.distance,
+          age: {
+            from: filter.age[0],
+            to: filter.age[1],
+          },
+        },
       },
-      distance: distance,
     });
-    await setIsModalVisible(false);
-    setLoad(!load);
-    navigation.goBack();
   };
 
   return (
@@ -94,34 +87,50 @@ export const FilterScreen = ({
         <View style={styles.container}>
           <FilterContent
             data={genderData}
-            setItemSelected={setGender}
-            defaultSelection={gender.optionText}
+            setItemSelected={(value: string) =>
+              setFilter({...filter, gender: value})
+            }
+            defaultSelection={checkGender(filter.gender).optionText}
             title="Who do you want to date?"
           />
-          <FilterSlider value={distance} setValue={setDistance} />
-          <FilterMultiSlider age={age} setAge={setAge} />
+          <FilterSlider
+            value={filter.distance}
+            setValue={(value) => setFilter({...filter, distance: value})}
+          />
+          <FilterMultiSlider
+            age={filter.age}
+            setAge={(value) => setFilter({...filter, age: value})}
+          />
           <FilterContent
             data={lookingForData}
-            setItemSelected={setLookingFor}
-            defaultSelection={lookingFor.optionText}
+            setItemSelected={(value: string) =>
+              setFilter({...filter, lookingFor: value})
+            }
+            defaultSelection={checkLookingFor(filter.lookingFor).optionText}
             title="Looking for..."
           />
           <FilterContent
             data={drinkingData}
-            setItemSelected={setDrinking}
-            defaultSelection={drinking.optionText}
+            setItemSelected={(value: string) =>
+              setFilter({...filter, drinking: value})
+            }
+            defaultSelection={checkDrinking(filter.drinking).optionText}
             title="Drinking"
           />
           <FilterContent
             data={drinkingData}
-            setItemSelected={setSmoking}
-            defaultSelection={smoking.optionText}
+            setItemSelected={(value: string) =>
+              setFilter({...filter, smoking: value})
+            }
+            defaultSelection={checkDrinking(filter.smoking).optionText}
             title="Smoking"
           />
           <FilterContent
             data={childData}
-            setItemSelected={setChild}
-            defaultSelection={child.optionText}
+            setItemSelected={(value: string) =>
+              setFilter({...filter, kids: value})
+            }
+            defaultSelection={checkChild(filter.kids).optionText}
             title="Kids"
           />
         </View>
