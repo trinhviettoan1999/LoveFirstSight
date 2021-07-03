@@ -45,7 +45,7 @@ export const IncomingCallScreen = ({
       .then((result) => result.json())
       .then((key) => {
         sound.stop();
-        navigation.replace(ROUTER.video, {
+        navigation.navigate(ROUTER.video, {
           name,
           avatar,
           appId,
