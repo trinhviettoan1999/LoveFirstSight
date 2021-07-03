@@ -31,17 +31,16 @@ const renderButton = (
 
 type Props = {
   data: any;
-  selectionHandler?: any;
   setItemSelected?: any;
-  maxMultiSelect: number;
+  maxMultiSelect?: number;
   defaultSelection?: any;
 };
 
 export const SelectionButtonGroup = ({
   data,
   setItemSelected,
-  defaultSelection,
-  maxMultiSelect,
+  defaultSelection = 0,
+  maxMultiSelect = 1,
 }: Props) => {
   const [selectionHandler, setSelectionHandler] = useState(
     new SelectionHandler({

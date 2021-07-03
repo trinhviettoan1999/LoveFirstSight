@@ -187,7 +187,7 @@ export const sendMessage = async (
       if (state && firstUserId !== auth().currentUser?.uid) {
         await likeUser(ownerId);
         await updateStateConversation(conversationId).then((res) =>
-          console.log(res),
+          console.log('update: ', res),
         );
       }
     });

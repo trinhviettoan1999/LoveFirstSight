@@ -14,7 +14,6 @@ import {
   Hobbies,
   Info,
   NotUser,
-  Loading,
   ProfileContainer,
   ImagesContainer,
   OptionsGroup,
@@ -36,9 +35,9 @@ import messaging from '@react-native-firebase/messaging';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
-import Modal from 'react-native-modal';
 import {spacing, color} from '../../theme';
 import LinearGradient from 'react-native-linear-gradient';
+import {ROUTER} from '../../constants';
 
 const saveTokenToDatabase = async (token: string) => {
   const userId = auth().currentUser?.uid;
@@ -110,7 +109,6 @@ export const StaplerScreen = () => {
       to: 40,
     },
   });
-  const [isModalVisibleMenu, setIsModalVisibleMenu] = useState(false);
   const [user, setUser] = useState(User);
   const [listUsers, setListUsers] = useState([]);
   const [load, setLoad] = useState(true);
@@ -159,6 +157,12 @@ export const StaplerScreen = () => {
     setLoad(!load);
   };
 
+  const handleFilter = () => {
+    navigation.navigate(ROUTER.filter, {
+      filter,
+    });
+  };
+
   useEffect(() => {
     //get token device
     messaging()
@@ -183,14 +187,6 @@ export const StaplerScreen = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   loadData();
-  //   return () => {
-  //     loadData();
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [listUsers]);
 
   useEffect(() => {
     if (showInfo) {
@@ -217,6 +213,9 @@ export const StaplerScreen = () => {
                 removeBorderWidth
                 barStyle="light-content"
               />
+              <Pressable style={styles.iconFilter} onPress={handleFilter}>
+                <Filter />
+              </Pressable>
               <LinearGradient
                 colors={['rgba(255, 255, 255, 0)', '#000000']}
                 locations={[0.5323, 0.993]}
@@ -290,5 +289,10 @@ const styles = StyleSheet.create({
     width: WIDTH - 32,
     backgroundColor: color.primary,
     marginTop: spacing[4],
+  },
+  iconFilter: {
+    position: 'absolute',
+    right: 10,
+    top: 32,
   },
 });

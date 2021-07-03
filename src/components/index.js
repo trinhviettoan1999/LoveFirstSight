@@ -26,3 +26,6 @@ export * from './OptionsGroup/OptionsGroup';
 export * from './ModalPicture/ModalPicture';
 export * from './InputToolBar/InputToolBar';
 export * from './PostItem/PostItem';
+export * from './FilterContent/FilterContent';
+export * from './FilterSlider/FilterSlider';
+export * from './FilterMultiSlider/FilterMultiSlider';

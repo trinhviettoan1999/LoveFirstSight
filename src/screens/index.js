@@ -25,7 +25,7 @@ export * from './SignUpScreen/initAvatarScreen';
 export * from './SignInScreen/signInScreen';
 export * from './ConversationScreen/giftChat';
 export * from './SignUpScreen/enterPassword';
-export * from './StaplerScreen/filterScreen';
+export * from './FilterScreen/filterScreen';
 export * from './LoadingScreen/loadingScreen';
 export * from './LikedYouScreen/profileScreen';
 export * from './AccountScreen/SettingsScreen/listIgnoreScreen';
