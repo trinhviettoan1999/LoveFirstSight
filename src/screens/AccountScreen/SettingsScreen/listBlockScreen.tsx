@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet, Pressable} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CustomIcon, Back, HeaderCustom} from '../../../components';
 import {getListBlock, unBlockUser} from '../../../controller';
@@ -10,15 +16,26 @@ import {color} from '../../../theme';
 export const ListBlockScreen = () => {
   const navigation = useNavigation();
   const [listBlock, setListBlock] = useState([]);
-  const [status, setStatus] = useState(0);
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(true);
 
-  useEffect(() => {
+  const handleUnBlock = async (data: any) => {
+    // @ts-ignore: Object is possibly 'null'.
+    await unBlockUser(data.item.userId);
+    setLoad(true);
+    loadData();
+  };
+
+  const loadData = () => {
     getListBlock().then(async (result) => {
       setListBlock(await result.json());
-      setStatus(await result.status);
+      setLoad(false);
     });
-  }, [load]);
+  };
+
+  useEffect(() => {
+    loadData();
+    return () => loadData();
+  }, []);
 
   return (
     <View style={styles.containerAll}>
@@ -31,7 +48,11 @@ export const ListBlockScreen = () => {
           </Pressable>
         }
       />
-      {status === 200 ? (
+      {load ? (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color={color.primary} />
+        </View>
+      ) : listBlock.length > 0 ? (
         <View style={styles.container}>
           <SwipeListView
             style={styles.container}
@@ -61,11 +82,7 @@ export const ListBlockScreen = () => {
               <View style={styles.itemHidden}>
                 <Pressable
                   style={styles.containerRight}
-                  onPress={async () => {
-                    // @ts-ignore: Object is possibly 'null'.
-                    await unBlockUser(data.item.userId);
-                    setLoad(!load);
-                  }}>
+                  onPress={() => handleUnBlock(data)}>
                   <CustomIcon name="bin" size={18} />
                   <Text>Unblock</Text>
                 </Pressable>
@@ -90,11 +107,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
   },
   item: {
-    height: 30,
-    paddingHorizontal: 16,
+    height: 40,
     backgroundColor: '#FFFFFF',
     marginTop: 10,
     borderRadius: 5,
@@ -102,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemHidden: {
-    height: 30,
+    height: 40,
     marginRight: 1,
     marginLeft: 1,
     marginTop: 10,
@@ -112,7 +128,7 @@ const styles = StyleSheet.create({
   },
   containerLeft: {
     flex: 1,
-    height: 30,
+    height: 40,
     backgroundColor: 'red',
     borderRadius: 5,
     alignItems: 'flex-start',
@@ -121,7 +137,7 @@ const styles = StyleSheet.create({
   },
   containerRight: {
     flex: 1,
-    height: 30,
+    height: 40,
     backgroundColor: 'red',
     borderRadius: 5,
     justifyContent: 'flex-end',

@@ -19,6 +19,7 @@ import {
   Hobbies,
   Info,
   Back,
+  ButtonCustom,
 } from '../../components';
 import auth from '@react-native-firebase/auth';
 import {
@@ -29,6 +30,7 @@ import {
   getUser,
   uploadCoordinates,
   sendNotification,
+  blockUser,
 } from '../../controller';
 import LinearGradient from 'react-native-linear-gradient';
 import {color, spacing} from '../../theme';
@@ -67,7 +69,15 @@ export const ProfileScreen = () => {
     lat: 0,
     long: 0,
   });
+  const [loadButton, setLoadButton] = useState(false);
   const ref_scroll = useRef(null);
+
+  const handleBlock = () => {
+    setLoadButton(true);
+    blockUser(user.userId);
+    setLoad(!load);
+    setLoadButton(false);
+  };
 
   const loadData = async () => {
     setLoad(true);
@@ -151,6 +161,12 @@ export const ProfileScreen = () => {
               <View>
                 <ProfileContainer user={user} coordinate={coordinate} />
                 <ImagesContainer images={user.images} />
+                <ButtonCustom
+                  loading={loadButton}
+                  title="Block User"
+                  buttonStyle={styles.button}
+                  onPress={handleBlock}
+                />
               </View>
             )}
           </ScrollView>
@@ -223,5 +239,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 40,
     left: 16,
+  },
+  button: {
+    alignSelf: 'center',
+    minHeight: 50,
+    borderRadius: spacing[2],
+    width: WIDTH - 32,
+    backgroundColor: color.primary,
+    marginTop: spacing[4],
   },
 });

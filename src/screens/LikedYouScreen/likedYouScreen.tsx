@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -18,6 +19,7 @@ import {ROUTER} from '../../constants/router';
 const Tab = createMaterialTopTabNavigator();
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
+const LIKEYOU_DEFAULT = require('../../../assets/images/likeyou_default.png');
 
 const Item = ({item, onPress, iconName}: any) => {
   const subString = (name: string) => {
@@ -106,7 +108,11 @@ const LikedYou = () => {
         <ListItem data={data} navigation={navigation} iconName="lookingfor" />
       ) : (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text>Don't have who liked you!!</Text>
+          <Image
+            style={{width: 200, height: 200, marginTop: -50}}
+            source={LIKEYOU_DEFAULT}
+            resizeMode="contain"
+          />
         </View>
       )}
     </View>

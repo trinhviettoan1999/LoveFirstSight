@@ -7,13 +7,13 @@ import {
   Pressable,
   Dimensions,
   StatusBar,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {
   checkIsReadConversation,
   getConversation,
-  getConversationWait,
   updateStatusIsRead,
 } from '../../controller';
 import FastImage from 'react-native-fast-image';
@@ -24,6 +24,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
+const CONVERSATION_DEFAULT = require('../../../assets/images/conversation_default.png');
 
 //item Conversation
 const ItemConversation = ({item, onPress}: any) => {
@@ -119,7 +120,11 @@ const ConversationWait = () => {
         {conversation.length <= 0 ? (
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text>Don't have Messages Request</Text>
+            <Image
+              style={{width: 200, height: 200, marginTop: -50}}
+              source={CONVERSATION_DEFAULT}
+              resizeMode="contain"
+            />
           </View>
         ) : (
           <FlatList
@@ -179,7 +184,11 @@ const Conversation = () => {
         {conversation.length <= 0 ? (
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text>Don't have Conversations</Text>
+            <Image
+              style={{width: 200, height: 200, marginTop: -50}}
+              source={CONVERSATION_DEFAULT}
+              resizeMode="contain"
+            />
           </View>
         ) : (
           <FlatList
@@ -235,7 +244,7 @@ export const ConversationScreen = () => {
 const styles = StyleSheet.create({
   allContainer: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
   },
   container: {
     flex: 1,

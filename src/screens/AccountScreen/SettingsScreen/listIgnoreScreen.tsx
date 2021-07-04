@@ -7,11 +7,11 @@ import {
   ScrollView,
   Dimensions,
   ImageBackground,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
-  StatusBarCustom,
-  Header,
   HeaderCustom,
   Back,
   OptionsGroup,
@@ -36,6 +36,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
+const PEOPLE_DEFAULT = require('../../../../assets/images/people1_default.png');
 
 export const ListIgnoreScreen = () => {
   const navigation = useNavigation();
@@ -63,40 +64,35 @@ export const ListIgnoreScreen = () => {
     lat: 0,
     long: 0,
   });
-  const [status, setStatus] = useState(0);
   const [user, setUser] = useState(User);
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(true);
   const ref_scroll = useRef(null);
 
-  const loadData = async (isMounted: boolean) => {
-    await getListIgnore().then(async (result) => {
-      if (isMounted) {
-        if (result.status === 200) {
-          setUser(getUserRandom(await result.json()));
-          setStatus(await result.status);
-        } else {
-          setUser(User);
-          setStatus(await result.status);
-        }
-      }
+  const loadData = async () => {
+    getListIgnore().then(async (result) => {
+      setUser(getUserRandom(await result.json()));
+      setLoad(false);
     });
   };
 
   const ignoreUser = async () => {
     await ignoreUserIgnored(user.userId);
-    setLoad(!load);
+    setLoad(true);
+    loadData();
   };
 
   const starUser = async () => {
     await superLikeUserIgnored(user.userId);
-    setLoad(!load);
+    setLoad(true);
+    loadData();
   };
 
   const likeUser = async () => {
     await likeUserIgnored(user.userId);
     // @ts-ignore: Object is possibly 'null'.
     sendNotification(user.userId, auth().currentUser?.uid);
-    setLoad(!load);
+    setLoad(true);
+    loadData();
   };
 
   useEffect(() => {
@@ -104,13 +100,12 @@ export const ListIgnoreScreen = () => {
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-    loadData(isMounted);
+    loadData();
     return () => {
-      isMounted = false;
+      loadData();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [load]);
+  }, []);
 
   useEffect(() => {
     if (showInfo) {
@@ -118,7 +113,42 @@ export const ListIgnoreScreen = () => {
       ref_scroll.current.scrollTo({x: 0, y: HEIGHT - 50, animated: true});
     }
   }, [showInfo]);
-  return status === 200 ? (
+
+  return load ? (
+    <View style={styles.containerAll}>
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
+        title="List Ignore"
+        leftComponent={
+          <Pressable onPress={() => navigation.goBack()}>
+            <Back />
+          </Pressable>
+        }
+      />
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator size="large" color={color.primary} />
+      </View>
+    </View>
+  ) : user?.name === '' || user === undefined ? (
+    <View style={styles.containerAll}>
+      <HeaderCustom
+        backgroundStatusBar={color.bgWhite}
+        title="List Ignore"
+        leftComponent={
+          <Pressable onPress={() => navigation.goBack()}>
+            <Back />
+          </Pressable>
+        }
+      />
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Image
+          style={{width: 200, height: 200, marginTop: -50}}
+          source={PEOPLE_DEFAULT}
+          resizeMode="contain"
+        />
+      </View>
+    </View>
+  ) : (
     <View style={styles.wrap}>
       <ScrollView
         ref={ref_scroll}
@@ -127,7 +157,7 @@ export const ListIgnoreScreen = () => {
           paddingBottom: showInfo ? 70 : 0,
         }}>
         <ImageBackground
-          source={{uri: user.avatar || undefined}}
+          source={{uri: user?.avatar || undefined}}
           style={styles.containerAll}
           resizeMode="cover">
           <HeaderCustom
@@ -148,19 +178,19 @@ export const ListIgnoreScreen = () => {
             style={[styles.image, {paddingBottom: 70}]}>
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.name}>
-                {`${user.name}  ${computeAge(user.birthday)}`}
+                {`${user?.name}  ${computeAge(user?.birthday)}`}
               </Text>
               <Pressable onPress={() => setShowInfo(!showInfo)}>
                 <Info />
               </Pressable>
             </View>
-            <Hobbies data={user.hobbies} />
+            <Hobbies data={user?.hobbies} />
           </LinearGradient>
         </ImageBackground>
         {showInfo && (
           <View>
             <ProfileContainer user={user} coordinate={coordinate} />
-            <ImagesContainer images={user.images} />
+            <ImagesContainer images={user?.images} />
           </View>
         )}
       </ScrollView>
@@ -169,21 +199,6 @@ export const ListIgnoreScreen = () => {
         onPressSupperLike={starUser}
         onPressLike={likeUser}
       />
-    </View>
-  ) : (
-    <View style={styles.containerAll}>
-      <HeaderCustom
-        backgroundStatusBar={color.bgWhite}
-        title="List Ignore"
-        leftComponent={
-          <Pressable onPress={() => navigation.goBack()}>
-            <Back />
-          </Pressable>
-        }
-      />
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>Don't have list ignore</Text>
-      </View>
     </View>
   );
 };
@@ -222,103 +237,13 @@ const styles = StyleSheet.create({
     top: 40,
     left: 16,
   },
-  modalFilter: {
-    flex: 1,
-    margin: 0,
-  },
-  modalMenu: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  interactiveContainer: {
-    width: '100%',
-    height: 50,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 5,
-    position: 'absolute',
-    bottom: 0,
-  },
   scrollView: {
     flex: 1,
   },
   container: {
     paddingHorizontal: 16,
   },
-  buttonIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0.2,
-  },
-  headerContainer: {
-    width: '100%',
-    height: 45,
-    backgroundColor: '#F8F8F8',
-  },
-  header: {
-    width: '100%',
-    height: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-  },
-  divider: {
-    width: '100%',
-    height: 1,
-    backgroundColor: '#C8C8C8',
-  },
-  avatar: {
-    height: 400,
-    width: '100%',
-    resizeMode: 'cover',
-  },
-  informationContainer: {
-    flex: 1,
-    marginTop: 16,
-    paddingBottom: 16,
-    borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-  },
-  firstContainer: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  font26: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-  },
-  font17: {
-    fontSize: 17,
-    fontWeight: '600',
-    fontStyle: 'normal',
-  },
-  buttonModal: {
-    backgroundColor: '#F8F8F8',
-    height: 50,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    paddingHorizontal: 40,
-  },
-  textButtonModal: {
-    flex: 2,
-    fontSize: 17,
-    fontWeight: 'bold',
-    fontStyle: 'normal',
-    color: '#000000',
-  },
-  modalLoading: {
+  loading: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
