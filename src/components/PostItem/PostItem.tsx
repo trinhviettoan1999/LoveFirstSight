@@ -3,7 +3,7 @@ import {View, StyleSheet, Pressable, Text, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
 import Video from 'react-native-video';
-import {getUserPost, unVotePost, votePost} from '../../controller';
+import {getUser, unVotePost, votePost} from '../../controller';
 import auth from '@react-native-firebase/auth';
 import {Comment, Heart, HeartFill, More} from '../AllSvgIcon/AllSvgIcon';
 import {color, spacing} from '../../theme';
@@ -37,7 +37,7 @@ export const PostItem = ({
   });
 
   useEffect(() => {
-    getUserPost(userId).then((result) => setUser(result));
+    getUser(userId).then((result) => setUser(result));
   }, [userId]);
 
   return (

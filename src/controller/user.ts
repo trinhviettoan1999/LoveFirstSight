@@ -12,16 +12,8 @@ export const checkAccount = async (userId: string) => {
 };
 
 export const getUser = async (userId: string) => {
-  return await fetch(
-    'https://still-brushlands-96770.herokuapp.com/profile/get/' + userId,
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json());
+  const user = (await firestore().collection('users').doc(userId).get()).data();
+  return user;
 };
 
 export const getHobbiesUser = async () => {
@@ -339,9 +331,4 @@ export const deleteTokenToDatabase = async (token: string) => {
     .update({
       tokens: firestore.FieldValue.arrayRemove(token),
     });
-};
-
-export const getUserPost = async (userId: string) => {
-  const user = (await firestore().collection('users').doc(userId).get()).data();
-  return user;
 };

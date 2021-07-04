@@ -7,124 +7,28 @@ import {
   TextInput,
   Pressable,
 } from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {
   StatusBarCustom,
-  RouteStackParamList,
   CustomIcon,
+  CommentItem,
+  Back,
+  InputCustom,
+  Send,
 } from '../../components';
-import {
-  commentPost,
-  getComments,
-  deleteComment,
-  editComment,
-} from '../../controller';
+import {commentPost, getComments} from '../../controller';
 import Swiper from 'react-native-swiper';
 import FastImage from 'react-native-fast-image';
 import Video from 'react-native-video';
-import auth from '@react-native-firebase/auth';
+import {color, spacing} from '../../theme';
+import {Input} from 'react-native-elements';
 
-type commentProps = {
-  avatar?: string;
-  comment: string;
-  name?: string;
-  userId: string;
-  commentId: string;
-  postId: string;
-};
-
-const ItemComment = ({
-  name,
-  comment,
-  userId,
-  commentId,
-  postId,
-}: commentProps) => {
-  const [showOption, setShowOption] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [text, setText] = useState('');
-  useEffect(() => {
-    setText(comment);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [edit]);
-
-  return (
-    <View style={styles.commentContainer}>
-      <FastImage
-        style={styles.avatar}
-        source={{
-          uri: 'https://media-cdn.laodong.vn/Storage/NewsPortal/2020/8/21/829850/Bat-Cuoi-Truoc-Nhung-07.jpg',
-        }}
-      />
-      <View style={styles.info}>
-        <Text style={styles.name}>{name}</Text>
-        {!edit && <Text>{comment}</Text>}
-        {edit && (
-          <View>
-            <TextInput
-              value={text}
-              onChangeText={setText}
-              autoFocus
-              style={{height: 40}}
-            />
-            <View style={styles.containerSave}>
-              <Text
-                style={{color: '#6A1616'}}
-                onPress={() => {
-                  editComment(postId, commentId, text, userId);
-                  setEdit(false);
-                }}>
-                Save
-              </Text>
-              <Text
-                style={{marginLeft: 10}}
-                onPress={() => {
-                  setEdit(false);
-                }}>
-                Cancel
-              </Text>
-            </View>
-          </View>
-        )}
-      </View>
-      {userId === auth().currentUser?.uid && !edit ? (
-        <Pressable onPress={() => setShowOption(!showOption)}>
-          <CustomIcon
-            name="option"
-            size={18}
-            color="#6A1616"
-            style={{alignSelf: 'flex-end'}}
-          />
-        </Pressable>
-      ) : null}
-      {showOption && (
-        <View style={styles.option}>
-          <Pressable
-            style={styles.textOption}
-            onPress={() => {
-              deleteComment(postId, commentId, comment, userId),
-                setShowOption(false);
-            }}>
-            <Text>Delete comment</Text>
-          </Pressable>
-          <Pressable
-            style={styles.textOption}
-            onPress={() => {
-              setEdit(true);
-              setShowOption(false);
-            }}>
-            <Text>Edit comment</Text>
-          </Pressable>
-        </View>
-      )}
-    </View>
-  );
-};
-
-export const DetailNewScreen = ({
-  navigation,
-  route,
-}: RouteStackParamList<'InitScreen'>) => {
+export const DetailNewScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {listCollections, content, postId} = route.params;
   const [comment, setComment] = useState('');
+  const [focused, setFocused] = useState(false);
   const [listComments, setListComments] = useState([
     {
       userId: '',
@@ -133,7 +37,12 @@ export const DetailNewScreen = ({
       postId: '',
     },
   ]);
-  const {listCollections, content, postId} = route.params;
+
+  const handleSend = () => {
+    commentPost(comment, postId);
+    setComment('');
+  };
+
   useEffect(() => {
     const subscriber = getComments(postId, (result: any) => {
       setListComments(result);
@@ -150,7 +59,7 @@ export const DetailNewScreen = ({
           <View style={styles.wrapper}>
             <Swiper
               loop={false}
-              activeDotColor="#6A1616"
+              activeDotColor={color.primary}
               key={listCollections.length}>
               {listCollections.map((item: any) => {
                 if (item.mediaType === 'image') {
@@ -178,12 +87,16 @@ export const DetailNewScreen = ({
                 }
               })}
             </Swiper>
-            <Pressable style={styles.back} onPress={() => navigation.goBack()}>
-              <CustomIcon name="cancel" color="#6A1616" size={20} />
-            </Pressable>
           </View>
         ) : null}
         <Text style={styles.content}>{content}</Text>
+        <Pressable
+          style={styles.back}
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Back color={color.bgWhite} />
+        </Pressable>
       </View>
       <FlatList
         style={styles.flatlist}
@@ -192,31 +105,25 @@ export const DetailNewScreen = ({
         keyExtractor={(item, index) => index.toString()}
         removeClippedSubviews={false}
         ListFooterComponent={
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Type here..."
-              style={styles.input}
-              value={comment}
-              onChangeText={setComment}
-            />
-            <Pressable
-              style={styles.send}
-              onPress={() => {
-                commentPost(comment, postId);
-                setComment('');
-              }}>
-              <CustomIcon
-                name="send"
-                color="#6A1616"
-                size={20}
-                style={{alignSelf: 'center'}}
-              />
-            </Pressable>
-          </View>
+          <Input
+            placeholder="Type here..."
+            inputContainerStyle={focused ? styles.inputFocused : styles.input}
+            style={styles.textInput}
+            containerStyle={styles.containerInput}
+            placeholderTextColor={color.textGray}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            value={comment}
+            onChangeText={setComment}
+            rightIcon={
+              <Pressable onPress={handleSend}>
+                <Send />
+              </Pressable>
+            }
+          />
         }
         renderItem={({item}) => (
-          <ItemComment
-            name="Toàn"
+          <CommentItem
             comment={item.comment}
             userId={item.userId}
             commentId={item.commentId}
@@ -231,16 +138,22 @@ export const DetailNewScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
   },
   newContainer: {
     width: '100%',
     backgroundColor: '#FFFFFF',
-    elevation: 7,
     borderBottomStartRadius: 5,
     borderBottomEndRadius: 5,
-    paddingTop: 10,
     paddingBottom: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 5,
   },
   wrapper: {
     width: '100%',
@@ -256,65 +169,42 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   back: {
-    position: 'absolute',
-    top: 10,
-    right: 16,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
     width: 30,
     height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'absolute',
+    top: 10,
+    left: 16,
   },
   flatlist: {
     paddingHorizontal: 16,
   },
-  commentContainer: {
-    flexDirection: 'row',
-    marginTop: 16,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  info: {
-    marginLeft: 10,
-    flex: 10,
-  },
-  name: {
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    marginTop: 20,
-    borderColor: '#6A1616',
-  },
-  send: {
-    flex: 2,
-    alignItems: 'flex-end',
-    paddingHorizontal: 16,
-  },
   input: {
-    flex: 15,
-    paddingHorizontal: 10,
+    width: '100%',
+    height: 40,
+    backgroundColor: color.light,
+    borderRadius: spacing[2],
+    paddingHorizontal: spacing[3],
+    borderBottomWidth: 0,
   },
-  option: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    padding: 10,
-    position: 'absolute',
-    right: 20,
-    top: -10,
+  inputFocused: {
+    width: '100%',
+    height: 40,
+    backgroundColor: color.bgWhite,
+    borderRadius: spacing[2],
+    paddingHorizontal: spacing[3],
+    borderWidth: 1,
+    borderColor: color.primary,
   },
-  textOption: {
-    margin: 5,
+  textInput: {
+    fontSize: 16,
+    color: color.primary,
   },
-  containerSave: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 10,
+  containerInput: {
+    marginTop: spacing[4],
+    paddingHorizontal: spacing[0],
   },
 });

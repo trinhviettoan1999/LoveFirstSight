@@ -9,7 +9,7 @@ import {
   openNotification,
   PostItem,
 } from '../../components';
-import {deletePost, getAllPosts, getUserPost} from '../../controller';
+import {deletePost, getAllPosts, getUser} from '../../controller';
 import auth from '@react-native-firebase/auth';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
@@ -60,13 +60,9 @@ export const NewsScreen = () => {
   };
 
   useEffect(() => {
-    getUserPost(auth().currentUser?.uid || '').then((result) =>
-      setUser(result),
-    );
+    getUser(auth().currentUser?.uid || '').then((result) => setUser(result));
     return () => {
-      getUserPost(auth().currentUser?.uid || '').then((result) =>
-        setUser(result),
-      );
+      getUser(auth().currentUser?.uid || '').then((result) => setUser(result));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
