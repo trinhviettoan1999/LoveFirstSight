@@ -36,13 +36,12 @@ const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
 const sound = new Sound(nhachuong);
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
+var engine: RtcEngine | undefined;
 
 export const VideoScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  var engine: RtcEngine | undefined;
-  const {appId, channelName, token, avatar, name, userId, ownerId} =
-    route.params;
+  const {appId, channelName, token, avatar, name, userId, type} = route.params;
   const [props, setProps] = useState({
     peerIds: [],
     vidMute: false,
@@ -64,7 +63,13 @@ export const VideoScreen = () => {
         setProps({...props, peerIds: [...props.peerIds, uid]});
       }
     });
-    engine?.addListener('UserOffline', (uid: number) => {
+    engine?.addListener('UserOffline', async (uid: number) => {
+      await engine?.leaveChannel();
+      if (type === 'incoming') {
+        navigation.pop(2);
+      } else {
+        navigation.goBack();
+      }
       console.log('UserOffline');
       setProps({
         ...props,
@@ -80,7 +85,7 @@ export const VideoScreen = () => {
     engine = await RtcEngine.create(appId);
     addListener();
     await engine?.enableAudio();
-    await engine?.enableVideo(); //Enable the audio
+    await engine?.enableVideo();
   };
 
   const joinChannel = async () => {
@@ -93,13 +98,13 @@ export const VideoScreen = () => {
     await engine?.joinChannel(token, channelName, null, userId);
   };
 
-  const toggleAudio = () => {
-    engine?.muteLocalAudioStream(!props.audMute);
+  const toggleAudio = async () => {
+    await engine?.muteLocalAudioStream(!props.audMute);
     setProps({...props, audMute: !props.audMute});
   };
 
-  const toggleVideo = () => {
-    engine?.muteLocalVideoStream(!props.vidMute);
+  const toggleVideo = async () => {
+    await engine?.muteLocalVideoStream(!props.vidMute);
     setProps({...props, vidMute: !props.vidMute});
   };
 
@@ -110,6 +115,13 @@ export const VideoScreen = () => {
       stateJoinCall: false,
     });
     setProps({...props, peerIds: [], joinSucceed: false});
+    await engine?.leaveChannel();
+    await engine?.destroy();
+    if (type === 'incoming') {
+      navigation.pop(2);
+    } else {
+      navigation.goBack();
+    }
   };
 
   useEffect(() => {
@@ -129,15 +141,15 @@ export const VideoScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    getStateVideoCall(channelName, async (result: boolean) => {
-      if (!result) {
-        await engine?.leaveChannel();
-        navigation.goBack();
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   getStateVideoCall(channelName, async (result: boolean) => {
+  //     if (!result) {
+  //       await engine?.leaveChannel();
+  //       navigation.goBack();
+  //     }
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <View style={styles.full}>
@@ -160,14 +172,14 @@ export const VideoScreen = () => {
             width: WIDTH,
             height: HEIGHT,
           }}>
-          {!props.vidMute && (
+          {!props.vidMute ? (
             <RtcLocalView.SurfaceView
               style={styles.localVideo}
               channelId={channelName}
               renderMode={VideoRenderMode.Hidden}
               key={auth().currentUser?.uid}
             />
-          )}
+          ) : null}
           <RtcRemoteView.SurfaceView
             style={{
               width: WIDTH,

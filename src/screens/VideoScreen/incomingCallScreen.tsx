@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, ImageBackground, Text, Pressable} from 'react-native';
-import {RouteStackParamList, DisLike} from '../../components';
+import {RouteStackParamList, DisLike, HeaderCustom} from '../../components';
 import {
   setStateVideoCall,
   createKey,
@@ -9,6 +9,7 @@ import {
 import {ROUTER} from '../../constants/router';
 import {VideoFull} from '../../components/AllSvgIcon/AllSvgIcon';
 import Sound from 'react-native-sound';
+import {color} from '../../theme';
 
 const nhachuong = require('../../../assets/sounds/chuongdienthoai.mp3');
 const sound = new Sound(nhachuong);
@@ -21,17 +22,19 @@ export const IncomingCallScreen = ({
 
   const handleCancel = () => {
     setStateVideoCall(channelName, false);
+    sound.stop();
+    navigation.goBack();
   };
 
-  useEffect(() => {
-    getStateVideoCall(channelName, async (result: boolean) => {
-      if (!result) {
-        sound.stop();
-        navigation.goBack();
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   getStateVideoCall(channelName, async (result: boolean) => {
+  //     if (!result) {
+  //       sound.stop();
+  //       navigation.goBack();
+  //     }
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     sound.setNumberOfLoops(-1);
@@ -52,12 +55,18 @@ export const IncomingCallScreen = ({
           channelName,
           userId,
           token: key,
+          type: 'incoming',
         });
       });
   };
 
   return (
     <ImageBackground source={{uri: avatar}} style={styles.imageBackground}>
+      <HeaderCustom
+        backgroundStatusBar={color.transparent}
+        barStyle="light-content"
+        removeBorderWidth
+      />
       <Text style={styles.text}>{name} is calling...</Text>
       <View style={styles.containerButton}>
         <Pressable onPress={handleCancel}>
