@@ -244,27 +244,18 @@ export const ConversationScreen = () => {
 const styles = StyleSheet.create({
   allContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F8F8F8',
   },
   container: {
     flex: 1,
-    paddingHorizontal: 16,
   },
   flatlistContainer: {
     flex: 1,
     paddingTop: 10,
   },
-
-  itemMatchContainer: {
-    height: 120,
-    width: 70,
-    alignItems: 'center',
-    marginHorizontal: 5,
-    marginTop: 5,
-  },
   avatar: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
     borderRadius: 100,
   },
   textName: {
@@ -274,11 +265,12 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   itemConversationContainer: {
-    height: 100,
+    height: 80,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
     backgroundColor: '#FFFFFF',
+    marginHorizontal: 16,
     marginBottom: 5,
     borderRadius: 10,
   },

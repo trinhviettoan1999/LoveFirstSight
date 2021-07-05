@@ -592,20 +592,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 100,
   },
-  inputToolbar: {
-    flex: 1,
-    flexDirection: 'row',
-    borderTopWidth: 0.3,
-    borderBottomWidth: 0.3,
-    borderColor: color.textGray,
-    backgroundColor: color.bgWhite,
-  },
-  textInput: {
-    marginLeft: 5,
-    flex: 2,
-    alignSelf: 'center',
-    fontSize: 16,
-  },
   row: {
     flex: 1,
     justifyContent: 'space-around',
@@ -633,32 +619,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     color: '#FFFFFF',
   },
-  containerWaveSound: {
-    flex: 1,
-    height: 35,
-    backgroundColor: '#6A1616',
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 20,
-    alignSelf: 'center',
-  },
-  textTime: {
-    flex: 0.2,
-    alignSelf: 'center',
-    color: '#FFFFFF',
-  },
-  wave: {
-    flex: 4,
-    marginLeft: 3,
-    marginRight: 8,
-    flexDirection: 'row',
-  },
-  chilWave: {
-    alignSelf: 'center',
-    width: 2,
-    marginLeft: 1,
-    backgroundColor: '#FFFFFF',
-  },
   containerAudio: {
     height: 30,
     width: 150,
@@ -673,8 +633,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     backgroundColor: 'transparent',
     marginLeft: 5,
-  },
-  textTimeAudio: {
-    color: '#FFFFFF',
   },
 });
