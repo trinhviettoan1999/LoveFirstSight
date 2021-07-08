@@ -24,6 +24,7 @@ import FlashMessage from 'react-native-flash-message';
 import {ROUTER} from '../constants';
 import {color} from '../theme/color';
 import {getCountNotRead} from '../controller';
+import {Icon} from 'react-native-elements';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -39,13 +40,55 @@ const AppTab = () => {
       screenOptions={({route}) => ({
         tabBarIcon: ({focused}) => {
           if (route.name === ROUTER.home) {
-            return focused ? <HomeFill /> : <Home />;
+            return focused ? (
+              <Icon
+                name="home"
+                type="ionicon"
+                color={color.primary}
+                size={25}
+              />
+            ) : (
+              <Icon
+                name="home-outline"
+                type="ionicon"
+                color={color.gray}
+                size={25}
+              />
+            );
           } else if (route.name === ROUTER.likedYou) {
-            return focused ? <SupperLikeFill /> : <SupperLike />;
+            return focused ? (
+              <Icon
+                name="star"
+                type="ionicon"
+                color={color.primary}
+                size={25}
+              />
+            ) : (
+              <Icon
+                name="star-outline"
+                type="ionicon"
+                color={color.gray}
+                size={25}
+              />
+            );
           } else if (route.name === ROUTER.conversation) {
             return (
               <View>
-                {focused ? <ConversationFill /> : <Conversation />}
+                {focused ? (
+                  <Icon
+                    name="chatbubble-ellipses"
+                    type="ionicon"
+                    color={color.primary}
+                    size={25}
+                  />
+                ) : (
+                  <Icon
+                    name="chatbubble-ellipses-outline"
+                    type="ionicon"
+                    color={color.gray}
+                    size={25}
+                  />
+                )}
                 {count > 0 && (
                   <View
                     style={{
@@ -65,9 +108,37 @@ const AppTab = () => {
               </View>
             );
           } else if (route.name === ROUTER.account) {
-            return focused ? <AccountFill /> : <Account />;
+            return focused ? (
+              <Icon
+                name="person-circle"
+                type="ionicon"
+                color={color.primary}
+                size={25}
+              />
+            ) : (
+              <Icon
+                name="person-circle-outline"
+                type="ionicon"
+                color={color.gray}
+                size={25}
+              />
+            );
           } else if (route.name === ROUTER.news) {
-            return focused ? <NewFill /> : <New />;
+            return focused ? (
+              <Icon
+                name="newspaper"
+                type="ionicon"
+                color={color.primary}
+                size={25}
+              />
+            ) : (
+              <Icon
+                name="newspaper-outline"
+                type="ionicon"
+                color={color.gray}
+                size={25}
+              />
+            );
           }
         },
       })}

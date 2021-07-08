@@ -8,4 +8,5 @@ export const color = {
   text: '#3F414E',
   textGray: '#BDBDBD',
   blue: '#0078D4',
+  gray: '#ADACAC',
 };
