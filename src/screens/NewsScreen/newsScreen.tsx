@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, StyleSheet, Pressable, Text, FlatList} from 'react-native';
-import {Image} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import {
   Bin,
   Edit,
@@ -32,13 +32,15 @@ export const NewsScreen = () => {
         onPress={() => {
           navigation.navigate(ROUTER.post);
         }}>
-        <Image
+        <FastImage
           style={styles.avatar}
           source={{
             // @ts-ignore: Object is possibly 'null'.
             uri: user.avatar,
+            headers: {Authorization: 'staplerapp123456'},
+            priority: FastImage.priority.normal,
           }}
-          resizeMode="cover"
+          resizeMode={FastImage.resizeMode.cover}
         />
         <Text style={styles.textCreatePost}>Create your new post!!</Text>
       </Pressable>

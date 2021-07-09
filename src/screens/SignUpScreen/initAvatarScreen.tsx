@@ -25,7 +25,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {upload, getUrl} from '../../firebase/storage';
 import * as firebase from '../../firebase/firebase';
 import auth from '@react-native-firebase/auth';
-import {Image} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 
 //get image from camera
 function cameraLaunch(setResourcePath: any) {
@@ -190,15 +190,18 @@ export const InitAvatarScreen = ({navigation}: any) => {
           style={styles.avatarContainer}
           onPress={() => setIsModalVisible(true)}
           underlayColor="#FFFFFF">
-          <Image
+          <FastImage
             style={styles.avatar}
             // @ts-ignore: Object is possibly 'null'.
             source={{
+              // @ts-ignore: Object is possibly 'null'.
               uri: resourcePath
                 ? resourcePath
                 : 'https://vsmcamp.com/wp-content/uploads/2020/11/JaZBMzV14fzRI4vBWG8jymplSUGSGgimkqtJakOV.jpeg',
+              headers: {Authorization: 'staplerapp123456'},
+              priority: FastImage.priority.normal,
             }}
-            resizeMode="cover"
+            resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableHighlight>
         <Modal

@@ -7,9 +7,10 @@ import {
   Pressable,
   Dimensions,
   StatusBar,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Image} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {StarSmall, HeartFill} from '../../components';
 import {computeAge, getLikedUsers, getTopPick} from '../../controller';
@@ -33,13 +34,15 @@ const Item = ({item, onPress, iconName}: any) => {
   return (
     <Pressable style={styles.itemContainer} onPress={onPress}>
       <View style={styles.avatar}>
-        <Image
+        <FastImage
           style={styles.avatar}
           source={{
             // @ts-ignore: Object is possibly 'null'.
             uri: item.avatar,
+            headers: {Authorization: 'staplerapp123456'},
+            priority: FastImage.priority.normal,
           }}
-          resizeMode="cover"
+          resizeMode={FastImage.resizeMode.cover}
         />
       </View>
       <View style={styles.informationContainer}>

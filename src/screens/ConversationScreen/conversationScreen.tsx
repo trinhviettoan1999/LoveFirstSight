@@ -7,6 +7,7 @@ import {
   Pressable,
   Dimensions,
   StatusBar,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -15,7 +16,7 @@ import {
   getConversation,
   updateStatusIsRead,
 } from '../../controller';
-import {Image} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import {ROUTER} from '../../constants/router';
 import {color} from '../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -50,13 +51,15 @@ const ItemConversation = ({item, onPress}: any) => {
           updateStatusIsRead(item.conversationId);
         }
       }}>
-      <Image
+      <FastImage
         style={styles.avatar}
         source={{
           // @ts-ignore: Object is possibly 'null'.
           uri: item.avatar,
+          headers: {Authorization: 'staplerapp123456'},
+          priority: FastImage.priority.normal,
         }}
-        resizeMode="cover"
+        resizeMode={FastImage.resizeMode.cover}
       />
       <View style={{flex: 1, paddingHorizontal: 10}}>
         <Text style={styles.textName}>{item.name}</Text>

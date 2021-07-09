@@ -6,7 +6,8 @@ import {commentPost, getComments} from '../../controller';
 import Swiper from 'react-native-swiper';
 import Video from 'react-native-video';
 import {color, spacing} from '../../theme';
-import {Input, Image} from 'react-native-elements';
+import {Input} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 
 export const DetailNewScreen = () => {
   const navigation = useNavigation();
@@ -49,14 +50,16 @@ export const DetailNewScreen = () => {
               {listCollections.map((item: any) => {
                 if (item.mediaType === 'image') {
                   return (
-                    <Image
+                    <FastImage
                       key={item.collectionId}
                       style={styles.collectionPost}
                       source={{
                         // @ts-ignore: Object is possibly 'null'.
                         uri: item.path,
+                        headers: {Authorization: 'staplerapp123456'},
+                        priority: FastImage.priority.normal,
                       }}
-                      resizeMode="cover"
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                   );
                 } else {

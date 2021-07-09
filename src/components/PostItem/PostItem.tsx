@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Pressable, Text, Dimensions} from 'react-native';
-import {Image} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
 import Video from 'react-native-video';
 import {getUser, unVotePost, votePost} from '../../controller';
@@ -43,13 +43,15 @@ export const PostItem = ({
   return (
     <View style={styles.itemPost}>
       <View style={styles.topContainerPost}>
-        <Image
+        <FastImage
           style={styles.avatar}
           source={{
             // @ts-ignore: Object is possibly 'null'.
             uri: user?.avatar,
+            headers: {Authorization: 'staplerapp123456'},
+            priority: FastImage.priority.normal,
           }}
-          resizeMode="cover"
+          resizeMode={FastImage.resizeMode.cover}
         />
         <Text style={styles.textName}>{user?.name}</Text>
       </View>
@@ -71,14 +73,16 @@ export const PostItem = ({
               {listCollections.map((item: any) => {
                 if (item.mediaType === 'image') {
                   return (
-                    <Image
+                    <FastImage
                       key={item.collectionId}
                       style={styles.wrapper}
                       source={{
                         // @ts-ignore: Object is possibly 'null'.
                         uri: item.path,
+                        headers: {Authorization: 'staplerapp123456'},
+                        priority: FastImage.priority.normal,
                       }}
-                      resizeMode="cover"
+                      resizeMode={FastImage.resizeMode.stretch}
                     />
                   );
                 } else {

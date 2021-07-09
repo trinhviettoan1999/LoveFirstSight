@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, Alert} from 'react-native';
-import {Image} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import {deleteComment, getUser} from '../../controller';
 import auth from '@react-native-firebase/auth';
 import {Bin} from '../AllSvgIcon/AllSvgIcon';
@@ -52,7 +52,7 @@ export const CommentItem: FC<IProps> = ({
 
   return (
     <View style={styles.commentContainer}>
-      <Image
+      <FastImage
         style={styles.avatar}
         source={{
           uri: user?.avatar,

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, ActivityIndicator, View} from 'react-native';
-import {Image} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import {spacing} from '../../theme/spacing';
 
 type props = {
@@ -18,7 +18,7 @@ export const ImageUser = ({urlImage}: props) => {
           style={styles.activityIndicator}
         />
       ) : null}
-      <Image
+      <FastImage
         style={styles.container}
         onLoadStart={() => {
           setLoad(true);
@@ -26,8 +26,10 @@ export const ImageUser = ({urlImage}: props) => {
         source={{
           // @ts-ignore: Object is possibly 'null'.
           uri: urlImage,
+          headers: {Authorization: 'staplerapp123456'},
+          priority: FastImage.priority.normal,
         }}
-        resizeMode="cover"
+        resizeMode={FastImage.resizeMode.cover}
         onLoadEnd={() => {
           setLoad(false);
         }}
