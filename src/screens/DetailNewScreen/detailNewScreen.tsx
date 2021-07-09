@@ -1,27 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  FlatList,
-  TextInput,
-  Pressable,
-} from 'react-native';
+import {View, StyleSheet, Text, FlatList, Pressable} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {
-  StatusBarCustom,
-  CustomIcon,
-  CommentItem,
-  Back,
-  InputCustom,
-  Send,
-} from '../../components';
+import {StatusBarCustom, CommentItem, Back, Send} from '../../components';
 import {commentPost, getComments} from '../../controller';
 import Swiper from 'react-native-swiper';
-import FastImage from 'react-native-fast-image';
 import Video from 'react-native-video';
 import {color, spacing} from '../../theme';
-import {Input} from 'react-native-elements';
+import {Input, Image} from 'react-native-elements';
 
 export const DetailNewScreen = () => {
   const navigation = useNavigation();
@@ -64,16 +49,14 @@ export const DetailNewScreen = () => {
               {listCollections.map((item: any) => {
                 if (item.mediaType === 'image') {
                   return (
-                    <FastImage
+                    <Image
                       key={item.collectionId}
                       style={styles.collectionPost}
                       source={{
                         // @ts-ignore: Object is possibly 'null'.
                         uri: item.path,
-                        headers: {Authorization: 'staplerapp123456'},
-                        priority: FastImage.priority.normal,
                       }}
-                      resizeMode={FastImage.resizeMode.contain}
+                      resizeMode="cover"
                     />
                   );
                 } else {

@@ -30,3 +30,4 @@ export * from './FilterContent/FilterContent';
 export * from './FilterSlider/FilterSlider';
 export * from './Comment/Comment';
 export * from './FilterMultiSlider/FilterMultiSlider';
+export * from './VideoPlayer/VideoPlayer';

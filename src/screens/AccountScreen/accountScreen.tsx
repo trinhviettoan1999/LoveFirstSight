@@ -18,10 +18,9 @@ import {
   HeaderCustom,
   Setting,
 } from '../../components';
+import {Image} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import {signOutAccount} from '../../firebase/firebase';
-import 'react-native-console-time-polyfill';
-import FastImage from 'react-native-fast-image';
 import messaging from '@react-native-firebase/messaging';
 import {color, spacing} from '../../theme';
 import {ROUTER} from '../../constants/router';
@@ -104,16 +103,13 @@ export const AccountScreen = () => {
                 style={styles.activityIndicator}
               />
             ) : null}
-            <FastImage
+            <Image
               style={styles.avatar}
               onLoadStart={() => setLoad(true)}
               source={{
-                // @ts-ignore: Object is possibly 'null'.
-                uri: user.avatar,
-                headers: {Authorization: 'staplerapp123456'},
-                priority: FastImage.priority.normal,
+                uri: user.avatar || '',
               }}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode="cover"
               onLoadEnd={() => setLoad(false)}
             />
           </View>

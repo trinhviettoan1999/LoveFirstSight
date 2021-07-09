@@ -41,7 +41,6 @@ import {
   sendImageChat,
   setStateVideoCall,
 } from '../../controller';
-import 'react-native-console-time-polyfill';
 import {ROUTER} from './../../constants/router';
 import {color} from '../../theme';
 import {sendMessage} from '../../controller/chat';

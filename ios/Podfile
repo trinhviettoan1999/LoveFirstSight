@@ -17,6 +17,7 @@ target 'client' do
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
 
+
   target 'clientTests' do
     inherit! :complete
     # Pods for testing

@@ -311,6 +311,6 @@ const styles = StyleSheet.create({
   iconFilter: {
     position: 'absolute',
     right: 10,
-    top: 60,
+    top: 50,
   },
 });

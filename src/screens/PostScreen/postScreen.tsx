@@ -16,7 +16,7 @@ import {
   VideoOn,
   GalleryFill,
 } from '../../components';
-import FastImage from 'react-native-fast-image';
+import {Image} from 'react-native-elements';
 import uuid from 'react-native-uuid';
 import ImagePicker from 'react-native-image-crop-picker';
 import Video from 'react-native-video';
@@ -31,18 +31,21 @@ const ItemImage = ({item, onPressRemove}: any) => {
   return (
     <View>
       {item.mediaType === 'image' ? (
-        <FastImage
+        <Image
           style={styles.image}
           source={{
             // @ts-ignore: Object is possibly 'null'.
             uri: item.path,
-            headers: {Authorization: 'staplerapp123456'},
-            priority: FastImage.priority.normal,
           }}
-          resizeMode={FastImage.resizeMode.cover}
+          resizeMode="cover"
         />
       ) : (
-        <Video style={styles.image} source={{uri: item.path}} />
+        <Video
+          style={styles.image}
+          source={{uri: item.path}}
+          controls={true}
+          paused={true}
+        />
       )}
       <Pressable
         onPress={onPressRemove}
