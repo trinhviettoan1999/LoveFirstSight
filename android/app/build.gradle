@@ -132,7 +132,7 @@ android {
         applicationId "com.stapler.client"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 29
-        versionCode 5
+        versionCode 6
         versionName "1.0"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true 

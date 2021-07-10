@@ -247,6 +247,9 @@ export const StaplerScreen = () => {
                   </Pressable>
                 </View>
                 <Hobbies data={user.hobbies} />
+                <Pressable style={styles.iconFilter} onPress={handleFilter}>
+                  <Filter />
+                </Pressable>
               </LinearGradient>
             </ImageBackground>
             {showInfo && (
@@ -269,9 +272,6 @@ export const StaplerScreen = () => {
           />
         </View>
       ) : null}
-      <Pressable style={styles.iconFilter} onPress={handleFilter}>
-        <Filter />
-      </Pressable>
       {!user?.name && !load && <NotUser />}
     </View>
   );
@@ -311,6 +311,6 @@ const styles = StyleSheet.create({
   iconFilter: {
     position: 'absolute',
     right: 10,
-    top: 50,
+    top: 0,
   },
 });
