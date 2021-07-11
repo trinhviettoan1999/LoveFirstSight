@@ -3,7 +3,6 @@ import {
   View,
   PermissionsAndroid,
   Platform,
-  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -14,14 +13,13 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
 import {
-  CustomIcon,
   HeaderCustom,
   Back,
   Video,
   InputToolBar,
+  AudioComponent,
 } from '../../components';
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
-import Sound from 'react-native-sound';
 import uuid from 'react-native-uuid';
 import {upload, getUrl} from '../../firebase/storage';
 import auth from '@react-native-firebase/auth';
@@ -29,7 +27,6 @@ import firestore from '@react-native-firebase/firestore';
 import {getUser} from '../../controller';
 import CameraRoll from '@react-native-community/cameraroll';
 import {launchCamera} from 'react-native-image-picker';
-import {Slider} from 'react-native-elements';
 import {
   checkPermisstionAudio,
   checkPermissionCamera,
@@ -73,9 +70,6 @@ const getPhotos = (setPhotos: any) => {
       console.log(error);
     });
 };
-
-let audio: Sound;
-let valueChangeInterval: NodeJS.Timeout;
 
 export const Chat = () => {
   const navigation = useNavigation();
@@ -214,99 +208,17 @@ export const Chat = () => {
   };
 
   const renderAudio = (props: any) => {
-    return !props.currentMessage.audioV ? null : (
-      <View>
-        {props.currentMessage._id === currentPlayedMessage ? (
-          <View
-            style={[
-              styles.containerAudio,
-              {
-                backgroundColor:
-                  props.position === 'left' ? color.bgWhite : color.primary,
-              },
-            ]}>
-            <CustomIcon
-              name="pause"
-              size={20}
-              color="#919191"
-              style={styles.iconAudio}
-            />
-            <Slider
-              // @ts-ignore: Object is possibly 'null'.
-              value={valueSlider}
-              style={{width: 110, marginLeft: 5}}
-              minimumValue={0}
-              maximumValue={timeAudio}
-              maximumTrackTintColor="#C8C8C8"
-              minimumTrackTintColor="blue"
-              trackStyle={{height: 3}}
-              thumbStyle={{
-                height: 0,
-                width: 0,
-                backgroundColor: '#FFFFFF',
-              }}
-            />
-          </View>
-        ) : (
-          <View
-            style={[
-              styles.containerAudio,
-              {
-                backgroundColor:
-                  props.position === 'left' ? '#E1E1E1' : '#6A1616',
-              },
-            ]}>
-            <CustomIcon
-              name="play"
-              size={20}
-              color="#FFFFFF"
-              style={styles.iconAudio}
-              onPress={() => {
-                setPlayAudio(true);
-                setCurrentPlayedMessage(props.currentMessage._id);
-                audio = new Sound(props.currentMessage.audioV, '', (error) => {
-                  valueChangeInterval = setInterval(() => {
-                    audio.getCurrentTime((seconds, isPlaying) => {
-                      if (isPlaying) {
-                        setValueSlider(seconds);
-                        console.log(seconds);
-                      }
-                      if (seconds >= audio.getDuration()) {
-                        clearInterval(valueChangeInterval);
-                      }
-                    });
-                  }, 50);
-                  if (error) {
-                    console.log('failed to load the sound', error);
-                  }
-                  // @ts-ignore: Object is possibly 'null'.
-                  setTimeAudio(audio.getDuration());
-                  audio.play((success) => {
-                    if (success) {
-                      setCurrentPlayedMessage('');
-                      setPlayAudio(false);
-                      console.log(success, 'success play');
-                    } else {
-                      Alert.alert('There was an error playing this audio');
-                    }
-                  });
-                  setValueSlider(0.01);
-                });
-              }}
-            />
-            <Slider
-              style={{width: 110, marginLeft: 5}}
-              maximumTrackTintColor="#C8C8C8"
-              trackStyle={{height: 3}}
-              thumbStyle={{
-                height: 0,
-                width: 0,
-                backgroundColor: '#FFFFFF',
-              }}
-            />
-          </View>
-        )}
-      </View>
+    return (
+      <AudioComponent
+        props={props}
+        currentPlayedMessage={currentPlayedMessage}
+        setCurrentPlayedMessage={setCurrentPlayedMessage}
+        setPlayAudio={setPlayAudio}
+        setValueSlider={setValueSlider}
+        valueSlider={valueSlider}
+        timeAudio={timeAudio}
+        setTimeAudio={setTimeAudio}
+      />
     );
   };
 
@@ -357,7 +269,7 @@ export const Chat = () => {
 
   const renderLoadEarlier = () => {
     return lengthMessage > 0 && isLoadingEarlier ? (
-      <ActivityIndicator size="small" color="#6a1616" />
+      <ActivityIndicator size="small" color={color.primary} />
     ) : null;
   };
 
@@ -617,20 +529,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontStyle: 'normal',
     color: '#FFFFFF',
-  },
-  containerAudio: {
-    height: 30,
-    width: 150,
-    borderRadius: 10,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  iconAudio: {
-    position: 'relative',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 0},
-    shadowOpacity: 0.5,
-    backgroundColor: 'transparent',
-    marginLeft: 5,
   },
 });

@@ -97,7 +97,7 @@ export const InputToolBar = ({
           {startAudio ? <MicFill /> : <Mic />}
         </Pressable>
       ) : (
-        <Pressable style={[styles.icon, {marginLeft: 10}]} onPress={onPressBin}>
+        <Pressable style={[styles.icon]} onPress={onPressBin}>
           <BinFill />
         </Pressable>
       )}
@@ -181,8 +181,9 @@ const styles = StyleSheet.create({
   },
   containerWaveSound: {
     flex: 1,
-    height: 35,
-    backgroundColor: '#6A1616',
+    marginLeft: 10,
+    height: 25,
+    backgroundColor: color.primary,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 20,
