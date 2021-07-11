@@ -72,7 +72,10 @@ const ListItem = ({data, navigation, iconName}: any) => {
   };
   return (
     <FlatList
-      contentContainerStyle={{paddingBottom: 16, backgroundColor: 'white'}}
+      contentContainerStyle={{
+        paddingBottom: 70,
+        backgroundColor: 'white',
+      }}
       numColumns={2}
       columnWrapperStyle={{flex: 1}}
       data={data}
@@ -144,7 +147,7 @@ const TopPick = () => {
   }, [navigation]);
 
   return (
-    <View style={{backgroundColor: 'white', flex: 1}}>
+    <View style={{backgroundColor: 'white'}}>
       {status === 200 ? (
         <ListItem data={data} navigation={navigation} iconName="star" />
       ) : (
