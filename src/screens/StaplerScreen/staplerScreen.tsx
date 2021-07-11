@@ -7,6 +7,7 @@ import {
   ScrollView,
   ImageBackground,
   Dimensions,
+  Image,
 } from 'react-native';
 import {useRoute, RouteProp} from '@react-navigation/native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
@@ -50,6 +51,7 @@ const saveTokenToDatabase = async (token: string) => {
     });
 };
 
+const searching_default = require('../../../assets/images/searching_default.png');
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
@@ -92,6 +94,7 @@ type TRouteProps = {
 export const StaplerScreen = () => {
   const route = useRoute<RouteProp<TRouteProps, 'Filter'>>();
   const navigation = useNavigation();
+  const [searching, setSearching] = useState(true);
   const tabBarHeight = useBottomTabBarHeight();
   const [filter] = useState({
     gender: '',
@@ -192,15 +195,18 @@ export const StaplerScreen = () => {
     getAvailableUsers(filter).then((result) => {
       setListUsers(result);
       setUser(getUserRandom(result));
+      setSearching(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    setSearching(true);
     if (route.params?.filter) {
       getAvailableUsers(route.params?.filter).then((result) => {
         setListUsers(result);
         setUser(getUserRandom(result));
+        setSearching(false);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,7 +221,15 @@ export const StaplerScreen = () => {
 
   return (
     <View style={styles.wrap}>
-      {/* {load && <Loading />} */}
+      {searching && (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Image
+            style={{width: 200, height: 200}}
+            resizeMode="contain"
+            source={searching_default}
+          />
+        </View>
+      )}
       {user?.name ? (
         <View>
           <ScrollView
