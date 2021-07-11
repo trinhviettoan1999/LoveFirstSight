@@ -163,11 +163,6 @@ export const AccountScreen = () => {
               }}
             />
             <ProfileInformation
-              iconName="location"
-              content={user.location}
-              onPress={() => navigation.navigate(ROUTER.editLiving)}
-            />
-            <ProfileInformation
               iconName="height"
               content={user.height ? user.height + ' cm' : user.height}
               onPress={() =>
