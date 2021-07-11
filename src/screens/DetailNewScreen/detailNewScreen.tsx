@@ -1,10 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, FlatList, Pressable} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {StatusBarCustom, CommentItem, Back, Send} from '../../components';
+import {
+  StatusBarCustom,
+  CommentItem,
+  Back,
+  Send,
+  VideoPlayer,
+} from '../../components';
 import {commentPost, getComments} from '../../controller';
 import Swiper from 'react-native-swiper';
-import Video from 'react-native-video';
 import {color, spacing} from '../../theme';
 import {Input} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
@@ -59,16 +64,12 @@ export const DetailNewScreen = () => {
                         headers: {Authorization: 'staplerapp123456'},
                         priority: FastImage.priority.normal,
                       }}
-                      resizeMode={FastImage.resizeMode.contain}
+                      resizeMode={FastImage.resizeMode.cover}
                     />
                   );
                 } else {
                   return (
-                    <Video
-                      key={item.collectionId}
-                      style={styles.collectionPost}
-                      source={{uri: item.path}}
-                    />
+                    <VideoPlayer key={item.collectionId} video={item.path} />
                   );
                 }
               })}
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: '100%',
-    height: 250,
+    height: 350,
   },
   collectionPost: {
     width: '100%',
