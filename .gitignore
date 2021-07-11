@@ -29,7 +29,6 @@ build/
 app/release
 local.properties
 *.iml
-*.pack
 
 # node.js
 #
