@@ -73,7 +73,7 @@ const ListItem = ({data, navigation, iconName}: any) => {
   return (
     <FlatList
       contentContainerStyle={{
-        paddingBottom: 70,
+        paddingBottom: 100,
         backgroundColor: 'white',
       }}
       numColumns={2}
