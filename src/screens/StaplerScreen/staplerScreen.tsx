@@ -146,10 +146,12 @@ export const StaplerScreen = () => {
   };
 
   const handleBlock = () => {
+    // @ts-ignore: Object is possibly 'null'.
+    ref_scroll.current.scrollTo({x: 0, y: 0, animated: true});
     setLoadButton(true);
     blockUser(user.userId);
-    setLoad(!load);
     setLoadButton(false);
+    loadData();
   };
 
   const handleLike = async () => {
