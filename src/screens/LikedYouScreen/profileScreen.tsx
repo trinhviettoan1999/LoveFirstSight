@@ -83,7 +83,8 @@ export const ProfileScreen = () => {
     setLoad(true);
     const result = await getUser(route.params.userId);
     if (result) {
-      setUser(result);
+      // @ts-ignore: Object is possibly 'null'.
+      setUser({...result, userId: route.params.userId});
       setIsMatched(result.availableUsers.indexOf(auth().currentUser?.uid));
     }
     setLoad(false);

@@ -141,8 +141,8 @@ export const updateStateConversation = (conversationId: any) => {
   );
 };
 
-export const sendMessageRequest = (receiverId: string) => {
-  return fetch(
+export const sendMessageRequest = async (receiverId: string) => {
+  return await fetch(
     'https://still-brushlands-96770.herokuapp.com/conversation/send-message',
     {
       method: 'POST',
@@ -155,7 +155,10 @@ export const sendMessageRequest = (receiverId: string) => {
         receiverId: receiverId,
       }),
     },
-  ).then((res) => res.json());
+  )
+    .then((res) => res.json())
+    .then((result) => result)
+    .catch((err) => console.log('err: ', err));
 };
 
 export const updateConversation = async (conversationId: string) => {

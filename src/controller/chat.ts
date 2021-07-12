@@ -181,15 +181,22 @@ export const sendMessage = async (
       },
     })
     .then(async () => {
+      console.log('firstUserId: ', firstUserId);
+      console.log('state: ', state);
+      // @ts-ignore: Object is possibly 'null'.
+      if (
+        state &&
+        firstUserId !== auth().currentUser?.uid &&
+        firstUserId !== undefined
+      ) {
+        console.log('conversationId2: ', conversationId);
+        await likeUser(ownerId);
+        await updateStateConversation(conversationId)
+          .then((res) => console.log('update: ', res))
+          .catch((err) => console.log('err conversation: ', err));
+      }
       updateConversation(conversationId);
       sendNotification(ownerId, userId, message, conversationId);
-      // @ts-ignore: Object is possibly 'null'.
-      if (state && firstUserId !== auth().currentUser?.uid) {
-        await likeUser(ownerId);
-        await updateStateConversation(conversationId).then((res) =>
-          console.log('update: ', res),
-        );
-      }
     });
 };
 
