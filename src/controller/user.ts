@@ -29,10 +29,6 @@ export const getUserRandom = (availableUsers: any) => {
   return availableUsers[index];
 };
 
-// export const getAvailableUsers = async () => {
-//   const listAvailableUsers = (await firestore().collection('users').doc())
-// }
-
 export const getAvailableUsers = async (filter: any) => {
   return await fetch('https://still-brushlands-96770.herokuapp.com/match', {
     method: 'POST',

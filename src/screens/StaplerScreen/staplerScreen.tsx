@@ -203,11 +203,14 @@ export const StaplerScreen = () => {
   useEffect(() => {
     setSearching(true);
     if (route.params?.filter) {
-      getAvailableUsers(route.params?.filter).then((result) => {
-        setListUsers(result);
-        setUser(getUserRandom(result));
-        setSearching(false);
-      });
+      console.log('ok');
+      getAvailableUsers(route.params?.filter)
+        .then((result) => {
+          setListUsers(result);
+          setUser(getUserRandom(result));
+          setSearching(false);
+        })
+        .catch((err) => console.log('err: ', err));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.params?.filter]);

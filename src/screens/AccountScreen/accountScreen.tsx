@@ -108,7 +108,7 @@ export const AccountScreen = () => {
               onLoadStart={() => setLoad(true)}
               source={{
                 // @ts-ignore: Object is possibly 'null'.
-                uri: user.avatar,
+                uri: user?.avatar,
                 headers: {Authorization: 'staplerapp123456'},
                 priority: FastImage.priority.normal,
               }}
