@@ -140,6 +140,9 @@ export const StaplerScreen = () => {
 
   const loadData = () => {
     setUser(getUserRandom(listUsers));
+    // @ts-ignore: Object is possibly 'null'.
+    const index = listUsers.findIndex((result) => result.email === user.email);
+    listUsers.splice(index, 1);
   };
 
   const handleBlock = () => {
