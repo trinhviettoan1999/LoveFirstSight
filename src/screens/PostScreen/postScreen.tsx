@@ -26,6 +26,7 @@ import {color, spacing} from '../../theme';
 import {useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {Divider} from 'react-native-elements';
 
 const ItemImage = ({item, onPressRemove}: any) => {
   return (
@@ -182,14 +183,19 @@ export const PostScreen = () => {
             </View>
           ) : null}
         </View>
-        <Pressable style={styles.bottomButton} onPress={handleAddImage}>
-          <GalleryFill />
-          <Text style={styles.textSelection}>Add images to your post</Text>
-        </Pressable>
-        <Pressable style={styles.bottomButton} onPress={handleAddVideo}>
-          <VideoOn />
-          <Text style={styles.textSelection}>Add video to your post</Text>
-        </Pressable>
+        <View style={{flex: 3}}>
+          <Divider />
+          <Pressable style={styles.bottomButton} onPress={handleAddImage}>
+            <GalleryFill />
+            <Text style={styles.textSelection}>Add images to your post</Text>
+          </Pressable>
+          <Divider />
+          <Pressable style={styles.bottomButton} onPress={handleAddVideo}>
+            <VideoOn />
+            <Text style={styles.textSelection}>Add video to your post</Text>
+          </Pressable>
+          <Divider />
+        </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
@@ -198,10 +204,10 @@ export const PostScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
   },
   content: {
-    flex: 1,
+    flex: 2,
     paddingHorizontal: spacing[4],
     paddingBottom: spacing[4],
     backgroundColor: color.light,
@@ -214,8 +220,6 @@ const styles = StyleSheet.create({
   bottomButton: {
     maxHeight: 50,
     backgroundColor: color.bgWhite,
-    borderTopWidth: 0.5,
-    borderColor: color.textGray,
     paddingHorizontal: spacing[4],
     flexDirection: 'row',
     flex: 1,
