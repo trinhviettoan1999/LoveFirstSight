@@ -39,11 +39,24 @@ export const EnterPassword = () => {
       setLoad(false);
       setRequired(true);
       return;
+    } else if (valuePassword.length < 8) {
+      setLoad(false);
+      setRequired(true);
+      return;
     }
     navigation.navigate(ROUTER.initName, {
       user: user,
     });
     setLoad(false);
+  };
+
+  const checkPassword = () => {
+    if (required && !valuePassword) {
+      return 'Password is required';
+    } else if (required && valuePassword.length < 8) {
+      return 'Password must least 8 characters';
+    }
+    return '';
   };
 
   return (
@@ -72,9 +85,7 @@ export const EnterPassword = () => {
           value={valuePassword}
           placeholder="Password must least 8 characters"
           onChangeText={(text) => onChangeTextPassword(text)}
-          errorMessage={
-            required && !valuePassword ? 'Password is required' : ''
-          }
+          errorMessage={checkPassword()}
         />
         <ButtonCustom
           loading={load}

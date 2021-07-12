@@ -57,6 +57,10 @@ export const EnterMailScreen = () => {
       setRequired(true);
       setLoad(false);
       return;
+    } else if (!validateEmail(valueEmail)) {
+      setRequired(true);
+      setLoad(false);
+      return;
     }
     getCode(valueEmail).then((data) => {
       if (data === 'that email address is already in use!') {
@@ -72,6 +76,21 @@ export const EnterMailScreen = () => {
         });
       }
     });
+  };
+
+  const validateEmail = (email: string) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const checkEmail = () => {
+    if (required && !valueEmail) {
+      return 'Email is required';
+    } else if (required && !validateEmail(valueEmail)) {
+      return 'Email not valid!';
+    }
+    return '';
   };
 
   return (
@@ -95,7 +114,7 @@ export const EnterMailScreen = () => {
           keyboardType="email-address"
           placeholder="Example@gmail.com"
           onChangeText={(text) => onChangeTextEmail(text)}
-          errorMessage={required && !valueEmail ? 'Email is required' : ''}
+          errorMessage={checkEmail()}
         />
         <ButtonCustom
           loading={load}
