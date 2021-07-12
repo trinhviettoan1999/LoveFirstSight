@@ -52,6 +52,7 @@ const saveTokenToDatabase = async (token: string) => {
 };
 
 const searching_default = require('../../../assets/images/searching_default.png');
+const not_result = require('../../../assets/images/not_result.png');
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
@@ -203,7 +204,6 @@ export const StaplerScreen = () => {
   useEffect(() => {
     setSearching(true);
     if (route.params?.filter) {
-      console.log('ok');
       getAvailableUsers(route.params?.filter)
         .then((result) => {
           setListUsers(result);
@@ -289,7 +289,18 @@ export const StaplerScreen = () => {
           />
         </View>
       ) : null}
-      {!user?.name && !load && <NotUser />}
+      {!user?.name && !searching && (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Image
+            style={{width: 200, height: 200}}
+            resizeMode="contain"
+            source={not_result}
+          />
+          <Pressable style={styles.iconFilterNotResult} onPress={handleFilter}>
+            <Filter />
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 };
@@ -329,5 +340,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10,
     top: 0,
+  },
+  iconFilterNotResult: {
+    position: 'absolute',
+    right: 10,
+    top: 40,
   },
 });
