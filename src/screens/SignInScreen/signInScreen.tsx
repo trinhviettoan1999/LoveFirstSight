@@ -232,7 +232,7 @@ export const SignInScreen = ({navigation}) => {
             onPress={() => {
               navigation.navigate(ROUTER.enterMail);
             }}>
-            {'ALREADY HAVE AN ACCOUNT? '}
+            {"ALREADY HAVEN'T AN ACCOUNT? "}
           </Text>
           <Text
             style={[styles.textOptions, {color: '#8E97FD'}]}

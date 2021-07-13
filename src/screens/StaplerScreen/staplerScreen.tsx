@@ -15,7 +15,6 @@ import {
   Filter,
   Hobbies,
   Info,
-  NotUser,
   ProfileContainer,
   ImagesContainer,
   OptionsGroup,

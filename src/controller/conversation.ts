@@ -25,6 +25,9 @@ export const getConversation = async (state: boolean, next: any) => {
         avatar: any;
         stateVideoCall: boolean;
       })[] = [];
+      if (newConversations.length <= 0) {
+        return next([]);
+      }
       newConversations.forEach(async (conversation) => {
         const length = newConversations.length;
         results.push(
