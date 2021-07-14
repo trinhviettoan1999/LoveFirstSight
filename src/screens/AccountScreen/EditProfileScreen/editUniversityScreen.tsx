@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    marginVertical: 10,
   },
   text: {
     flex: 1,

@@ -191,8 +191,13 @@ export const ProfileScreen = () => {
               }}
               onPressLike={async () => {
                 await likeUser(route.params.userId);
-                // @ts-ignore: Object is possibly 'null'.
-                sendNotification(route.params.userId, auth().currentUser?.uid);
+
+                await sendNotification(
+                  // @ts-ignore: Object is possibly 'null'.
+                  route.params.userId,
+                  // @ts-ignore: Object is possibly 'null'.
+                  auth().currentUser?.uid,
+                );
                 if (route.params.flag) {
                   navigation.replace(ROUTER.tab);
                 } else {
