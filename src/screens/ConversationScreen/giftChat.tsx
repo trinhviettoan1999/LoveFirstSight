@@ -9,6 +9,7 @@ import {
   Pressable,
   Text,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {GiftedChat, Bubble} from 'react-native-gifted-chat';
@@ -24,7 +25,7 @@ import uuid from 'react-native-uuid';
 import {upload, getUrl} from '../../firebase/storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import {getUser} from '../../controller';
+import {getUser, unMatchUser} from '../../controller';
 import CameraRoll from '@react-native-community/cameraroll';
 import {launchCamera} from 'react-native-image-picker';
 import {
@@ -41,6 +42,7 @@ import {
 import {ROUTER} from './../../constants/router';
 import {color} from '../../theme';
 import {sendMessage} from '../../controller/chat';
+import {Icon} from 'react-native-elements';
 
 const messagesRef = firestore().collection('conversations');
 
@@ -387,6 +389,32 @@ export const Chat = () => {
     );
   };
 
+  const handleYesAlert = () => {
+    unMatchUser(ownerId, conversationId)
+      .then(() => {
+        navigation.goBack();
+      })
+      .catch((err) => console.log('err: ', err));
+  };
+
+  const handleUnmatch = () => {
+    Alert.alert(
+      'Notification',
+      `Do you want to unmatch ${name}?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: handleYesAlert,
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   return (
     <View style={styles.containerAll}>
       <HeaderCustom
@@ -397,9 +425,19 @@ export const Chat = () => {
           </Pressable>
         }
         rightComponent={
-          <Pressable onPress={handleVideoCall}>
-            <Video />
-          </Pressable>
+          <View style={{flexDirection: 'row'}}>
+            <Pressable onPress={handleVideoCall}>
+              <Video />
+            </Pressable>
+            <Pressable style={{marginLeft: 16}} onPress={handleUnmatch}>
+              <Icon
+                name="heart-dislike"
+                size={26}
+                type="ionicon"
+                color={color.gray}
+              />
+            </Pressable>
+          </View>
         }
         centerComponent={
           <View style={styles.headerName}>

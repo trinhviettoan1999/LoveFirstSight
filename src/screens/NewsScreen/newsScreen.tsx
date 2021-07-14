@@ -116,7 +116,7 @@ export const NewsScreen = () => {
         style={styles.modalMenu}
         onBackdropPress={() => setIsModalVisibleMenu(false)}
         backdropOpacity={0.5}>
-        <View style={[styles.buttonModal, {backgroundColor: color.primary}]}>
+        {/* <View style={[styles.buttonModal, {backgroundColor: color.primary}]}>
           <Edit />
           <Text
             style={[styles.textButtonModal, {color: color.bgWhite}]}
@@ -125,7 +125,7 @@ export const NewsScreen = () => {
             }}>
             Edit post
           </Text>
-        </View>
+        </View> */}
         <View style={[styles.buttonModal, {backgroundColor: color.light}]}>
           <Bin />
           <Text

@@ -232,12 +232,14 @@ export const unBlockUser = (userId: string) => {
   );
 };
 
-export const unMatchUser = (userId: string) => {
-  fetch(
+export const unMatchUser = async (userId: string, conversationId: string) => {
+  return await fetch(
     'https://still-brushlands-96770.herokuapp.com/match/unmatch/' +
       auth().currentUser?.uid +
       '/' +
-      userId,
+      userId +
+      '/' +
+      conversationId,
     {
       method: 'PUT',
       headers: {
