@@ -35,7 +35,7 @@ export const createAccount = async (
 };
 
 //Sign Out
-export const signOutAccount = async (success_callback: any) => {
+export const signOutAccount = async () => {
   if (auth().currentUser?.providerData[0].providerId === 'google.com') {
     GoogleSignin.configure({
       webClientId:
@@ -47,7 +47,7 @@ export const signOutAccount = async (success_callback: any) => {
   if (auth().currentUser?.providerData[0].providerId === 'facebook.com') {
     LoginManager.logOut();
   }
-  auth().signOut().then(success_callback);
+  await auth().signOut();
 };
 
 //Reset password

@@ -320,16 +320,14 @@ export const AccountScreen = () => {
               buttonStyle={styles.button}
               onPress={() => {
                 setLoadLogout(true);
-                signOutAccount(() => {
-                  navigation.replace(ROUTER.loading);
-                });
                 messaging()
                   .getToken()
-                  .then((token) => {
-                    deleteTokenToDatabase(token).then(() => {
-                      signOutAccount(() => {
-                        navigation.replace(ROUTER.loading);
-                      });
+                  .then(async (token) => {
+                    deleteTokenToDatabase(token);
+                    await signOutAccount();
+                    navigation.reset({
+                      index: 0,
+                      routes: [{name: ROUTER.signIn}],
                     });
                   });
                 setLoadLogout(false);

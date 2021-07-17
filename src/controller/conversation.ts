@@ -182,13 +182,15 @@ export const checkIsReadConversation = async (
     .collection('conversations')
     .doc(conversationId)
     .onSnapshot((result) => {
-      if (
-        result.data()?.isRead === false &&
-        result.data()?.senderId !== auth().currentUser?.uid
-      ) {
-        return next(true);
-      } else {
-        return next(false);
+      if (result !== null) {
+        if (
+          result.data()?.isRead === false &&
+          result.data()?.senderId !== auth().currentUser?.uid
+        ) {
+          return next(true);
+        } else {
+          return next(false);
+        }
       }
     });
 };
@@ -201,20 +203,27 @@ export const updateStatusIsRead = (conversationId: string) => {
 };
 
 export const getCountNotRead = async (next: any) => {
+  if (auth().currentUser?.uid === undefined) {
+    return;
+  }
   return await firestore()
     .collection('conversations')
     .where('participants', 'array-contains', auth().currentUser?.uid)
     .where('isRead', '==', false)
     .onSnapshot((snapshot) => {
-      if (snapshot.docs.length > 0) {
-        next(
-          snapshot.docs.filter(
-            (conversation) =>
-              conversation.data().senderId !== auth().currentUser?.uid,
-          ),
-        );
-      } else {
-        next([]);
+      if (snapshot !== null) {
+        if (snapshot.size) {
+          if (snapshot.docs.length > 0) {
+            next(
+              snapshot.docs.filter(
+                (conversation) =>
+                  conversation.data().senderId !== auth().currentUser?.uid,
+              ),
+            );
+          } else {
+            next([]);
+          }
+        }
       }
     });
 };

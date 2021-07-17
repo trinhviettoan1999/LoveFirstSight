@@ -7,18 +7,6 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import * as screen from '../screens';
-import {
-  Home,
-  HomeFill,
-  SupperLike,
-  SupperLikeFill,
-  Conversation,
-  ConversationFill,
-  Account,
-  AccountFill,
-  NewFill,
-  New,
-} from '../components';
 import messaging from '@react-native-firebase/messaging';
 import FlashMessage from 'react-native-flash-message';
 import {ROUTER} from '../constants';

@@ -137,7 +137,10 @@ export const SignInScreen = ({navigation}) => {
       email,
       password,
       () => {
-        navigation.replace(ROUTER.tab);
+        navigation.reset({
+          index: 0,
+          routes: [{name: ROUTER.tab}],
+        });
         setLoad(false);
       },
       (error: any) => {
@@ -185,6 +188,7 @@ export const SignInScreen = ({navigation}) => {
         />
         <Text style={styles.textOrEmail}>OR LOGIN WITH EMAIL</Text>
         <InputCustom
+          autoCapitalize="none"
           value={email}
           keyboardType="email-address"
           placeholder="Example@gmail.com"
@@ -196,6 +200,7 @@ export const SignInScreen = ({navigation}) => {
           errorMessage={required && !email ? 'Email is required' : ''}
         />
         <InputCustom
+          autoCapitalize="none"
           ref={ref_input2}
           value={password}
           placeholder="Password"
