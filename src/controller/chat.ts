@@ -86,18 +86,20 @@ export const getAllMessage = (
     .orderBy('createdAt', 'desc')
     .limit(20)
     .onSnapshot((querySnapshot) => {
-      const threads = querySnapshot.docs.map((documentSnapshot) => {
-        return {
-          _id: documentSnapshot.id,
-          ...documentSnapshot.data(),
-        };
-      }) as any;
-      setLengthMessage(threads.length);
-      setMessages(threads);
-      if (threads.length > 0) {
-        setCreatedAt(threads[threads.length - 1].createdAt);
+      if (querySnapshot !== null) {
+        const threads = querySnapshot.docs.map((documentSnapshot) => {
+          return {
+            _id: documentSnapshot.id,
+            ...documentSnapshot.data(),
+          };
+        }) as any;
+        setLengthMessage(threads.length);
+        setMessages(threads);
+        if (threads.length > 0) {
+          setCreatedAt(threads[threads.length - 1].createdAt);
+        }
+        setIsLoadingEarlier(false);
       }
-      setIsLoadingEarlier(false);
     });
 };
 
@@ -118,17 +120,19 @@ export const getMessageLoadMore = (
     .where('createdAt', '<', createdAt)
     .limit(20)
     .onSnapshot((querySnapshot) => {
-      const threads = querySnapshot.docs.map((documentSnapshot) => {
-        return {
-          _id: documentSnapshot.id,
-          ...documentSnapshot.data(),
-        };
-      }) as any;
-      setLengthMessage(threads.length);
-      if (threads.length > 0) {
-        setCreatedAt(threads[threads.length - 1].createdAt);
-        setMessages(GiftedChat.prepend(messages, threads));
-        setIsLoadingEarlier(false);
+      if (querySnapshot !== null) {
+        const threads = querySnapshot.docs.map((documentSnapshot) => {
+          return {
+            _id: documentSnapshot.id,
+            ...documentSnapshot.data(),
+          };
+        }) as any;
+        setLengthMessage(threads.length);
+        if (threads.length > 0) {
+          setCreatedAt(threads[threads.length - 1].createdAt);
+          setMessages(GiftedChat.prepend(messages, threads));
+          setIsLoadingEarlier(false);
+        }
       }
     });
 };
@@ -181,15 +185,11 @@ export const sendMessage = async (
       },
     })
     .then(async () => {
-      console.log('firstUserId: ', firstUserId);
-      console.log('state: ', state);
-      // @ts-ignore: Object is possibly 'null'.
       if (
         state &&
         firstUserId !== auth().currentUser?.uid &&
         firstUserId !== undefined
       ) {
-        console.log('conversationId2: ', conversationId);
         await likeUser(ownerId);
         await updateStateConversation(conversationId)
           .then((res) => console.log('update: ', res))

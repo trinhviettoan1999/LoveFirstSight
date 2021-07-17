@@ -20,7 +20,9 @@ const AppTab = () => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    getCountNotRead((result: any) => setCount(result.length));
+    getCountNotRead((result: any) => {
+      setCount(result.length);
+    });
   }, []);
 
   return (

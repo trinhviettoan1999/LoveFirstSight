@@ -20,6 +20,7 @@ import FastImage from 'react-native-fast-image';
 import {ROUTER} from '../../constants/router';
 import {color} from '../../theme';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import auth from '@react-native-firebase/auth';
 const Tab = createMaterialTopTabNavigator();
 
 const WIDTH = Dimensions.get('window').width;
@@ -31,14 +32,16 @@ const ItemConversation = ({item, onPress}: any) => {
   const [isRead, setIsRead] = useState(false);
 
   useEffect(() => {
-    checkIsReadConversation(item.conversationId, (result: boolean) => {
-      setIsRead(result || false);
-    });
-    return () => {
+    if (auth().currentUser !== undefined) {
       checkIsReadConversation(item.conversationId, (result: boolean) => {
         setIsRead(result || false);
       });
-    };
+      return () => {
+        checkIsReadConversation(item.conversationId, (result: boolean) => {
+          setIsRead(result || false);
+        });
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -104,14 +107,16 @@ const ConversationWait = () => {
   };
 
   useEffect(() => {
-    getConversation(true, (result: any) => {
-      setConversation(result);
-    });
-    return () => {
+    if (auth().currentUser !== undefined) {
       getConversation(true, (result: any) => {
         setConversation(result);
       });
-    };
+      return () => {
+        getConversation(true, (result: any) => {
+          setConversation(result);
+        });
+      };
+    }
   }, []);
 
   return (
@@ -168,14 +173,16 @@ const Conversation = () => {
   };
 
   useEffect(() => {
-    getConversation(false, (result: any) => {
-      setConversation(result);
-    });
-    return () => {
+    if (auth().currentUser !== undefined) {
       getConversation(false, (result: any) => {
         setConversation(result);
       });
-    };
+      return () => {
+        getConversation(false, (result: any) => {
+          setConversation(result);
+        });
+      };
+    }
   }, []);
 
   return (

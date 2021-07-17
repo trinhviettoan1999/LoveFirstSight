@@ -149,14 +149,7 @@ export const Chat = () => {
   }, [startAudio]);
 
   useEffect(() => {
-    getAllMessage(
-      conversationId,
-      setLengthMessage,
-      setMessages,
-      setCreatedAt,
-      setIsLoadingEarlier,
-    );
-    return () =>
+    if (auth().currentUser?.uid !== undefined) {
       getAllMessage(
         conversationId,
         setLengthMessage,
@@ -164,6 +157,15 @@ export const Chat = () => {
         setCreatedAt,
         setIsLoadingEarlier,
       );
+      return () =>
+        getAllMessage(
+          conversationId,
+          setLengthMessage,
+          setMessages,
+          setCreatedAt,
+          setIsLoadingEarlier,
+        );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
