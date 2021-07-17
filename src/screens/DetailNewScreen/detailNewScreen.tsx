@@ -13,6 +13,7 @@ import Swiper from 'react-native-swiper';
 import {color, spacing} from '../../theme';
 import {Input} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export const DetailNewScreen = () => {
   const navigation = useNavigation();
@@ -43,82 +44,83 @@ export const DetailNewScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBarCustom backgroundColor="#F8F8F8" barStyle="dark-content" />
-      <View style={styles.newContainer}>
-        {listCollections ? (
-          <View style={styles.wrapper}>
-            <Swiper
-              loop={false}
-              activeDotColor={color.primary}
-              key={listCollections.length}>
-              {listCollections.map((item: any) => {
-                if (item.mediaType === 'image') {
-                  return (
-                    <FastImage
-                      key={item.collectionId}
-                      style={styles.collectionPost}
-                      source={{
-                        // @ts-ignore: Object is possibly 'null'.
-                        uri: item.path,
-                        headers: {Authorization: 'staplerapp123456'},
-                        priority: FastImage.priority.normal,
-                      }}
-                      resizeMode={FastImage.resizeMode.cover}
-                    />
-                  );
-                } else {
-                  return (
-                    <VideoPlayer key={item.collectionId} video={item.path} />
-                  );
-                }
-              })}
-            </Swiper>
-          </View>
-        ) : null}
-        <Text style={styles.content}>{content}</Text>
-        <Pressable
-          style={styles.back}
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Back color={color.bgWhite} />
-        </Pressable>
+    <SafeAreaView style={styles.container} edges={['bottom', 'top']}>
+      <View style={styles.container}>
+        <View style={styles.newContainer}>
+          {listCollections ? (
+            <View style={styles.wrapper}>
+              <Swiper
+                loop={false}
+                activeDotColor={color.primary}
+                key={listCollections.length}>
+                {listCollections.map((item: any) => {
+                  if (item.mediaType === 'image') {
+                    return (
+                      <FastImage
+                        key={item.collectionId}
+                        style={styles.collectionPost}
+                        source={{
+                          // @ts-ignore: Object is possibly 'null'.
+                          uri: item.path,
+                          headers: {Authorization: 'staplerapp123456'},
+                          priority: FastImage.priority.normal,
+                        }}
+                        resizeMode={FastImage.resizeMode.cover}
+                      />
+                    );
+                  } else {
+                    return (
+                      <VideoPlayer key={item.collectionId} video={item.path} />
+                    );
+                  }
+                })}
+              </Swiper>
+            </View>
+          ) : null}
+          <Text style={styles.content}>{content}</Text>
+          <Pressable
+            style={styles.back}
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <Back color={color.bgWhite} />
+          </Pressable>
+        </View>
+        <FlatList
+          style={styles.flatlist}
+          contentContainerStyle={{paddingTop: 10, paddingBottom: 16}}
+          data={listComments}
+          keyExtractor={(item, index) => index.toString()}
+          removeClippedSubviews={false}
+          ListFooterComponent={
+            <Input
+              placeholder="Type here..."
+              inputContainerStyle={focused ? styles.inputFocused : styles.input}
+              style={styles.textInput}
+              containerStyle={styles.containerInput}
+              placeholderTextColor={color.textGray}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              value={comment}
+              onChangeText={setComment}
+              rightIcon={
+                <Pressable onPress={handleSend}>
+                  <Send />
+                </Pressable>
+              }
+            />
+          }
+          renderItem={({item}) => (
+            <CommentItem
+              comment={item.comment}
+              userId={item.userId}
+              commentId={item.commentId}
+              postId={postId}
+            />
+          )}
+        />
       </View>
-      <FlatList
-        style={styles.flatlist}
-        contentContainerStyle={{paddingTop: 10, paddingBottom: 16}}
-        data={listComments}
-        keyExtractor={(item, index) => index.toString()}
-        removeClippedSubviews={false}
-        ListFooterComponent={
-          <Input
-            placeholder="Type here..."
-            inputContainerStyle={focused ? styles.inputFocused : styles.input}
-            style={styles.textInput}
-            containerStyle={styles.containerInput}
-            placeholderTextColor={color.textGray}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            value={comment}
-            onChangeText={setComment}
-            rightIcon={
-              <Pressable onPress={handleSend}>
-                <Send />
-              </Pressable>
-            }
-          />
-        }
-        renderItem={({item}) => (
-          <CommentItem
-            comment={item.comment}
-            userId={item.userId}
-            commentId={item.commentId}
-            postId={postId}
-          />
-        )}
-      />
-    </View>
+    </SafeAreaView>
   );
 };
 
