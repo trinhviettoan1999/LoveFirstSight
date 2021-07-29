@@ -87,6 +87,7 @@ const ConversationWait = () => {
   const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
   const [conversation, setConversation] = useState([]);
+
   const renderItemConversation = ({item}: any) => {
     return (
       <ItemConversation
@@ -133,7 +134,7 @@ const ConversationWait = () => {
           </View>
         ) : (
           <FlatList
-            style={styles.flatlistContainer}
+            contentContainerStyle={styles.flatlistContainer}
             showsVerticalScrollIndicator={false}
             data={conversation}
             renderItem={renderItemConversation}
@@ -199,7 +200,7 @@ const Conversation = () => {
           </View>
         ) : (
           <FlatList
-            style={styles.flatlistContainer}
+            contentContainerStyle={styles.flatlistContainer}
             showsVerticalScrollIndicator={false}
             data={conversation}
             renderItem={renderItemConversation}
@@ -257,8 +258,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flatlistContainer: {
-    flex: 1,
     paddingTop: 10,
+    paddingBottom: 80,
   },
   avatar: {
     width: 60,
